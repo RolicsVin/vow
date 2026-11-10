@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://bmb1dk37kyqce"]
 
 [ext_resource type="PackedScene" uid="uid://e612oyf6jcwk" path="res://scenes/scene.tscn" id="1_errlg"]
-[ext_resource type="Script" uid="uid://ubqpel73dg6o" path="res://godo_visual_novel/core/classes/linear_dialog.gd" id="2_74lek"]
-[ext_resource type="Script" uid="uid://ba3bu5tnfw5l7" path="res://godo_visual_novel/core/classes/replica.gd" id="3_j5jx5"]
 [ext_resource type="Script" uid="uid://ds60nmvsajp50" path="res://godo_visual_novel/core/classes/txt_linear_dialog.gd" id="4_lpvoh"]
 
 [sub_resource type="Resource" id="Resource_bl13t"]
@@ -14,24 +12,4 @@ dialog_name = "start"
 
 [node name="Chat" parent="ChatRoot" parent_id_path=PackedInt32Array(765098785) index="1" unique_id=1260149037]
 linear_dialog_play_ready = "start"
-dialog_tree = Array[ExtResource("2_74lek")]([SubResource("Resource_bl13t")])
-
-[node name="Menu" parent="ChatRoot/Control/HBoxContainer" parent_id_path=PackedInt32Array(1358434576) index="2" unique_id=961365472 node_paths=PackedStringArray("nodes")]
-nodes = {
-NodePath("../../../../Menu"): true
-}
-
-[node name="Continio" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="1" unique_id=185243247 node_paths=PackedStringArray("nodes")]
-nodes = {
-NodePath(".."): false
-}
-
-[node name="Settings" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="2" unique_id=681030097 node_paths=PackedStringArray("nodes")]
-nodes = {
-NodePath("../../SettingsMenu"): true
-}
-
-[node name="MainMenu" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="3" unique_id=449968782 node_paths=PackedStringArray("nodes")]
-nodes = {
-NodePath("../Ready"): true
-}
+dialog_tree = [SubResource("Resource_bl13t")]

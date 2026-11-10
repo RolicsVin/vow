@@ -1,0 +1,9 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# avtor specific ignores
+bin/
+obsidian/
+__pycache__/
+/__pycache__/

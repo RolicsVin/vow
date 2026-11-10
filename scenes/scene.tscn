@@ -595,6 +595,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_7c5am")
+show_speed = 0.7
 behind = NodePath("../Behind")
 fast_action = NodePath("../../FastAction")
 background = NodePath("../../Backgrounds")
@@ -607,7 +608,6 @@ back_button = NodePath("../Control/HBoxContainer/Back")
 sounds = NodePath("../../Sounds")
 music = NodePath("../../Music")
 timer = NodePath("Timer")
-show_speed = 0.7
 metadata/_custom_type_script = "uid://dyqa1xka71un7"
 
 [node name="Timer" type="Timer" parent="ChatRoot/Chat" unique_id=2015705789]
@@ -695,7 +695,7 @@ volume_db = 5.0
 script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="Menu" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=961365472 node_paths=PackedStringArray("animation", "sound", "nodes")]
+[node name="Menu" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=961365472 node_paths=PackedStringArray("animation", "sound")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 script = ExtResource("7_7ftgl")
@@ -703,9 +703,6 @@ action = "esc"
 hidding_on_press = false
 animation = NodePath("AnimationPlayer")
 sound = NodePath("GTSound")
-nodes = {
-NodePath("../../../../Menu"): true
-}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="ChatRoot/Control/HBoxContainer/Menu" unique_id=758703159]
@@ -736,8 +733,8 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 script = SubResource("GDScript_fsfa6")
 hidding_on_press = false
-animation = NodePath("AnimationPlayer")
 find_sound = false
+animation = NodePath("AnimationPlayer")
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="ChatRoot/Control/HBoxContainer/SaveButton" unique_id=69690778]
@@ -910,7 +907,7 @@ color = Color(0, 0, 0, 1)
 stream = ExtResource("18_c7gmr")
 volume_db = -5.0
 
-[node name="Continio" type="TextureButton" parent="Menu" unique_id=185243247 node_paths=PackedStringArray("nodes")]
+[node name="Continio" type="TextureButton" parent="Menu" unique_id=185243247]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -923,9 +920,6 @@ offset_bottom = -117.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
 hidding_on_press = false
-nodes = {
-NodePath(".."): false
-}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/Continio" unique_id=213786879]
@@ -951,7 +945,7 @@ volume_db = 5.0
 script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="Settings" type="TextureButton" parent="Menu" unique_id=681030097 node_paths=PackedStringArray("nodes")]
+[node name="Settings" type="TextureButton" parent="Menu" unique_id=681030097]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -964,9 +958,6 @@ offset_bottom = -15.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
 hidding_on_press = false
-nodes = {
-NodePath("../../SettingsMenu"): true
-}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/Settings" unique_id=1210088481]
@@ -992,7 +983,7 @@ volume_db = 5.0
 script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="MainMenu" type="TextureButton" parent="Menu" unique_id=449968782 node_paths=PackedStringArray("nodes")]
+[node name="MainMenu" type="TextureButton" parent="Menu" unique_id=449968782]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -1004,9 +995,6 @@ offset_right = 382.0
 offset_bottom = 94.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
-nodes = {
-NodePath("../Ready"): true
-}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/MainMenu" unique_id=1627441392]

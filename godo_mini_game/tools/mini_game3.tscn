@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://jaonqbpipmb3"]
+
+[ext_resource type="Script" uid="uid://c8blwov574jpo" path="res://godo_mini_game/core/classes/mini_game.gd" id="1_nnnt0"]
+[ext_resource type="Texture2D" uid="uid://cangj7q3k1uxt" path="res://godo_mini_game/tools/line3.png" id="2_gjvxm"]
+[ext_resource type="Script" uid="uid://cketuygqgl0df" path="res://godo_mini_game/core/classes/action2d.gd" id="3_08m3n"]
+[ext_resource type="Script" uid="uid://bd8hbg4x36l55" path="res://godo_mini_game/core/classes/dragable_area2d.gd" id="4_5teyi"]
+[ext_resource type="Texture2D" uid="uid://csvyguadlilda" path="res://assets/ui/point.png" id="5_6nicc"]
+[ext_resource type="Script" uid="uid://srejthmud1dp" path="res://godo_tools/classes/linear_visible.gd" id="6_8p03d"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ll8pg"]
+radius = 81.3019
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1n4e7"]
+radius = 101.07918
+
+[node name="MiniGame" type="Control" unique_id=487739462 node_paths=PackedStringArray("elements_root", "start_element", "end_element")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nnnt0")
+elements_root = NodePath("Control")
+start_element = NodePath("Control/Action2D")
+end_element = NodePath("Control/Action2D")
+metadata/_custom_type_script = "uid://c8blwov574jpo"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2005080460]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gjvxm")
+
+[node name="Control" type="Control" parent="." unique_id=70711087]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Action2D" type="Marker2D" parent="Control" unique_id=1750072917 node_paths=PackedStringArray("object", "path", "end_point")]
+script = ExtResource("3_08m3n")
+time = 30.0
+object = NodePath("DraggableArea2D")
+path = NodePath("Area2D")
+end_point = NodePath("Area2D2")
+metadata/_custom_type_script = "uid://cketuygqgl0df"
+
+[node name="Area2D" type="Area2D" parent="Control/Action2D" unique_id=1500745932]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Control/Action2D/Area2D" unique_id=532225555]
+polygon = PackedVector2Array(13, 549, 46, 549, 42, -509, 11, -509)
+
+[node name="DraggableArea2D" type="Area2D" parent="Control/Action2D" unique_id=2137502042 node_paths=PackedStringArray("colision")]
+position = Vector2(29, -429)
+script = ExtResource("4_5teyi")
+colision = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://bd8hbg4x36l55"
+
+[node name="Point" type="Sprite2D" parent="Control/Action2D/DraggableArea2D" unique_id=170983452]
+scale = Vector2(0.265, 0.265)
+texture = ExtResource("5_6nicc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Action2D/DraggableArea2D" unique_id=1837553361]
+shape = SubResource("CircleShape2D_ll8pg")
+
+[node name="Area2D2" type="Area2D" parent="Control/Action2D" unique_id=1500824507]
+position = Vector2(29, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/Action2D/Area2D2" unique_id=919287422]
+shape = SubResource("CircleShape2D_1n4e7")
+
+[node name="LinearVisible" type="Node" parent="." unique_id=1538057609]
+script = ExtResource("6_8p03d")
+metadata/_custom_type_script = "uid://srejthmud1dp"

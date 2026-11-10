@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Entitie" format=3 uid="uid://cwn1tnk2knwuj"]
+
+[ext_resource type="Script" uid="uid://dkk41kc8t4e7y" path="res://godo_combat/core/classes/ability.gd" id="1_u0nc1"]
+[ext_resource type="Script" uid="uid://db5oexxt61bbt" path="res://godo_combat/core/classes/effect.gd" id="2_t32v3"]
+[ext_resource type="Script" uid="uid://b55gcuabk48ai" path="res://godo_combat/core/classes/entitie.gd" id="3_swc2v"]
+
+[resource]
+script = ExtResource("3_swc2v")
+name = "player"
+metadata/_custom_type_script = "uid://b55gcuabk48ai"

@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dtq2odk0h162o"]
+
+[ext_resource type="Script" uid="uid://dyqa1xka71un7" path="res://godo_visual_novel/core/classes/chat.gd" id="1_lub5d"]
+[ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="1_oiyd2"]
+[ext_resource type="Script" uid="uid://cp2osj87mhleq" path="res://godo_visual_novel/core/classes/behind.gd" id="2_2sodj"]
+
+[node name="ChatRoot" type="VBoxContainer" unique_id=765098785]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -266.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Behind" type="Label" parent="." unique_id=1151219392]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_oiyd2")
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_2sodj")
+metadata/_custom_type_script = "uid://cp2osj87mhleq"
+
+[node name="Chat" type="Label" parent="." unique_id=1260149037 node_paths=PackedStringArray("behind", "auto_text_swith_timer", "timer")]
+custom_minimum_size = Vector2(0, 212)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("1_oiyd2")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+script = ExtResource("1_lub5d")
+behind = NodePath("../Behind")
+auto_text_swith_timer = NodePath("Timer2")
+timer = NodePath("Timer")
+metadata/_custom_type_script = "uid://dyqa1xka71un7"
+
+[node name="Timer" type="Timer" parent="Chat" unique_id=2015705789]
+
+[node name="Timer2" type="Timer" parent="Chat" unique_id=1369124230]

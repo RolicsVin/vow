@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b4odqgkwrcfqn"]
+
+[ext_resource type="Script" uid="uid://c8blwov574jpo" path="res://godo_mini_game/core/classes/mini_game.gd" id="1_lv4bm"]
+
+[node name="MiniGame" type="Control" unique_id=487739462]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_lv4bm")
+metadata/_custom_type_script = "uid://c8blwov574jpo"

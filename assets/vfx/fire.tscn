@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dc5w0tuekqcd0"]
+
+[sub_resource type="Gradient" id="Gradient_gyftl"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gyftl"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gyftl"]
+width = 100
+height = 100
+noise = SubResource("FastNoiseLite_gyftl")
+color_ramp = SubResource("Gradient_gyftl")
+
+[sub_resource type="Curve" id="Curve_05wo8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gyftl"]
+curve = SubResource("Curve_05wo8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_05wo8"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 1, 1)
+angular_velocity_min = -316.33002
+angular_velocity_max = 258.11
+radial_velocity_min = -97.04002
+radial_velocity_max = 86.24998
+gravity = Vector3(0, -980, 0)
+scale_min = 0.19999999
+alpha_curve = SubResource("CurveTexture_gyftl")
+turbulence_enabled = true
+turbulence_influence_max = 0.554
+
+[node name="FileDialog" type="GPUParticles2D" unique_id=18730591]
+amount = 42
+texture = SubResource("NoiseTexture2D_gyftl")
+lifetime = 10.0
+process_material = SubResource("ParticleProcessMaterial_05wo8")

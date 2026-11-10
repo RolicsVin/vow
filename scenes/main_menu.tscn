@@ -1,0 +1,987 @@
+[gd_scene format=3 uid="uid://cw2e8p7y0lhg5"]
+
+[ext_resource type="Texture2D" uid="uid://bf0aldfu0xmvn" path="res://scenes/chapter1_prologue/boat_on_short.png" id="1_l6cm7"]
+[ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="2_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://c08kkbmf58viv" path="res://assets/icons/logo/game_logo.png" id="2_ekxnf"]
+[ext_resource type="Script" uid="uid://bcfvkrvnfiito" path="res://scenes/saving_buttons.gd" id="3_5dd4i"]
+[ext_resource type="Script" uid="uid://dbvhkyheli2yv" path="res://scenes/start.gd" id="3_lgwnu"]
+[ext_resource type="Script" uid="uid://cpsqcnxlbbk31" path="res://godo_tools/tools/paralax.gd" id="4_wu84c"]
+[ext_resource type="Texture2D" uid="uid://d4mf43gmlyrjl" path="res://assets/ui/continio-Photoroom.png" id="5_tbmy8"]
+[ext_resource type="Script" uid="uid://srejthmud1dp" path="res://godo_tools/classes/linear_visible.gd" id="6_jk1qb"]
+[ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="7_5dd4i"]
+[ext_resource type="Script" uid="uid://bvc438jdgpr3y" path="res://godo_tools/classes/gt_sound.gd" id="8_lgwnu"]
+[ext_resource type="Shader" uid="uid://c38esbjplmhjs" path="res://assets/shaders/alpha_gradient.gdshader" id="9_jk1qb"]
+[ext_resource type="Texture2D" uid="uid://fnwy1ciunyub" path="res://assets/ui/new_game.png" id="12_j7ex8"]
+[ext_resource type="PackedScene" uid="uid://baek1lyp2auop" path="res://godo_tools/tools/visible_scene.tscn" id="12_rcqid"]
+[ext_resource type="PackedScene" uid="uid://dvkyeaumsxv85" path="res://godo_tools/tools/post_processing.tscn" id="13_1ajci"]
+[ext_resource type="Texture2D" uid="uid://dvtkgnpaeaycv" path="res://assets/ui/awards.png" id="13_8egab"]
+[ext_resource type="Texture2D" uid="uid://cj44hno72kjaa" path="res://assets/ui/exit.png" id="13_hstxw"]
+[ext_resource type="AudioStream" uid="uid://cmseso6e3ax30" path="res://assets/atmosphere/rain-sounds.ogg" id="14_5pajh"]
+[ext_resource type="Script" uid="uid://dlreye3jsma6y" path="res://godo_tools/classes/linear_sound.gd" id="15_j7ex8"]
+[ext_resource type="AudioStream" uid="uid://cwvt8vajnw4g0" path="res://assets/sounds/water/small-river-ambiance_gkwphsn_.mp3" id="16_a8gd2"]
+[ext_resource type="PackedScene" uid="uid://cdmvmkaab0an" path="res://core/tools/settings_menu.tscn" id="18_a8gd2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jk1qb"]
+shader = ExtResource("9_jk1qb")
+shader_parameter/direction = 1
+shader_parameter/gradient_start = 1.0
+shader_parameter/gradient_end = 1.0
+
+[sub_resource type="Animation" id="Animation_jk1qb"]
+resource_name = "end"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/gradient_end")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.858000040755, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/gradient_start")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_5dd4i"]
+resource_name = "start"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/gradient_end")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.858000040755]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:material:shader_parameter/gradient_start")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lgwnu"]
+_data = {
+&"end": SubResource("Animation_jk1qb"),
+&"start": SubResource("Animation_5dd4i")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ekxnf"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.858000040755
+shader_parameter/intensity = 2.0
+shader_parameter/streak_length = 0.2
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 40
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flqon"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="GDScript" id="GDScript_rcqid"]
+resource_name = "continio"
+script/source = "extends GTButton
+
+@export var strength: float = 10.0
+@export var smoothness: float = 8.0
+
+var start_position: Vector2
+var target_position: Vector2
+
+var pressed_: bool = false
+
+
+func _ready() -> void:
+	super._ready()
+	
+	pressed.connect(press)
+	
+	start_position = position
+	target_position = position
+
+
+func press():
+	pressed_ = true
+
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	
+	var viewport_size := get_viewport_rect().size
+	var mouse_position := get_viewport().get_mouse_position()
+	
+	# Переводим положение мыши в диапазон от -1 до 1
+	var mouse_offset := (mouse_position / viewport_size) * 2.0 - Vector2.ONE
+	
+	# Целевая позиция объекта
+	target_position = start_position + mouse_offset * strength
+	
+	# Плавное движение
+	position = position.lerp(target_position, smoothness * delta)
+	
+	if pressed_:
+		return
+	
+	if is_hovered():
+		$AnimationPlayer.play(\"hovered\", 0.5)
+	else:
+		$AnimationPlayer.play(\"state\", 0.5)
+
+
+func _pressed() -> void:
+	super._pressed()
+	hide()
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5pajh"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="Animation" id="Animation_he51e"]
+resource_name = "hovered"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/angle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [90.000004275]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/streak_length")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:material:shader_parameter/threshold")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:material:shader_parameter/intensity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TextureRect2:material:shader_parameter/threshold")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.8]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("TextureRect2:material:shader_parameter/intensity")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 3.250000154375]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("TextureRect2:material:shader_parameter/streak_length")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.030000001425]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("TextureRect2:material:shader_parameter/angle")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("TextureRect2:material:shader_parameter/alpha")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_lgwnu"]
+resource_name = "pressed"
+length = 0.3333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect2:material:shader_parameter/alpha")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect2:material:shader_parameter/use_alpha_corrector")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_tbmy8"]
+resource_name = "state"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect2:material:shader_parameter/threshold")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TextureRect2:material:shader_parameter/intensity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TextureRect2:material:shader_parameter/streak_length")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TextureRect2:material:shader_parameter/angle")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jk1qb"]
+_data = {
+&"hovered": SubResource("Animation_he51e"),
+&"pressed": SubResource("Animation_lgwnu"),
+&"state": SubResource("Animation_tbmy8")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8egab"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ajci"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gw5y6"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qywvv"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_svtp6"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wgol"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1dfpl"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 90.000004275
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1acrt"]
+shader = ExtResource("2_bqqt6")
+shader_parameter/threshold = 0.0
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = -1.0
+shader_parameter/use_alpha_corrector = true
+
+[sub_resource type="Animation" id="Animation_bqqt6"]
+resource_name = "logo"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Logo:material:shader_parameter/threshold")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 6.9333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.858000040755, 0.858000040755]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Logo:material:shader_parameter/intensity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5, 6.9333334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [2.0, 6.722000319295, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Logo:material:shader_parameter/streak_length")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 6.9333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Logo:material:shader_parameter/angle")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 6.9333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [90.000004275, 90.000004275]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Logo:material:shader_parameter/use_alpha_corrector")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 5, 6.9333334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Logo:material:shader_parameter/alpha")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 5, 6.9333334),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-1.0, 0.0, 0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Continio/TextureRect2:material:shader_parameter/alpha")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 5.3333335, 7.2933335),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-1.0, -1.0, 0.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("NewGame:material:shader_parameter/alpha")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(4.9666667, 6.9466662),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("NewGame/TextureRect2:material:shader_parameter/alpha")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-1.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Awards:material:shader_parameter/alpha")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(5.633333, 7.6033335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Exit:material:shader_parameter/alpha")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(7.3333335, 9.303334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Settings:material:shader_parameter/alpha")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(6.0666666, 8.036667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Continio:material:shader_parameter/alpha")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(6.71, 8.68),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Exit/TextureRect2:material:shader_parameter/alpha")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-1.0]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Awards:process_mode")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 6.79, 6.94),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [4, 4, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wu84c"]
+_data = {
+&"logo": SubResource("Animation_bqqt6")
+}
+
+[node name="Control" type="Control" unique_id=1820590634]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=60374524]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_l6cm7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1857721951]
+material = SubResource("ShaderMaterial_jk1qb")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect" unique_id=1469430117]
+libraries/ = SubResource("AnimationLibrary_lgwnu")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1608574082]
+visible = false
+layout_mode = 0
+offset_right = 673.0
+offset_bottom = 1080.0
+size_flags_vertical = 3
+script = ExtResource("3_lgwnu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=854072204]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("3_5dd4i")
+
+[node name="Logo" type="TextureRect" parent="." unique_id=2048083758]
+material = SubResource("ShaderMaterial_ekxnf")
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1053.0
+offset_top = -283.0
+offset_bottom = 770.0
+grow_horizontal = 0
+texture = ExtResource("2_ekxnf")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("4_wu84c")
+
+[node name="NewGame" type="TextureButton" parent="." unique_id=443365314 node_paths=PackedStringArray("animation", "sound")]
+material = SubResource("ShaderMaterial_flqon")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -736.0
+offset_top = 324.0
+offset_right = -312.0
+offset_bottom = 524.0
+grow_horizontal = 0
+texture_normal = ExtResource("12_j7ex8")
+texture_pressed = ExtResource("12_j7ex8")
+texture_hover = ExtResource("12_j7ex8")
+ignore_texture_size = true
+stretch_mode = 5
+script = SubResource("GDScript_rcqid")
+scene = "res://settings_game.tscn"
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="TextureRect2" type="TextureRect" parent="NewGame" unique_id=864275634]
+material = SubResource("ShaderMaterial_5pajh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_j7ex8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="NewGame" unique_id=40763348]
+libraries/ = SubResource("AnimationLibrary_jk1qb")
+
+[node name="LinearVisible" type="Node" parent="NewGame" unique_id=430550479]
+script = ExtResource("6_jk1qb")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="GTSound" type="AudioStreamPlayer" parent="NewGame" unique_id=1526252944]
+stream = ExtResource("7_5dd4i")
+script = ExtResource("8_lgwnu")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Continio" type="TextureButton" parent="." unique_id=1566941655 node_paths=PackedStringArray("animation", "sound")]
+material = SubResource("ShaderMaterial_8egab")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -680.0
+offset_top = 484.0
+offset_right = -368.0
+offset_bottom = 650.0
+grow_horizontal = 0
+texture_normal = ExtResource("5_tbmy8")
+texture_pressed = ExtResource("5_tbmy8")
+texture_hover = ExtResource("5_tbmy8")
+ignore_texture_size = true
+stretch_mode = 5
+script = SubResource("GDScript_rcqid")
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="TextureRect2" type="TextureRect" parent="Continio" unique_id=2127598428]
+material = SubResource("ShaderMaterial_1ajci")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_tbmy8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Continio" unique_id=1732656611]
+libraries/ = SubResource("AnimationLibrary_jk1qb")
+
+[node name="LinearVisible" type="Node" parent="Continio" unique_id=1988121569]
+script = ExtResource("6_jk1qb")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Continio" unique_id=571117696]
+stream = ExtResource("7_5dd4i")
+script = ExtResource("8_lgwnu")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Awards" type="TextureButton" parent="." unique_id=1516893493 node_paths=PackedStringArray("animation", "sound")]
+process_mode = 4
+material = SubResource("ShaderMaterial_gw5y6")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -650.0
+offset_top = 641.0
+offset_right = -398.0
+offset_bottom = 785.0001
+grow_horizontal = 0
+texture_normal = ExtResource("13_8egab")
+texture_pressed = ExtResource("13_8egab")
+texture_hover = ExtResource("13_8egab")
+ignore_texture_size = true
+stretch_mode = 5
+script = SubResource("GDScript_rcqid")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="TextureRect2" type="TextureRect" parent="Awards" unique_id=22140881]
+material = SubResource("ShaderMaterial_qywvv")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13_8egab")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Awards" unique_id=246629415]
+libraries/ = SubResource("AnimationLibrary_jk1qb")
+
+[node name="LinearVisible" type="Node" parent="Awards" unique_id=2082210029]
+script = ExtResource("6_jk1qb")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Awards" unique_id=1857690274]
+stream = ExtResource("7_5dd4i")
+script = ExtResource("8_lgwnu")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Settings" type="TextureButton" parent="." unique_id=2052303259 node_paths=PackedStringArray("animation", "sound")]
+visible = false
+material = SubResource("ShaderMaterial_svtp6")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -680.0
+offset_top = 571.0
+offset_right = -368.0
+offset_bottom = 737.0
+grow_horizontal = 0
+texture_normal = ExtResource("12_j7ex8")
+texture_pressed = ExtResource("12_j7ex8")
+texture_hover = ExtResource("12_j7ex8")
+ignore_texture_size = true
+stretch_mode = 5
+script = SubResource("GDScript_rcqid")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="TextureRect" type="TextureRect" parent="Settings" unique_id=1860518061]
+material = SubResource("ShaderMaterial_3wgol")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12_j7ex8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Settings" unique_id=1529104844]
+libraries/ = SubResource("AnimationLibrary_jk1qb")
+
+[node name="LinearVisible" type="Node" parent="Settings" unique_id=744712262]
+script = ExtResource("6_jk1qb")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Settings" unique_id=1184999395]
+stream = ExtResource("7_5dd4i")
+script = ExtResource("8_lgwnu")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Exit" type="TextureButton" parent="." unique_id=1644531746 node_paths=PackedStringArray("animation", "sound")]
+material = SubResource("ShaderMaterial_1dfpl")
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -626.0
+offset_top = 791.0
+offset_right = -422.0
+offset_bottom = 915.0
+grow_horizontal = 0
+texture_normal = ExtResource("13_hstxw")
+texture_pressed = ExtResource("13_hstxw")
+texture_hover = ExtResource("13_hstxw")
+ignore_texture_size = true
+stretch_mode = 5
+script = SubResource("GDScript_rcqid")
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+exit_button = true
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="TextureRect2" type="TextureRect" parent="Exit" unique_id=189867387]
+material = SubResource("ShaderMaterial_1acrt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13_hstxw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Exit" unique_id=294583732]
+libraries/ = SubResource("AnimationLibrary_jk1qb")
+
+[node name="LinearVisible" type="Node" parent="Exit" unique_id=282449752]
+script = ExtResource("6_jk1qb")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Exit" unique_id=1220393285]
+stream = ExtResource("7_5dd4i")
+script = ExtResource("8_lgwnu")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="SettingsMenu" parent="." unique_id=144951887 instance=ExtResource("18_a8gd2")]
+visible = false
+layout_mode = 1
+
+[node name="VisibleScene" parent="." unique_id=134337691 instance=ExtResource("12_rcqid")]
+visible = false
+layout_mode = 1
+
+[node name="PostProcessing" parent="." unique_id=447539963 instance=ExtResource("13_1ajci")]
+visible = false
+layout_mode = 1
+
+[node name="RainSounds" type="AudioStreamPlayer" parent="." unique_id=399322720]
+stream = ExtResource("14_5pajh")
+volume_db = -10.0
+autoplay = true
+script = ExtResource("8_lgwnu")
+sound_type = 3
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="LinearSound" type="Node" parent="RainSounds" unique_id=864120637]
+script = ExtResource("15_j7ex8")
+metadata/_custom_type_script = "uid://dlreye3jsma6y"
+
+[node name="River" type="AudioStreamPlayer" parent="." unique_id=1072041697]
+stream = ExtResource("16_a8gd2")
+volume_db = -20.0
+pitch_scale = 0.9
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1177869945]
+libraries/ = SubResource("AnimationLibrary_wu84c")
+autoplay = &"logo"
+
+[connection signal="pressed" from="Continio" to="ScrollContainer" method="start"]

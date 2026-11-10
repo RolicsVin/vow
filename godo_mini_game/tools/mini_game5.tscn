@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://uxjxxssae31m"]
+
+[ext_resource type="Script" uid="uid://c8blwov574jpo" path="res://godo_mini_game/core/classes/mini_game.gd" id="1_4k0yq"]
+[ext_resource type="Texture2D" uid="uid://65ggy4svupyw" path="res://godo_mini_game/tools/curcle.png" id="2_2r3hg"]
+[ext_resource type="Script" uid="uid://iidvgrudxlm0" path="res://godo_mini_game/core/classes/action_center.gd" id="3_pd12a"]
+[ext_resource type="Script" uid="uid://srejthmud1dp" path="res://godo_tools/classes/linear_visible.gd" id="3_reswt"]
+[ext_resource type="Script" uid="uid://cxls1rgqj0w22" path="res://godo_mini_game/core/classes/wobble_area2d.gd" id="4_pd12a"]
+[ext_resource type="Texture2D" uid="uid://csvyguadlilda" path="res://assets/ui/point.png" id="5_b81e0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hf7dp"]
+radius = 159.00314
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fqxyq"]
+radius = 82.219215
+
+[node name="MiniGame" type="Control" unique_id=487739462 node_paths=PackedStringArray("elements_root", "start_element", "end_element")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4k0yq")
+elements_root = NodePath("Control")
+start_element = NodePath("Control/ActionCenter")
+end_element = NodePath("Control/ActionCenter")
+victory_count = 1
+metadata/_custom_type_script = "uid://c8blwov574jpo"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=495328941]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2r3hg")
+stretch_mode = 3
+
+[node name="Control" type="Control" parent="." unique_id=1491539743]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ActionCenter" type="Area2D" parent="Control" unique_id=1516614206 node_paths=PackedStringArray("object")]
+script = ExtResource("3_pd12a")
+object = NodePath("WobbleArea2D")
+counter = 7.0
+metadata/_custom_type_script = "uid://iidvgrudxlm0"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/ActionCenter" unique_id=647988514]
+shape = SubResource("CircleShape2D_hf7dp")
+
+[node name="WobbleArea2D" type="Area2D" parent="Control/ActionCenter" unique_id=736383905 node_paths=PackedStringArray("colision")]
+script = ExtResource("4_pd12a")
+colision = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://cxls1rgqj0w22"
+
+[node name="Point" type="Sprite2D" parent="Control/ActionCenter/WobbleArea2D" unique_id=444785462]
+scale = Vector2(0.265, 0.265)
+texture = ExtResource("5_b81e0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Control/ActionCenter/WobbleArea2D" unique_id=394082924]
+shape = SubResource("CircleShape2D_fqxyq")
+
+[node name="LinearVisible" type="Node" parent="." unique_id=91032417]
+script = ExtResource("3_reswt")
+metadata/_custom_type_script = "uid://srejthmud1dp"

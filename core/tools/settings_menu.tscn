@@ -1,0 +1,1008 @@
+[gd_scene format=3 uid="uid://cdmvmkaab0an"]
+
+[ext_resource type="Script" uid="uid://diusb22s34e03" path="res://core/tools/settings_menu.gd" id="1_ga0f5"]
+[ext_resource type="Texture2D" uid="uid://oiq2lotjk2fq" path="res://assets/ui/ramka2.png" id="1_xm5ki"]
+[ext_resource type="LabelSettings" uid="uid://bx5vwxhqo21ac" path="res://assets/label_settings/standart_text.tres" id="2_vxum1"]
+[ext_resource type="Script" uid="uid://dqquy1ejfgbvm" path="res://godo_tools/classes/gt_button.gd" id="3_byosp"]
+[ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="4_7jbq7"]
+[ext_resource type="FontFile" uid="uid://bo7wyme1ehd60" path="res://assets/fonts/FoglihtenNo06_076.otf" id="5_orlur"]
+[ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="6_ga0f5"]
+[ext_resource type="Script" uid="uid://bvc438jdgpr3y" path="res://godo_tools/classes/gt_sound.gd" id="7_0jiyd"]
+[ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="9_ga0f5"]
+[ext_resource type="Texture2D" uid="uid://d2pgrxovifbir" path="res://assets/vfx/particle_red.png" id="9_orlur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ga0f5"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 1.1990000569525
+shader_parameter/streak_length = 0.26800001273
+shader_parameter/angle = 128.7890061174775
+shader_parameter/samples = 5
+shader_parameter/alpha = 1.0
+shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0jiyd"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1000, 100, 1)
+gravity = Vector3(98, -98, 0)
+scale_min = 0.099999994
+scale_max = 0.099999994
+turbulence_enabled = true
+
+[sub_resource type="Animation" id="Animation_rgwxq"]
+resource_name = "particles"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/intensity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4, 6, 8, 10),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.1990000569525, 2.000000095, 1.50000007125, 1.1990000569525, 2.000000095, 1.1990000569525]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material:shader_parameter/angle")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2, 4, 6, 8, 10),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [128.7890061174775, 138.7890065924775, 121.2890057612275, 150.178007133455, 115.9070055055825, 128.7890061174775]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:material:shader_parameter/streak_length")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.26800001273, 0.26800001273]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wcigw"]
+_data = {
+&"particles": SubResource("Animation_rgwxq")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_byosp"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = 0.0
+shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="Animation" id="Animation_1id6j"]
+resource_name = "hovered"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:material:shader_parameter/streak_length")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0130000006175]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:material:shader_parameter/angle")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Label:material:shader_parameter/intensity")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Label:material:shader_parameter/threshold")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.8]
+}
+
+[sub_resource type="Animation" id="Animation_dv0eb"]
+resource_name = "state"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:material:shader_parameter/streak_length")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:material:shader_parameter/angle")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Label:material:shader_parameter/intensity")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Label:material:shader_parameter/threshold")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.8]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2atfd"]
+_data = {
+&"hovered": SubResource("Animation_1id6j"),
+&"state": SubResource("Animation_dv0eb")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0jiyd"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = 0.0
+shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7jbq7"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = 0.0
+shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_orlur"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = 0.0
+shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wcigw"]
+shader = ExtResource("4_7jbq7")
+shader_parameter/threshold = 0.8
+shader_parameter/intensity = 0.0
+shader_parameter/streak_length = 0.0
+shader_parameter/angle = 0.0
+shader_parameter/samples = 20
+shader_parameter/alpha = 0.0
+shader_parameter/use_alpha_corrector = false
+
+[node name="SettingsMenu" type="Control" unique_id=144951887]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ga0f5")
+
+[node name="BG" type="TextureRect" parent="." unique_id=2026594623]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -563.0
+offset_top = -62.0
+offset_right = 563.0
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xm5ki")
+expand_mode = 1
+
+[node name="Particles" type="GPUParticles2D" parent="." unique_id=485258563]
+material = SubResource("ShaderMaterial_ga0f5")
+position = Vector2(562, 1171)
+amount = 50
+texture = ExtResource("9_orlur")
+lifetime = 60.0
+process_material = SubResource("ParticleProcessMaterial_0jiyd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Particles" unique_id=964209652]
+libraries/ = SubResource("AnimationLibrary_wcigw")
+autoplay = &"particles"
+
+[node name="Behind" type="VBoxContainer" parent="." unique_id=227939428]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 151.0
+grow_horizontal = 2
+
+[node name="Label2" type="Label" parent="Behind" unique_id=1630000590]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Behind" unique_id=549544690]
+layout_mode = 2
+text = "Настройки"
+label_settings = ExtResource("2_vxum1")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="Behind" unique_id=1070402370]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Behind/Control" unique_id=1772745622]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -608.0
+offset_right = 608.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Back" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=1280022118 node_paths=PackedStringArray("animation", "sound", "nodes")]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+script = ExtResource("3_byosp")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../.."): false
+}
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="Label" type="Label" parent="Behind/Control/HBoxContainer/Back" unique_id=1071237510]
+material = SubResource("ShaderMaterial_byosp")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_orlur")
+theme_override_font_sizes/font_size = 32
+text = "Назад"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Behind/Control/HBoxContainer/Back" unique_id=1143232726]
+libraries/ = SubResource("AnimationLibrary_2atfd")
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Back" unique_id=192926211]
+stream = ExtResource("6_ga0f5")
+volume_db = 10.0
+script = ExtResource("7_0jiyd")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Game" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=1201353415 node_paths=PackedStringArray("animation", "sound", "nodes")]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+script = ExtResource("3_byosp")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Root/Game"): true,
+NodePath("../../../../Root/Window"): false,
+NodePath("../../../../Root/Graphic"): false,
+NodePath("../../../../Root/Sound"): false
+}
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="Label" type="Label" parent="Behind/Control/HBoxContainer/Game" unique_id=608631538]
+material = SubResource("ShaderMaterial_0jiyd")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_orlur")
+theme_override_font_sizes/font_size = 32
+text = "Игра"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Behind/Control/HBoxContainer/Game" unique_id=282700251]
+libraries/ = SubResource("AnimationLibrary_2atfd")
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Game" unique_id=434907910]
+stream = ExtResource("6_ga0f5")
+volume_db = 10.0
+script = ExtResource("7_0jiyd")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Window" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=1578903671 node_paths=PackedStringArray("animation", "sound", "nodes")]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+script = ExtResource("3_byosp")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Root/Window"): true,
+NodePath("../../../../Root/Game"): false,
+NodePath("../../../../Root/Graphic"): false,
+NodePath("../../../../Root/Sound"): false
+}
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="Label" type="Label" parent="Behind/Control/HBoxContainer/Window" unique_id=2132216236]
+material = SubResource("ShaderMaterial_7jbq7")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_orlur")
+theme_override_font_sizes/font_size = 32
+text = "Экран"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Behind/Control/HBoxContainer/Window" unique_id=1063767492]
+libraries/ = SubResource("AnimationLibrary_2atfd")
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Window" unique_id=1987752040]
+stream = ExtResource("6_ga0f5")
+volume_db = 10.0
+script = ExtResource("7_0jiyd")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Graphic" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=532485154 node_paths=PackedStringArray("animation", "sound", "nodes")]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+script = ExtResource("3_byosp")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Root/Graphic"): true,
+NodePath("../../../../Root/Game"): false,
+NodePath("../../../../Root/Window"): false,
+NodePath("../../../../Root/Sound"): false
+}
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="Label" type="Label" parent="Behind/Control/HBoxContainer/Graphic" unique_id=1052542627]
+material = SubResource("ShaderMaterial_orlur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_orlur")
+theme_override_font_sizes/font_size = 32
+text = "Настройки графики"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Behind/Control/HBoxContainer/Graphic" unique_id=194093775]
+libraries/ = SubResource("AnimationLibrary_2atfd")
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Graphic" unique_id=70874606]
+stream = ExtResource("6_ga0f5")
+volume_db = 10.0
+script = ExtResource("7_0jiyd")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Soudns" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=306879763 node_paths=PackedStringArray("animation", "sound", "nodes")]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+script = ExtResource("3_byosp")
+hidding_on_press = false
+animation = NodePath("AnimationPlayer")
+sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Root/Sound"): true,
+NodePath("../../../../Root/Game"): false,
+NodePath("../../../../Root/Window"): false,
+NodePath("../../../../Root/Graphic"): false
+}
+metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
+
+[node name="Label" type="Label" parent="Behind/Control/HBoxContainer/Soudns" unique_id=1468515645]
+material = SubResource("ShaderMaterial_wcigw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_orlur")
+theme_override_font_sizes/font_size = 32
+text = "Звуки"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Behind/Control/HBoxContainer/Soudns" unique_id=563945000]
+libraries/ = SubResource("AnimationLibrary_2atfd")
+
+[node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Soudns" unique_id=640596093]
+stream = ExtResource("6_ga0f5")
+volume_db = 10.0
+script = ExtResource("7_0jiyd")
+metadata/_custom_type_script = "uid://bvc438jdgpr3y"
+
+[node name="Root" type="Control" parent="." unique_id=2107087774]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 92.0
+offset_right = -92.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Game" type="VBoxContainer" parent="Root" unique_id=769474753]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Root/Game" unique_id=2048182646]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Root/Game" unique_id=532349479]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/Game" unique_id=243995774]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Game/HBoxContainer" unique_id=2008752126]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Уровень сложности"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Game/HBoxContainer" unique_id=1080819190]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 1
+item_count = 2
+popup/item_0/text = "Сложный"
+popup/item_0/id = 0
+popup/item_1/text = "Простой"
+popup/item_1/id = 1
+
+[node name="Label2" type="Label" parent="Root/Game/HBoxContainer" unique_id=1758361644]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Language" type="HBoxContainer" parent="Root/Game" unique_id=191463664]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Game/Language" unique_id=1093367271]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Language(Язык)"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Game/Language" unique_id=667571779]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 0
+item_count = 2
+popup/item_0/text = "Русский"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+
+[node name="Label2" type="Label" parent="Root/Game/Language" unique_id=1567207975]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="AutoTextSwith" type="HBoxContainer" parent="Root/Game" unique_id=641845898]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Game/AutoTextSwith" unique_id=31279809]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Автопролистывание"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="LineEdit" type="SpinBox" parent="Root/Game/AutoTextSwith" unique_id=992330646]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 15.0
+value = 1.0
+suffix = "сек."
+
+[node name="Label2" type="Label" parent="Root/Game/AutoTextSwith" unique_id=1814051053]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Window" type="VBoxContainer" parent="Root" unique_id=997618388]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Root/Window" unique_id=1008092423]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Root/Window" unique_id=104367397]
+layout_mode = 2
+
+[node name="Vsync" type="HBoxContainer" parent="Root/Window" unique_id=1401961645]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/Vsync" unique_id=1978988243]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Вертикальная синхронизация"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Vsync" type="OptionButton" parent="Root/Window/Vsync" unique_id=851585346]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 0
+item_count = 2
+popup/item_0/text = "Да"
+popup/item_0/id = 0
+popup/item_1/text = "Нет"
+popup/item_1/id = 1
+
+[node name="Label2" type="Label" parent="Root/Window/Vsync" unique_id=1015111569]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Noise" type="HBoxContainer" parent="Root/Window" unique_id=631338890]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/Noise" unique_id=2087364542]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Сила шума"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Noise" type="HSlider" parent="Root/Window/Noise" unique_id=1065721547]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 3.0
+
+[node name="Label2" type="Label" parent="Root/Window/Noise" unique_id=395323264]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Brigtness" type="HBoxContainer" parent="Root/Window" unique_id=1970449881]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/Brigtness" unique_id=713318285]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Яркость"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Window/Brigtness" unique_id=1601195996]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -80.0
+max_value = 80.0
+
+[node name="Label2" type="Label" parent="Root/Window/Brigtness" unique_id=162140764]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Contrast" type="HBoxContainer" parent="Root/Window" unique_id=1901078496]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/Contrast" unique_id=1091803809]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Контраст"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Window/Contrast" unique_id=1051757290]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -200.0
+max_value = 200.0
+
+[node name="Label2" type="Label" parent="Root/Window/Contrast" unique_id=426885615]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Saturation" type="HBoxContainer" parent="Root/Window" unique_id=1039951663]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/Saturation" unique_id=948588854]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Насыщенность"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Window/Saturation" unique_id=2123808083]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -200.0
+max_value = 200.0
+
+[node name="Label2" type="Label" parent="Root/Window/Saturation" unique_id=1612636088]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="WindowMode" type="HBoxContainer" parent="Root/Window" unique_id=1659158739]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/WindowMode" unique_id=639646934]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Режим окна"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Window/WindowMode" unique_id=239823446]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 0
+item_count = 2
+popup/item_0/text = "Полноэкранный"
+popup/item_0/id = 0
+popup/item_1/text = "Оконный"
+popup/item_1/id = 1
+
+[node name="Label2" type="Label" parent="Root/Window/WindowMode" unique_id=144379980]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="MonitorNumber" type="HBoxContainer" parent="Root/Window" unique_id=656880707]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Window/MonitorNumber" unique_id=1922337151]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Номер монитора"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Window/MonitorNumber" unique_id=2082767253]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+flat = true
+
+[node name="Label2" type="Label" parent="Root/Window/MonitorNumber" unique_id=1222921568]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Graphic" type="VBoxContainer" parent="Root" unique_id=1014896335]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Root/Graphic" unique_id=1591460195]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Root/Graphic" unique_id=2050272246]
+layout_mode = 2
+
+[node name="Shader" type="HBoxContainer" parent="Root/Graphic" unique_id=1380998262]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Graphic/Shader" unique_id=1006055146]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Качество шейдеров"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Graphic/Shader" unique_id=1438182668]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 1
+item_count = 4
+popup/item_0/text = "Эпическое"
+popup/item_0/id = 0
+popup/item_1/text = "Высокое"
+popup/item_1/id = 1
+popup/item_2/text = "Среднее"
+popup/item_2/id = 2
+popup/item_3/text = "Отключено"
+popup/item_3/id = 3
+
+[node name="Label2" type="Label" parent="Root/Graphic/Shader" unique_id=77227326]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Particles" type="HBoxContainer" parent="Root/Graphic" unique_id=1882991263]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Graphic/Particles" unique_id=1730901991]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Частицы"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="Root/Graphic/Particles" unique_id=350132032]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_ga0f5")
+selected = 0
+item_count = 3
+popup/item_0/text = "Нормально"
+popup/item_0/id = 0
+popup/item_1/text = "Меньше"
+popup/item_1/id = 1
+popup/item_2/text = "Нет"
+popup/item_2/id = 2
+
+[node name="Label2" type="Label" parent="Root/Graphic/Particles" unique_id=1575882536]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Sound" type="VBoxContainer" parent="Root" unique_id=849701222]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Root/Sound" unique_id=1073973876]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="Root/Sound" unique_id=82241408]
+layout_mode = 2
+
+[node name="Characters" type="HBoxContainer" parent="Root/Sound" unique_id=431933599]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Sound/Characters" unique_id=8092186]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Голос"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Sound/Characters" unique_id=1775768027]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Label2" type="Label" parent="Root/Sound/Characters" unique_id=156856774]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Sounds" type="HBoxContainer" parent="Root/Sound" unique_id=1964863287]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Sound/Sounds" unique_id=1411138631]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Звуки"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Sound/Sounds" unique_id=1000404621]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Label2" type="Label" parent="Root/Sound/Sounds" unique_id=1086790253]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Music" type="HBoxContainer" parent="Root/Sound" unique_id=823683985]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Sound/Music" unique_id=1439063618]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Музыка"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Sound/Music" unique_id=201054296]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Label2" type="Label" parent="Root/Sound/Music" unique_id=1996314697]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="Other" type="HBoxContainer" parent="Root/Sound" unique_id=1560995165]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/Sound/Other" unique_id=862636540]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_vertical = 1
+text = "Другое"
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Root/Sound/Other" unique_id=665675364]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Label2" type="Label" parent="Root/Sound/Other" unique_id=1816727784]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_vertical = 1
+label_settings = ExtResource("2_vxum1")
+vertical_alignment = 1
+
+[connection signal="item_selected" from="Root/Window/Vsync/Vsync" to="." method="_on_vsync_item_selected"]
+[connection signal="value_changed" from="Root/Window/Noise/Noise" to="." method="_on_noise_value_changed"]

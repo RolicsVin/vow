@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://b2m6mtcjrdsgn"]
+
+[ext_resource type="Script" uid="uid://c8blwov574jpo" path="res://godo_mini_game/core/classes/mini_game.gd" id="1_5uchx"]
+[ext_resource type="Texture2D" uid="uid://d3b6y20qmwo27" path="res://assets/ui/button.png" id="2_nvpcw"]
+[ext_resource type="Texture2D" uid="uid://crqkoul6h07im" path="res://assets/ui/button_pressed.png" id="3_d047n"]
+[ext_resource type="Script" uid="uid://cmytwfxwlw06u" path="res://godo_mini_game/core/classes/button_action.gd" id="4_e15ib"]
+[ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="5_53okg"]
+[ext_resource type="Script" uid="uid://srejthmud1dp" path="res://godo_tools/classes/linear_visible.gd" id="6_m1mjl"]
+
+[node name="MiniGame" type="Control" unique_id=487739462 node_paths=PackedStringArray("elements_root", "start_element", "end_element")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5uchx")
+elements_root = NodePath(".")
+start_element = NodePath("ButtonAction")
+end_element = NodePath("ButtonAction")
+victory_count = 1
+metadata/_custom_type_script = "uid://c8blwov574jpo"
+
+[node name="ButtonAction" type="TextureButton" parent="." unique_id=1151216767 node_paths=PackedStringArray("texture_button")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_nvpcw")
+texture_pressed = ExtResource("3_d047n")
+texture_hover = ExtResource("2_nvpcw")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("4_e15ib")
+action = "Q"
+counter = 10
+time = 15.0
+texture_button = NodePath("TextureRect")
+metadata/_custom_type_script = "uid://cmytwfxwlw06u"
+
+[node name="TextureRect" type="TextureRect" parent="ButtonAction" unique_id=774751969]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="ButtonAction" unique_id=467173839]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_53okg")
+theme_override_font_sizes/font_size = 64
+text = "Q"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LinearVisible" type="Node" parent="." unique_id=1764344719]
+script = ExtResource("6_m1mjl")
+metadata/_custom_type_script = "uid://srejthmud1dp"

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://csf14agdsbfib"]
+
+[ext_resource type="Script" uid="uid://da4t5lsq7wcad" path="res://godo_combat/scenes/ability_button.gd" id="1_dc3as"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hs1x8"]
+
+[node name="AbilityButton" type="TextureButton" unique_id=576408455]
+custom_minimum_size = Vector2(0, 40)
+offset_right = 221.0
+offset_bottom = 40.0
+texture_normal = SubResource("NoiseTexture2D_hs1x8")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("1_dc3as")
+
+[node name="Label" type="Label" parent="." unique_id=451000176]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

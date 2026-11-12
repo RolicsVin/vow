@@ -1,5 +1,8 @@
 class_name Action extends Resource
 
+
+enum Type {visible, sound, music}
+
 @export var path_node: String
 @export var action: bool = false
 @export var action_type: GvnEnums.action_types = GvnEnums.action_types.visible

@@ -14,7 +14,6 @@
 [ext_resource type="FontFile" uid="uid://bo7wyme1ehd60" path="res://assets/fonts/FoglihtenNo06_076.otf" id="9_dv0eb"]
 [ext_resource type="PackedScene" uid="uid://dvkyeaumsxv85" path="res://assets/scripts/post_processing.tscn" id="9_tpwpp"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="10_tvkk6"]
-[ext_resource type="Script" path="res://godo_tools/classes/gt_sound.gd" id="11_8cc7s"]
 [ext_resource type="Texture2D" uid="uid://oiq2lotjk2fq" path="res://assets/ui/ramka2.png" id="13_dv0eb"]
 [ext_resource type="Script" uid="uid://bl88gs0cgmmrc" path="res://scenes/history.gd" id="13_tvkk6"]
 [ext_resource type="Shader" uid="uid://c38esbjplmhjs" path="res://assets/shaders/alpha_gradient.gdshader" id="15_8cc7s"]
@@ -660,7 +659,6 @@ libraries/ = SubResource("AnimationLibrary_tvkk6")
 [node name="GTSound" type="AudioStreamPlayer" parent="ChatRoot/Control/HBoxContainer/Back" unique_id=1885034567]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="History" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=824046209 node_paths=PackedStringArray("animation", "sound")]
@@ -692,7 +690,6 @@ libraries/ = SubResource("AnimationLibrary_r2e7w")
 [node name="GTSound" type="AudioStreamPlayer" parent="ChatRoot/Control/HBoxContainer/History" unique_id=63842371]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Menu" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=961365472 node_paths=PackedStringArray("animation", "sound")]
@@ -725,7 +722,6 @@ libraries/ = SubResource("AnimationLibrary_fsfa6")
 [node name="GTSound" type="AudioStreamPlayer" parent="ChatRoot/Control/HBoxContainer/Menu" unique_id=1419364034]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="SaveButton" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=1128708657 node_paths=PackedStringArray("animation")]
@@ -889,7 +885,6 @@ libraries/ = SubResource("AnimationLibrary_tvkk6")
 [node name="GTSound" type="AudioStreamPlayer" parent="History/Back" unique_id=2011582537]
 stream = ExtResource("10_tvkk6")
 volume_db = 10.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Menu" type="ColorRect" parent="." unique_id=506455870]
@@ -942,7 +937,6 @@ libraries/ = SubResource("AnimationLibrary_cvxd1")
 [node name="GTSound" type="AudioStreamPlayer" parent="Menu/Continio" unique_id=1208897371]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Settings" type="TextureButton" parent="Menu" unique_id=681030097]
@@ -980,7 +974,6 @@ libraries/ = SubResource("AnimationLibrary_cvxd1")
 [node name="GTSound" type="AudioStreamPlayer" parent="Menu/Settings" unique_id=1194549278]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="MainMenu" type="TextureButton" parent="Menu" unique_id=449968782]
@@ -1017,7 +1010,6 @@ libraries/ = SubResource("AnimationLibrary_cvxd1")
 [node name="GTSound" type="AudioStreamPlayer" parent="Menu/MainMenu" unique_id=420224995]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Ready" type="TextureButton" parent="Menu" unique_id=1176765528]
@@ -1056,7 +1048,6 @@ libraries/ = SubResource("AnimationLibrary_cvxd1")
 [node name="GTSound" type="AudioStreamPlayer" parent="Menu/Ready" unique_id=40558598]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="SaveButton" type="TextureButton" parent="Menu" unique_id=2113517283 node_paths=PackedStringArray("animation", "sound")]
@@ -1096,7 +1087,6 @@ libraries/ = SubResource("AnimationLibrary_fsfa6")
 [node name="GTSound" type="AudioStreamPlayer" parent="Menu/SaveButton" unique_id=1134649808]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-script = ExtResource("11_8cc7s")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="SettingsMenu" parent="." unique_id=144951887 node_paths=PackedStringArray("post_process") instance=ExtResource("18_fsfa6")]

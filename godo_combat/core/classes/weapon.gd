@@ -1,12 +1,15 @@
 class_name Weapon extends Resource
 
+
+enum Type {HEAD, CHEST, LEGS, BOOTS, ARMS, ARMR, ARML}
+
 @export var weapon_name: String
 @export var icon: Texture2D
 
 @export var damage: float
 @export var armor: float
 
-@export var type: GcEnum.weapon_type = GcEnum.weapon_type.CHEST
+@export var type: Weapon.Type = Weapon.Type.CHEST
 
 
 func get_icon() -> Texture2D:
@@ -37,5 +40,5 @@ func get_armor() -> float:
 	return armor
 
 
-func get_type() -> GcEnum.weapon_type:
+func get_type() -> Weapon.Type:
 	return type

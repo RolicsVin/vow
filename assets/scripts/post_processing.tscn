@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dvkyeaumsxv85"]
 
 [ext_resource type="Shader" uid="uid://bhkxap1mvqjv2" path="res://assets/shaders/screen_post_processing.gdshader" id="1_ovpnr"]
-[ext_resource type="Script" path="res://godo_tools/tools/post_processing.gd" id="2_vrkvn"]
+[ext_resource type="Script" uid="uid://cayir7xdvrg6m" path="res://assets/scripts/post_processing.gd" id="2_s2hkh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjhuw"]
 shader = ExtResource("1_ovpnr")
@@ -19,4 +19,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("2_vrkvn")
+script = ExtResource("2_s2hkh")

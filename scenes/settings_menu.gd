@@ -68,5 +68,4 @@ func _on_vsync_item_selected(index: int) -> void:
 
 
 func _on_noise_value_changed(value: float) -> void:
-	GodoTools._get_buffer()['noise_intensity'] = value / 100
 	post_process._ready()

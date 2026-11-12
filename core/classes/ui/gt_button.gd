@@ -78,12 +78,12 @@ func _process(_delta: float) -> void:
 
 
 func _pressed() -> void:
-	if not is_visible_in_tree():
-		return
-	
 	for i in nodes:
 		if i:
 			i.visible = nodes[i]
+	
+	if not is_visible_in_tree():
+		return
 	
 	if animation:
 		animation.play('pressed', 0.5)

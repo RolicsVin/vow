@@ -1,44 +1,8 @@
 [gd_scene format=3 uid="uid://bmb1dk37kyqce"]
 
 [ext_resource type="PackedScene" uid="uid://e612oyf6jcwk" path="res://scenes/scene.tscn" id="1_errlg"]
-[ext_resource type="Script" uid="uid://ubqpel73dg6o" path="res://godo_visual_novel/core/classes/linear_dialog.gd" id="2_74lek"]
-[ext_resource type="Script" uid="uid://ba3bu5tnfw5l7" path="res://godo_visual_novel/core/classes/replica.gd" id="3_j5jx5"]
-[ext_resource type="Script" uid="uid://ds60nmvsajp50" path="res://godo_visual_novel/core/classes/txt_linear_dialog.gd" id="4_lpvoh"]
-
-[sub_resource type="Resource" id="Resource_bl13t"]
-script = ExtResource("4_lpvoh")
-txt_path = "res://example_dialog.txt"
-dialog_name = "start"
 
 [node name="Scene" unique_id=733753458 instance=ExtResource("1_errlg")]
 
-[node name="Chat" parent="ChatRoot" parent_id_path=PackedInt32Array(765098785) index="1" unique_id=1260149037]
-linear_dialog_play_ready = "start"
-dialog_tree = Array[ExtResource("2_74lek")]([SubResource("Resource_bl13t")])
-
-[node name="GTSound" parent="ChatRoot/Control/HBoxContainer/Back" parent_id_path=PackedInt32Array(1102514879) index="2" unique_id=1885034567]
-script = null
-
-[node name="GTSound" parent="ChatRoot/Control/HBoxContainer/History" parent_id_path=PackedInt32Array(824046209) index="2" unique_id=63842371]
-script = null
-
-[node name="GTSound" parent="ChatRoot/Control/HBoxContainer/Menu" parent_id_path=PackedInt32Array(961365472) index="2" unique_id=1419364034]
-script = null
-
-[node name="GTSound" parent="History/Back" parent_id_path=PackedInt32Array(2146543999) index="2" unique_id=2011582537]
-script = null
-
-[node name="GTSound" parent="Menu/Continio" parent_id_path=PackedInt32Array(185243247) index="2" unique_id=1208897371]
-script = null
-
-[node name="GTSound" parent="Menu/Settings" parent_id_path=PackedInt32Array(681030097) index="2" unique_id=1194549278]
-script = null
-
-[node name="GTSound" parent="Menu/MainMenu" parent_id_path=PackedInt32Array(449968782) index="2" unique_id=420224995]
-script = null
-
-[node name="GTSound" parent="Menu/Ready" parent_id_path=PackedInt32Array(1176765528) index="2" unique_id=40558598]
-script = null
-
-[node name="GTSound" parent="Menu/SaveButton" parent_id_path=PackedInt32Array(2113517283) index="2" unique_id=1134649808]
+[node name="PostProcessing" parent="." index="14" unique_id=447539963]
 script = null

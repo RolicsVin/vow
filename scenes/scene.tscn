@@ -594,7 +594,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 script = ExtResource("3_7c5am")
-show_speed = 0.7
 behind = NodePath("../Behind")
 fast_action = NodePath("../../FastAction")
 background = NodePath("../../Backgrounds")
@@ -607,6 +606,7 @@ back_button = NodePath("../Control/HBoxContainer/Back")
 sounds = NodePath("../../Sounds")
 music = NodePath("../../Music")
 timer = NodePath("Timer")
+show_speed = 0.7
 metadata/_custom_type_script = "uid://dyqa1xka71un7"
 
 [node name="Timer" type="Timer" parent="ChatRoot/Chat" unique_id=2015705789]
@@ -729,8 +729,8 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 script = SubResource("GDScript_fsfa6")
 hidding_on_press = false
-find_sound = false
 animation = NodePath("AnimationPlayer")
+find_sound = false
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="ChatRoot/Control/HBoxContainer/SaveButton" unique_id=69690778]
@@ -1101,6 +1101,7 @@ layout_mode = 1
 [node name="PostProcessing" parent="." unique_id=447539963 instance=ExtResource("9_tpwpp")]
 visible = false
 layout_mode = 1
+script = null
 
 [node name="Node" type="Node" parent="." unique_id=2102971820]
 

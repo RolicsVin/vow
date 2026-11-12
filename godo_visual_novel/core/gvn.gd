@@ -8,21 +8,21 @@ var _buffer: Dictionary = {
 
 
 func _ready() -> void:
-	if _data.current_language == GvnEnums.languages.En:
+	if _data.current_language == Replica.Language.En:
 		GvnData.emotion_protection = GvnData.emotion_en_protection
 		GvnData.name_protection = GvnData.name_en_protection
-	if GvnData.current_language == GvnEnums.languages.Ru:
+	if GvnData.current_language == Replica.Language.Ru:
 		GvnData.emotion_protection = GvnData.emotion_ru_protection
 		GvnData.name_protection = GvnData.name_ru_protection
 
 
-func set_language(language: GvnEnums.languages):
+func set_language(language: Replica.Language):
 	GvnData.current_language = language
 	
-	if GvnData.current_language == GvnEnums.languages.En:
+	if GvnData.current_language == Replica.Language.En:
 		GvnData.emotion_protection = GvnData.emotion_en_protection
 		GvnData.name_protection = GvnData.name_en_protection
-	if GvnData.current_language == GvnEnums.languages.Ru:
+	if GvnData.current_language == Replica.Language.Ru:
 		GvnData.emotion_protection = GvnData.emotion_ru_protection
 		GvnData.name_protection = GvnData.name_ru_protection
 
@@ -37,7 +37,7 @@ func get_save() -> Dictionary:
 		}
 	
 	var save: Dictionary = {
-		'name': GvnData.name_protection[GvnEnums.characters.ГлавныйГерой],
+		'name': GvnData.name_protection[Character.CharacterType.ГлавныйГерой],
 		'chat': _buffer['chat'],
 		'video': GvnData.video,
 		'bookmarks': GvnData.bookmarks_scenes,
@@ -67,7 +67,7 @@ func load_save(save: Dictionary) -> void:
 	GvnData.automatic_text_switching_speed = save['automatic_text_switching_speed']
 	GvnData.video = save['video']
 	set_language(save['language'])
-	GvnData.name_protection[GvnEnums.characters.ГлавныйГерой] = save['name']
+	GvnData.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
 	
 	print()
 	print('GVNsave_load-------------------------------------')
@@ -113,7 +113,7 @@ func get_character_color(character: int) -> Color:
 
 ## Возвращает защитное имя главного героя.
 func get_player_name() -> String:
-	return get_character_name(GvnEnums.characters.ГлавныйГерой)
+	return get_character_name(Character.CharacterType.ГлавныйГерой)
 
 
 ## Возвращает текущую скорость отображения текста.
@@ -127,7 +127,7 @@ func get_automatic_text_switching_speed() -> float:
 
 
 ## Возвращает текущий язык интерфейса новеллы.
-func get_language() -> GvnEnums.languages:
+func get_language() -> Replica.Language:
 	return _data.current_language
 
 

@@ -1,5 +1,8 @@
 class_name Character extends TextureRect
 
+
+enum CharacterType {Нет, ГлавныйГерой, Вы, Ты, Алиса, Катя, Валя, Гальхя, Фейхья, Калия, Лира, Дорман, Фея, Сигурд, ЗверьГнева, ЗверьСмерти, Незнакомец, Незнакомка, Прохожий, Мужчина, Женщина, Девушка, Подросток, Мальчик, Девочка, Ребёнок, КастомныйПерсонаж}
+
 @export var character: GvnEnums.characters = GvnEnums.characters.Нет
 @export var emotion_player: AnimationPlayer
 

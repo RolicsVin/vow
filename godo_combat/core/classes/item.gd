@@ -35,7 +35,7 @@ func get_item_effects() -> Array[Effect]:
 			_effects.append(effects.pick_random())
 		Ability.EffectType.RANDOM:
 			for effect in effects:
-				if GodoTools.chance(effects_change):
+				if Core.tools.chance(effects_change):
 					_effects.append(effect)
 		Ability.EffectType.FULL:
 			_effects = effects

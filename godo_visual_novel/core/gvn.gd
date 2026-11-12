@@ -1,12 +1,14 @@
 extends Node
 
+var _data: Node = ToolFactory.make_tool(self, "res://godo_visual_novel/data/gvn_data.gd", "Data")
+
 var _buffer: Dictionary = {
 	'history': []
 }
 
 
 func _ready() -> void:
-	if GvnData.current_language == GvnEnums.languages.En:
+	if _data.current_language == GvnEnums.languages.En:
 		GvnData.emotion_protection = GvnData.emotion_en_protection
 		GvnData.name_protection = GvnData.name_en_protection
 	if GvnData.current_language == GvnEnums.languages.Ru:
@@ -92,3 +94,43 @@ func _write_buffer(obj, k) -> void:
 func _clear_buffer() -> void:
 	"""Полностью очистит буфер"""
 	_buffer.clear()
+
+
+## Возвращает отображаемое имя персонажа для текущего языка.
+func get_character_name(character: int) -> String:
+	return _data.name_protection.get(character, "")
+
+
+## Возвращает отображение эмоции для текущего языка.
+func get_emotion_name(emotion: int) -> String:
+	return _data.emotion_protection.get(emotion, "")
+
+
+## Возвращает цвет персонажа.
+func get_character_color(character: int) -> Color:
+	return _data.characters_color.get(character, Color.WHITE)
+
+
+## Возвращает защитное имя главного героя.
+func get_player_name() -> String:
+	return get_character_name(GvnEnums.characters.ГлавныйГерой)
+
+
+## Возвращает текущую скорость отображения текста.
+func get_text_speed() -> float:
+	return _data.text_speed
+
+
+## Возвращает скорость автоматического переключения текста.
+func get_automatic_text_switching_speed() -> float:
+	return _data.automatic_text_switching_speed
+
+
+## Возвращает текущий язык интерфейса новеллы.
+func get_language() -> GvnEnums.languages:
+	return _data.current_language
+
+
+## Возвращает состояние отображения видео.
+func is_video_enabled() -> bool:
+	return _data.video

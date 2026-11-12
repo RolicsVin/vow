@@ -1,5 +1,7 @@
 extends Node
 
+var _data: Node = ToolFactory.make_tool(self, "res://godo_combat/data/gc_data.gd", "Data")
+
 var _buffer: Dictionary = {
 	'player_entitie': load("res://Assets/entities/player/player.tres")
 }
@@ -53,7 +55,7 @@ func load_save(save: Dictionary):
 	var abilitys: Array[Ability] = []
 	
 	for i in player['abilitys']:
-		abilitys.append(GcData.abilitys[i])
+		abilitys.append(get_ability(i))
 	
 	_buffer['player_entitie'].health_max = player['health_max']
 	_buffer['player_entitie'].health = player['health']
@@ -98,14 +100,14 @@ func equip_weapon(weapon_name: String):
 	if weapon_name not in _buffer['weapons']:
 		return
 	
-	var weapon: Weapon = GcData.weapons[weapon_name]
+	var weapon: Weapon = get_weapon(weapon_name)
 	var type = weapon.get_type()
 	
 	if 'equiped_weapons' not in _buffer:
 		_buffer['equiped_weapons'] = []
 	
 	for i: String in _buffer['equiped_weapons']:
-		var _weapon: Weapon = GcData.weapons[i]
+		var _weapon: Weapon = get_weapon(i)
 		if _weapon.get_type() == type:
 			unequip_weapon(_weapon.get_weapon_name())
 	
@@ -121,3 +123,23 @@ func unequip_weapon(weapon_name: String):
 	
 	_buffer['equiped_weapons'].remove_at(_buffer['equiped_weapons'].find(weapon_name))
 	add_weapon_to_player_inventory(weapon_name)
+
+
+## Возвращает предмет по идентификатору, не раскрывая хранилище данных модуля.
+func get_item(item_name: String) -> GCItem:
+	return _data.items.get(item_name) as GCItem
+
+
+## Возвращает оружие по идентификатору.
+func get_weapon(weapon_name: String) -> Weapon:
+	return _data.weapons.get(weapon_name) as Weapon
+
+
+## Возвращает способность по идентификатору.
+func get_ability(ability_name: String) -> Ability:
+	return _data.abilitys.get(ability_name) as Ability
+
+
+## Возвращает описание уровня по его пороговому значению.
+func get_level(level: float) -> Dictionary:
+	return _data.levels.get(level, {})

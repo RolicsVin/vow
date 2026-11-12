@@ -49,13 +49,13 @@ func get_behind() -> String:
 	if custom_name:
 		behind = custom_name
 	else:
-		if speaker in GVN.has_character_name(speaker):
+		if GVN.has_character_name(speaker):
 			behind = GVN.get_character_name(speaker)
 		else:
 			behind = Character.CharacterType.keys()[speaker]
 	
 	var emotion_buffer: String = '('
-	if emotion in GVN.has_emotion_name(emotion):
+	if GVN.has_emotion_name(emotion):
 		emotion_buffer += GVN.get_emotion_name(emotion)
 	else:
 		emotion_buffer += str(Replica.Emotion.keys()[emotion])
@@ -94,7 +94,7 @@ func get_color() -> Color:
 	"""Вернёт цвет имени персонажа."""
 	if custom_color:
 		return custom_color
-	if speaker in GVN.has_character_color(speaker):
+	if GVN.has_character_color(speaker):
 		return GVN.get_character_color(speaker)
 	
 	return Color.WHITE

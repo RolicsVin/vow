@@ -12,9 +12,9 @@ enum Interpolation {instantaneous, linear}
 @export var mini_game: String
 
 @export_group('interpoliation')
-@export var type_of_interpolation: GvnEnums.types_of_interpolation = GvnEnums.types_of_interpolation.linear
-@export var type_of_start: GvnEnums.types_of_linear_dialog_interpolation = GvnEnums.types_of_linear_dialog_interpolation.linear
-@export var type_of_end: GvnEnums.types_of_linear_dialog_interpolation = GvnEnums.types_of_linear_dialog_interpolation.linear
+@export var type_of_interpolation: Replica.Interpolation = Replica.Interpolation.linear
+@export var type_of_start: LinearDialog.Interpolation = LinearDialog.Interpolation.linear
+@export var type_of_end: LinearDialog.Interpolation = LinearDialog.Interpolation.linear
 
 
 func get_replicas() -> Array[Replica]:
@@ -25,11 +25,11 @@ func get_dialog_name() -> String:
 	return dialog_name
 
 
-func get_dialog_start_type() -> GvnEnums.types_of_linear_dialog_interpolation:
+func get_dialog_start_type() -> LinearDialog.Interpolation:
 	return type_of_start
 
 
-func get_dialog_end_type() -> GvnEnums.types_of_linear_dialog_interpolation:
+func get_dialog_end_type() -> LinearDialog.Interpolation:
 	return type_of_end
 
 
@@ -55,5 +55,5 @@ func get_dialog_len() -> int:
 	return len(replicas)
 
 
-func get_interpolation() -> GvnEnums.types_of_interpolation:
+func get_interpolation() -> Replica.Interpolation:
 	return type_of_interpolation

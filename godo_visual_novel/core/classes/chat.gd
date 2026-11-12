@@ -36,7 +36,7 @@ signal dialog_exited(dialog: LinearDialog)
 
 @export_group('linear_interpolation')
 @export var timer: Timer
-@export var text_speed: float = GVN.get_text_speed()
+@export var text_speed: float = 0.03
 
 @export_group('experienced')
 @export var show_speed: float = 0.3

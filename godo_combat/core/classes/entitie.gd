@@ -35,13 +35,13 @@ var mana: float = mana_max:
 @export var effects: Array[Effect]
 
 @export var equiped_weapons: Dictionary = {
-	GcEnum.weapon_type.HEAD: null,
-	GcEnum.weapon_type.CHEST: null,
-	GcEnum.weapon_type.LEGS: null,
-	GcEnum.weapon_type.BOOTS: null,
-	GcEnum.weapon_type.ARMS: null,
-	GcEnum.weapon_type.ARML: null,
-	GcEnum.weapon_type.ARMR: null
+	Weapon.Type.HEAD: null,
+	Weapon.Type.CHEST: null,
+	Weapon.Type.LEGS: null,
+	Weapon.Type.BOOTS: null,
+	Weapon.Type.ARMS: null,
+	Weapon.Type.ARML: null,
+	Weapon.Type.ARMR: null
 }
 
 @export var experience: float = 10.0
@@ -124,7 +124,7 @@ func attack(entitie: Entitie, ability: Ability = null, _mini_game: MiniGame = nu
 				mana -= ability.get_mana()
 				break
 	
-	if ability.get_type() == GcEnum.ability_type.MINI_GAME_LOW or ability.get_type() == GcEnum.ability_type.MINI_GAME_HIGT:
+	if ability.get_type() == Ability.Type.MINI_GAME_LOW or ability.get_type() == Ability.Type.MINI_GAME_HIGT:
 		mini_game = _mini_game
 		mini_game.victory.connect(_victory)
 		mini_game.defeat.connect(_defeat)

@@ -61,9 +61,9 @@ func reset_inventory() -> void:
 	
 	if 'inventory' in GCombat._buffer:
 		for item_str: String in GCombat._get_buffer()['inventory']:
-			var item: GCItem = GcData.items[item_str]
+			var item: GCItem = GCombat.get_item(item_str)
 			var _button: TextureButton = inventory_button.instantiate()
-			_button.setup(GcData.items[item.get_item_name()], _add_effects_to_player)
+			_button.setup(GCombat.get_item(item.get_item_name()), _add_effects_to_player)
 			inventory.add_child(_button)
 
 

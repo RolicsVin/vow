@@ -9,18 +9,11 @@ var _save_elapsed: float = 0.0
 var _data_loaded: bool = false
 
 # Инструменты
-var tools: GTTools = _make_tool("res://core/tools/tools.gd", "Tools")
-var window_tools: WindowTools = _make_tool("res://core/tools/window_tools.gd", "WindowTools")
-var time_tools: TimeTools = _make_tool("res://core/tools/time_tools.gd", "TimeTools")
-var scene_tools: SceneTools = _make_tool("res://core/tools/scene_tools.gd", "SceneTools")
-var platform_tools: PlatformTools = _make_tool("res://core/tools/platform_tools.gd", "PlatformTools")
-
-
-func _make_tool(path: String, tool_name: String) -> Node:
-	var node: Node = load(path).new()
-	node.name = tool_name
-	add_child(node)
-	return node
+var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
+var window_tools: WindowTools = ToolFactory.make_tool(self, "res://core/tools/window_tools.gd", "WindowTools")
+var time_tools: TimeTools = ToolFactory.make_tool(self, "res://core/tools/time_tools.gd", "TimeTools")
+var scene_tools: SceneTools = ToolFactory.make_tool(self, "res://core/tools/scene_tools.gd", "SceneTools")
+var platform_tools: PlatformTools = ToolFactory.make_tool(self, "res://core/tools/platform_tools.gd", "PlatformTools")
 
 
 func _ready() -> void:

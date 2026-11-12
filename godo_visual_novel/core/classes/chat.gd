@@ -36,7 +36,7 @@ signal dialog_exited(dialog: LinearDialog)
 
 @export_group('linear_interpolation')
 @export var timer: Timer
-@export var text_speed: float = GvnData.text_speed
+@export var text_speed: float = GVN.get_text_speed()
 
 @export_group('experienced')
 @export var show_speed: float = 0.3
@@ -410,7 +410,7 @@ func set_replica(replica: Replica):
 	else:
 		for character in characters:
 			if character.get_character() == replica.get_speaker():
-				character.set_emotion(GvnData.character_emotion_protection[replica.get_emotion()])
+				character.set_emotion(GVN.get_character_emotion(replica.get_emotion()))
 	
 	_last_replica = replica
 	replica_started.emit(replica)
@@ -441,7 +441,7 @@ func set_replica(replica: Replica):
 		add_theme_font_size_override("font_size", default_text_size)
 	
 	auto_text_swith_timer.stop()
-	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GvnData.automatic_text_switching_speed)
+	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GVN.get_automatic_text_switching_speed())
 	
 	perform_an_action_start(replica)
 

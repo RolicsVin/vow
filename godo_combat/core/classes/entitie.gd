@@ -96,7 +96,7 @@ func unequip_weapon(weapon_name: String) -> void:
 	GCombat.add_weapon_to_player_inventory(weapon_name)
 	GCombat._get_buffer()['equiped_weapons'].remove_at(GCombat._get_buffer()['equiped_weapons'].find(weapon_name))
 	
-	var weapon: Weapon = GCombat.get_weapon(weapon_name]
+	var weapon: Weapon = GCombat.get_weapon(weapon_name)
 	
 	damage -= equiped_weapons[weapon.get_type()].damage
 	armor -= equiped_weapons[weapon.get_type()].armor

@@ -18,13 +18,10 @@ config/icon="res://icon.svg"
 
 Core="*uid://depffqo3r1or4"
 PythonBridge="*uid://cq4qjfjivev80"
-GodoTools="*uid://7e6b42h11ide"
 GM="*uid://xbv5awfux18e"
 GVN="*uid://cmxvv28i33boy"
 GCombat="*uid://dr5e8hjtl7gu1"
 Data="*uid://bfhhpidro8m27"
-GtData="*uid://b5odvo7se8xbm"
-GtEnums="*uid://by4q75pvtbytq"
 
 [display]
 

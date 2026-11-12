@@ -16,7 +16,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Core="*uid://b1ub3rwkwvhl4"
+Core="*uid://depffqo3r1or4"
 PythonBridge="*uid://cq4qjfjivev80"
 GvnData="*uid://dcjyojtxtecup"
 GvnEnums="*uid://bebjo64fkan0"
@@ -27,7 +27,6 @@ GVN="*uid://cmxvv28i33boy"
 GCombat="*uid://dr5e8hjtl7gu1"
 GcEnum="*uid://cdvrwufcv2ngr"
 GcData="*uid://dape3ufi7p0nr"
-Core="*uid://depffqo3r1or4"
 Data="*uid://bfhhpidro8m27"
 GtData="*uid://b5odvo7se8xbm"
 GtEnums="*uid://by4q75pvtbytq"

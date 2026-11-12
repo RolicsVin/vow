@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cdmvmkaab0an"]
 
-[ext_resource type="Script" uid="uid://diusb22s34e03" path="res://core/tools/settings_menu.gd" id="1_ga0f5"]
+[ext_resource type="Script" uid="uid://diusb22s34e03" path="res://scenes/settings_menu.gd" id="1_ga0f5"]
 [ext_resource type="Texture2D" uid="uid://oiq2lotjk2fq" path="res://assets/ui/ramka2.png" id="1_xm5ki"]
 [ext_resource type="LabelSettings" uid="uid://bx5vwxhqo21ac" path="res://assets/label_settings/standart_text.tres" id="2_vxum1"]
-[ext_resource type="Script" uid="uid://dqquy1ejfgbvm" path="res://godo_tools/classes/gt_button.gd" id="3_byosp"]
+[ext_resource type="Script" uid="uid://dqquy1ejfgbvm" path="res://core/classes/ui/gt_button.gd" id="3_byosp"]
 [ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="4_7jbq7"]
 [ext_resource type="FontFile" uid="uid://bo7wyme1ehd60" path="res://assets/fonts/FoglihtenNo06_076.otf" id="5_orlur"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="6_ga0f5"]
-[ext_resource type="Script" uid="uid://bvc438jdgpr3y" path="res://godo_tools/classes/gt_sound.gd" id="7_0jiyd"]
+[ext_resource type="Script" path="res://godo_tools/classes/gt_sound.gd" id="7_0jiyd"]
 [ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="9_ga0f5"]
 [ext_resource type="Texture2D" uid="uid://d2pgrxovifbir" path="res://assets/vfx/particle_red.png" id="9_orlur"]
 

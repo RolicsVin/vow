@@ -18,6 +18,19 @@ config/icon="res://icon.svg"
 
 Core="*uid://b1ub3rwkwvhl4"
 PythonBridge="*uid://cq4qjfjivev80"
+GvnData="*uid://dcjyojtxtecup"
+GvnEnums="*uid://bebjo64fkan0"
+GodoTools="*uid://7e6b42h11ide"
+GmEnum="*uid://c2ehw1hdjtdx4"
+GM="*uid://xbv5awfux18e"
+GVN="*uid://cmxvv28i33boy"
+GCombat="*uid://dr5e8hjtl7gu1"
+GcEnum="*uid://cdvrwufcv2ngr"
+GcData="*uid://dape3ufi7p0nr"
+Core="*uid://depffqo3r1or4"
+Data="*uid://bfhhpidro8m27"
+GtData="*uid://b5odvo7se8xbm"
+GtEnums="*uid://by4q75pvtbytq"
 
 [display]
 
@@ -37,10 +50,6 @@ folder_colors={
 [physics]
 
 3d/physics_engine="Jolt Physics"
-
-[python_bridge]
-
-scripts_dir="res://core/py"
 
 [rendering]
 

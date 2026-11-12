@@ -1,5 +1,8 @@
 class_name LinearDialog extends Resource
 
+
+enum Interpolation {instantaneous, linear}
+
 @export var dialog_name: String
 @export var replicas: Array[Replica]
 

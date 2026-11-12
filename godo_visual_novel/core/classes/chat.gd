@@ -81,7 +81,7 @@ func _ready() -> void:
 	# Если у реплики установлет тип интерполяции "Родитель", то устанавливаем интерполяцию от родителя
 	for linear_dialog in dialog_tree:
 		for replica in linear_dialog.get_replicas():
-			if replica.get_type_of_interpolation() == GvnEnums.types_of_interpolation.parent:
+			if replica.get_type_of_interpolation() == Replica.Interpolation.parent:
 				replica.type_of_interpolation = linear_dialog.get_interpolation()
 	
 	await get_tree().create_timer(0.5).timeout
@@ -145,7 +145,7 @@ func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0):
 	index = idx
 	current_dialog = get_linear_dialog(dialog_name)
 	
-	if current_dialog.get_dialog_start_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+	if current_dialog.get_dialog_start_type() == LinearDialog.Interpolation.instantaneous:
 		modulate = default_color
 	
 	set_replica(current_dialog.get_replica_to_id(index))
@@ -166,7 +166,7 @@ func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
 	timer.start()
 	current_dialog = linear_dialog
 	
-	if current_dialog.get_dialog_start_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+	if current_dialog.get_dialog_start_type() == LinearDialog.Interpolation.instantaneous:
 		modulate = default_color
 	
 	set_replica(current_dialog.get_replica_to_id(index))
@@ -188,17 +188,17 @@ func perform_an_action_start(replica: Replica):
 	for action_fast_last in replica.get_on_start_fast_action(): # основной цикл
 		if action_fast_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.show_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.play_sound(action_fast_last.get_path_node())
 			else:
 				music.play_music(action_fast_last.get_path_node())
 		else: # если action false
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.hide_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.stop_sound(action_fast_last.get_path_node())
 			else:
 				music.stop_music(action_fast_last.get_path_node())
@@ -208,13 +208,13 @@ func perform_an_action_start(replica: Replica):
 		var node = get_node(action_last.get_path_node())
 		if action_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_show()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -232,7 +232,7 @@ func perform_an_action_start(replica: Replica):
 					node.play()
 		else:
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearVisible:
@@ -241,7 +241,7 @@ func perform_an_action_start(replica: Replica):
 						continue
 				if not success:
 					node.hide()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -264,17 +264,17 @@ func perform_an_action_end(replica: Replica):
 	for action_fast_last in replica.get_on_end_fast_action(): # основной цикл
 		if action_fast_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.show_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.play_sound(action_fast_last.get_path_node())
 			else:
 				music.play_music(action_fast_last.get_path_node())
 		else: # если action false
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.hide_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.stop_sound(action_fast_last.get_path_node())
 			else:
 				music.stop_music(action_fast_last.get_path_node())
@@ -284,13 +284,13 @@ func perform_an_action_end(replica: Replica):
 		var node = get_node(action_last.get_path_node())
 		if action_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_show()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -308,13 +308,13 @@ func perform_an_action_end(replica: Replica):
 					node.play()
 		else:
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_hide()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -356,7 +356,7 @@ func next() -> void:
 			play_linear_dialog_on_libriary(current_dialog.get_next_dialog())
 			return
 		
-		if current_dialog.get_dialog_end_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+		if current_dialog.get_dialog_end_type() == LinearDialog.Interpolation.instantaneous:
 			hide()
 			behind.hide()
 			modulate.a = 0
@@ -432,7 +432,7 @@ func set_replica(replica: Replica):
 		modulate = default_color
 		modulate.a = alpha
 	
-	if replica.get_type_of_interpolation() == GvnEnums.types_of_interpolation.instantaneous:
+	if replica.get_type_of_interpolation() == Replica.Interpolation.instantaneous:
 		_load_text_on_buffer()
 	
 	if replica.get_small_text():

@@ -62,12 +62,12 @@ func get_attack() -> Array:
 			_effects.append(effects.pick_random())
 		Ability.EffectType.RANDOM:
 			for effect in effects:
-				if GodoTools.chance(50):
+				if Core.tools.chance(50):
 					_effects.append(effect)
 		Ability.EffectType.FULL:
 			_effects = effects
 	
-	if GodoTools.chance(critical_change):
+	if Core.tools.chance(critical_change):
 		return [critical + _get_random_damage(), _effects]
 	else:
 		return [damage + _get_random_damage(), _effects]

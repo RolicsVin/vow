@@ -77,7 +77,7 @@ func _ready() -> void:
 	
 	for dialog in dialog_tree:
 		if not dialog.get_dialog_name():
-			GodoTools.push_fatal_error('У линейного диалога отсутствует имя!')
+			Core.push_fatal_error('У линейного диалога отсутствует имя!')
 	
 	# Если у реплики установлет тип интерполяции "Родитель", то устанавливаем интерполяцию от родителя
 	for linear_dialog in dialog_tree:
@@ -106,7 +106,7 @@ func load_save_on_buffer() -> void:
 	if 'chat' in buffer:
 		is_loading = true
 		var save = buffer['chat']
-		if name == save['name'] and save['scene'] == GodoTools.get_scene_path():
+		if name == save['name'] and save['scene'] == Core.scene_tools.get_scene_path():
 			play_linear_dialog_on_libriary(save['linear_dialog'], save['index'])
 
 
@@ -157,7 +157,7 @@ func load_linear_dialog_in_libriary(linear_dialog: LinearDialog):
 	if linear_dialog.dialog_name:
 		dialog_tree.append(linear_dialog)
 	else:
-		GodoTools.push_fatal_error('У линейного диалога отсутствует имя!')
+		Core.push_fatal_error('У линейного диалога отсутствует имя!')
 
 
 func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
@@ -391,7 +391,7 @@ func set_replica(replica: Replica):
 		replica_ended.emit(_last_replica)
 	
 	GVN._write_buffer({
-		'scene': GodoTools.get_scene_path(),
+		'scene': Core.scene_tools.get_scene_path(),
 		'linear_dialog': current_dialog.get_dialog_name(),
 		'index': index,
 		'name': name}, 'chat')

@@ -134,3 +134,23 @@ func get_language() -> GvnEnums.languages:
 ## Возвращает состояние отображения видео.
 func is_video_enabled() -> bool:
 	return _data.video
+
+
+## Проверяет наличие локализованного имени персонажа.
+func has_character_name(character: int) -> bool:
+	return _data.name_protection.has(character)
+
+
+## Проверяет наличие локализованного названия эмоции.
+func has_emotion_name(emotion: int) -> bool:
+	return _data.emotion_protection.has(emotion)
+
+
+## Проверяет наличие цвета персонажа.
+func has_character_color(character: int) -> bool:
+	return _data.characters_color.has(character)
+
+
+## Возвращает внутреннее имя эмоции персонажа.
+func get_character_emotion(emotion: int) -> String:
+	return _data.character_emotion_protection.get(emotion, "default")

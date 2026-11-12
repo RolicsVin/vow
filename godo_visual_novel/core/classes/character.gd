@@ -3,7 +3,7 @@ class_name Character extends TextureRect
 
 enum CharacterType {Нет, ГлавныйГерой, Вы, Ты, Алиса, Катя, Валя, Гальхя, Фейхья, Калия, Лира, Дорман, Фея, Сигурд, ЗверьГнева, ЗверьСмерти, Незнакомец, Незнакомка, Прохожий, Мужчина, Женщина, Девушка, Подросток, Мальчик, Девочка, Ребёнок, КастомныйПерсонаж}
 
-@export var character: GvnEnums.characters = GvnEnums.characters.Нет
+@export var character: Character.CharacterType = Character.CharacterType.Нет
 @export var emotion_player: AnimationPlayer
 
 @export_group('emotions')
@@ -47,5 +47,5 @@ func set_texture_emotion(_emotion: Texture2D) -> void:
 	texture = _emotion
 
 
-func get_character() -> GvnEnums.characters:
+func get_character() -> Character.CharacterType:
 	return character

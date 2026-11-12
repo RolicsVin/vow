@@ -12,7 +12,7 @@ var start_position: Vector2
 func _ready() -> void:
 	start_position = position
 	if not colision.shape is CircleShape2D:
-		GodoTools.push_fatal_error('Для DraggableArea2D поддерживается только круглая колизия(CircleShape2D)!')
+		Core.push_fatal_error('Для DraggableArea2D поддерживается только круглая колизия(CircleShape2D)!')
 	await get_tree().create_timer(0.3).timeout
 	_is_ready = true
 

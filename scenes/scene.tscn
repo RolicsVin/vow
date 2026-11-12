@@ -722,7 +722,6 @@ libraries/ = SubResource("AnimationLibrary_fsfa6")
 [node name="GTSound" type="AudioStreamPlayer" parent="ChatRoot/Control/HBoxContainer/Menu" unique_id=1419364034]
 stream = ExtResource("10_tvkk6")
 volume_db = 5.0
-metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="SaveButton" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=1128708657 node_paths=PackedStringArray("animation")]
 custom_minimum_size = Vector2(200, 0)

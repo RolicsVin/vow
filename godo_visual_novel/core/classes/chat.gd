@@ -53,6 +53,7 @@ var _hidding: bool = false
 var is_loading: bool = false
 
 func _ready() -> void:
+	text_speed = GVN.get_text_speed()
 	if not default_text_size:
 		default_text_size = get_theme_font_size("font_size")
 	if not small_text_size:

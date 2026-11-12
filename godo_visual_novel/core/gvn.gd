@@ -9,22 +9,22 @@ var _buffer: Dictionary = {
 
 func _ready() -> void:
 	if _data.current_language == Replica.Language.En:
-		GvnData.emotion_protection = GvnData.emotion_en_protection
-		GvnData.name_protection = GvnData.name_en_protection
-	if GvnData.current_language == Replica.Language.Ru:
-		GvnData.emotion_protection = GvnData.emotion_ru_protection
-		GvnData.name_protection = GvnData.name_ru_protection
+		_data.emotion_protection = _data.emotion_en_protection
+		_data.name_protection = _data.name_en_protection
+	if _data.current_language == Replica.Language.Ru:
+		_data.emotion_protection = _data.emotion_ru_protection
+		_data.name_protection = _data.name_ru_protection
 
 
 func set_language(language: Replica.Language):
-	GvnData.current_language = language
+	_data.current_language = language
 	
-	if GvnData.current_language == Replica.Language.En:
-		GvnData.emotion_protection = GvnData.emotion_en_protection
-		GvnData.name_protection = GvnData.name_en_protection
-	if GvnData.current_language == Replica.Language.Ru:
-		GvnData.emotion_protection = GvnData.emotion_ru_protection
-		GvnData.name_protection = GvnData.name_ru_protection
+	if _data.current_language == Replica.Language.En:
+		_data.emotion_protection = _data.emotion_en_protection
+		_data.name_protection = _data.name_en_protection
+	if _data.current_language == Replica.Language.Ru:
+		_data.emotion_protection = _data.emotion_ru_protection
+		_data.name_protection = _data.name_ru_protection
 
 
 func get_save() -> Dictionary:
@@ -37,14 +37,14 @@ func get_save() -> Dictionary:
 		}
 	
 	var save: Dictionary = {
-		'name': GvnData.name_protection[Character.CharacterType.ГлавныйГерой],
+		'name': _data.name_protection[Character.CharacterType.ГлавныйГерой],
 		'chat': _buffer['chat'],
-		'video': GvnData.video,
-		'bookmarks': GvnData.bookmarks_scenes,
-		'language': int(GvnData.current_language),
-		'text_speed': GvnData.text_speed,
-		'automatic_text_switching': GvnData.automatic_text_switching,
-		'automatic_text_switching_speed': GvnData.automatic_text_switching_speed
+		'video': _data.video,
+		'bookmarks': _data.bookmarks_scenes,
+		'language': int(_data.current_language),
+		'text_speed': _data.text_speed,
+		'automatic_text_switching': _data.automatic_text_switching,
+		'automatic_text_switching_speed': _data.automatic_text_switching_speed
 	}
 	print('Печатает служба Godo Visual Novel')
 	
@@ -61,13 +61,13 @@ func load_save(save: Dictionary) -> void:
 	print('Печатает служба Godo Visual Novel')
 	print(save['chat'])
 	_buffer['chat'] = save['chat']
-	GvnData.bookmarks_scenes = save['bookmarks']
-	GvnData.text_speed = save['text_speed']
-	GvnData.automatic_text_switching = save['automatic_text_switching']
-	GvnData.automatic_text_switching_speed = save['automatic_text_switching_speed']
-	GvnData.video = save['video']
+	_data.bookmarks_scenes = save['bookmarks']
+	_data.text_speed = save['text_speed']
+	_data.automatic_text_switching = save['automatic_text_switching']
+	_data.automatic_text_switching_speed = save['automatic_text_switching_speed']
+	_data.video = save['video']
 	set_language(save['language'])
-	GvnData.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
+	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
 	
 	print()
 	print('GVNsave_load-------------------------------------')
@@ -78,7 +78,7 @@ func load_save(save: Dictionary) -> void:
 
 func add_bookmark(bookmark: String, _name: String) -> void:
 	"""Добавляет сцену в закладки по её пути. Если закладка уже существует, то будет перезаписана."""
-	GvnData.bookmarks_scenes[_name] = bookmark
+	_data.bookmarks_scenes[_name] = bookmark
 
 
 func _get_buffer() -> Dictionary:

@@ -5,8 +5,8 @@ enum Emotion {Без_эмоции, В_мыслях, Радостно, Счаст
 enum Language {Ru, En}
 enum Interpolation {parent, instantaneous, linear}
 
-@export var speaker: GvnEnums.characters
-@export var emotion: GvnEnums.emotions
+@export var speaker: Character.CharacterType
+@export var emotion: Replica.Emotion
 @export var replica: String
 @export var sound: String
 @export var background: String
@@ -16,8 +16,8 @@ enum Interpolation {parent, instantaneous, linear}
 @export var fast_action_end: Array[Action]
 
 @export_group('language')
-@export var language: GvnEnums.languages = GvnEnums.languages.Ru
-@export var languages: Dictionary[GvnEnums.languages, String]
+@export var language: Replica.Language = Replica.Language.Ru
+@export var languages: Dictionary[Replica.Language, String]
 
 @export_group('adventure')
 @export var reset_text_buffer: bool = true
@@ -33,7 +33,7 @@ enum Interpolation {parent, instantaneous, linear}
 @export var on_start: Array[Action]
 @export var on_end: Array[Action]
 
-@export var type_of_interpolation: GvnEnums.types_of_interpolation = GvnEnums.types_of_interpolation.parent
+@export var type_of_interpolation: Replica.Interpolation = Replica.Interpolation.parent
 @export var unical_id: String
 
 
@@ -52,13 +52,13 @@ func get_behind() -> String:
 		if speaker in GVN.has_character_name(speaker):
 			behind = GVN.get_character_name(speaker)
 		else:
-			behind = GvnEnums.characters.keys()[speaker]
+			behind = Character.CharacterType.keys()[speaker]
 	
 	var emotion_buffer: String = '('
 	if emotion in GVN.has_emotion_name(emotion):
 		emotion_buffer += GVN.get_emotion_name(emotion)
 	else:
-		emotion_buffer += str(GvnEnums.emotions.keys()[emotion])
+		emotion_buffer += str(Replica.Emotion.keys()[emotion])
 	
 	# Если эмоции нет, то очищаем буфер эмоции, иначе закрываем скобку
 	if len(emotion_buffer) < 2:
@@ -69,14 +69,14 @@ func get_behind() -> String:
 	return behind + emotion_buffer
 
 
-func get_speaker() -> GvnEnums.characters:
+func get_speaker() -> Character.CharacterType:
 	"""Вернёт Enum."""
 	if custom_name:
-		return GvnEnums.characters.КастомныйПерсонаж
+		return Character.CharacterType.КастомныйПерсонаж
 	return speaker
 
 
-func get_emotion() -> GvnEnums.emotions:
+func get_emotion() -> Replica.Emotion:
 	return emotion
 
 
@@ -104,7 +104,7 @@ func get_chat_color() -> Color:
 	return chat_color
 
 
-func get_type_of_interpolation() -> GvnEnums.types_of_interpolation:
+func get_type_of_interpolation() -> Replica.Interpolation:
 	return type_of_interpolation
 
 

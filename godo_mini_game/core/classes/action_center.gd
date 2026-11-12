@@ -11,7 +11,7 @@ signal defeat
 @export var counter: float = 10.0
 @export var time: float = 10.0
 
-@export var interpolation: GmEnum.types_interpolation = GmEnum.types_interpolation.linear
+@export var interpolation: MiniGame.Interpolation = MiniGame.Interpolation.linear
 @export var object_copy_alpha: bool = true
 
 var _is_started: bool = false
@@ -35,7 +35,7 @@ func _ready() -> void:
 
 
 func start():
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 1
 	else:
 		_is_showing = true
@@ -86,7 +86,7 @@ func _on_exited(area: Area2D):
 
 
 func _end():
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 0
 		object.hide()
 		hide()

@@ -44,14 +44,14 @@ func get_behind() -> String:
 	if custom_name:
 		behind = custom_name
 	else:
-		if speaker in GvnData.name_protection:
-			behind = GvnData.name_protection[speaker]
+		if speaker in _REMOVE_NAME_PROTECTION_:
+			behind = GVN.get_character_name(speaker)
 		else:
 			behind = GvnEnums.characters.keys()[speaker]
 	
 	var emotion_buffer: String = '('
-	if emotion in GvnData.emotion_protection:
-		emotion_buffer += GvnData.emotion_protection[emotion]
+	if emotion in _REMOVE_EMOTION_PROTECTION_:
+		emotion_buffer += GVN.get_emotion_name(emotion)
 	else:
 		emotion_buffer += str(GvnEnums.emotions.keys()[emotion])
 	
@@ -77,20 +77,20 @@ func get_emotion() -> GvnEnums.emotions:
 
 func get_replica() -> String:
 	"""Вернёт реплику персонажа."""
-	if language == GvnData.current_language:
-		return replica.replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
-	elif GvnData.current_language in languages:
-		return languages[GvnData.current_language].replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
+	if language == GVN.get_language():
+		return replica.replace('@', GVN.get_player_name())
+	elif GVN.get_language() in languages:
+		return languages[GVN.get_language()].replace('@', GVN.get_player_name())
 	else:
-		return replica.replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
+		return replica.replace('@', GVN.get_player_name())
 
 
 func get_color() -> Color:
 	"""Вернёт цвет имени персонажа."""
 	if custom_color:
 		return custom_color
-	if speaker in GvnData.characters_color:
-		return GvnData.characters_color[speaker]
+	if speaker in _REMOVE_CHARACTERS_COLOR_:
+		return GVN.get_character_color(speaker)
 	
 	return Color.WHITE
 

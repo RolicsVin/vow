@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://b3qcc6wlu2chr" path="res://assets/ui/save_button.gd" id="1_mkvoo"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="2_c8f21"]
 [ext_resource type="Texture2D" uid="uid://bpd0ega4gklwx" path="res://assets/ui/ramka3.png" id="2_swgd6"]
-[ext_resource type="Script" uid="uid://bvc438jdgpr3y" path="res://godo_tools/classes/gt_sound.gd" id="2_wcmmu"]
 [ext_resource type="Texture2D" uid="uid://va6y5n866r5" path="res://scenes/chapter1_prologue/boat.png" id="3_7tes7"]
 [ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="6_swgd6"]
 

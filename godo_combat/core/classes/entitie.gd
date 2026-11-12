@@ -62,7 +62,7 @@ func _reset_weapons() -> void:
 	
 	if 'equiped_weapons' in GCombat._get_buffer():
 		for i in GCombat._get_buffer()['equiped_weapons']:
-			var weapon: Weapon = GcData.weapons[i]
+			var weapon: Weapon = GCombat.get_weapon(i)
 			
 			equiped_weapons[weapon.get_type()] = weapon
 			damage += weapon.damage
@@ -72,7 +72,7 @@ func _reset_weapons() -> void:
 
 func equip_weapon(weapon_name: String) -> void:
 	GCombat.remowe_weapon_to_player_inventory(weapon_name)
-	var weapon: Weapon = GcData.weapons[weapon_name]
+	var weapon: Weapon = GCombat.get_weapon(weapon_name)
 	
 	if not equiped_weapons[weapon.get_type()]:
 		equiped_weapons[weapon.get_type()] = weapon
@@ -96,7 +96,7 @@ func unequip_weapon(weapon_name: String) -> void:
 	GCombat.add_weapon_to_player_inventory(weapon_name)
 	GCombat._get_buffer()['equiped_weapons'].remove_at(GCombat._get_buffer()['equiped_weapons'].find(weapon_name))
 	
-	var weapon: Weapon = GcData.weapons[weapon_name]
+	var weapon: Weapon = GCombat.get_weapon(weapon_name]
 	
 	damage -= equiped_weapons[weapon.get_type()].damage
 	armor -= equiped_weapons[weapon.get_type()].armor

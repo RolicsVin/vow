@@ -1,5 +1,10 @@
 class_name Replica extends Resource
 
+
+enum Emotion {Без_эмоции, В_мыслях, Радостно, Счастливо, Смеясь, Веселясь, Хихикая, Грустно, Печально, Огорчённо, Недовольно, Шокированно, Удивлённо, Пугливо, Испуганно, Боясь, Истеря, Плача, Злясь, Злостно, Яростно, Безумно, Неистово, Подозрительно, Раздосадованно, Задумчиво, Насмешливо, Издеваясь, Не_доверчиво, Прищурившись, Присмотревшись, Страсно, Возбуждённо, Влюблённо, Стыдливо, Смущённо}
+enum Language {Ru, En}
+enum Interpolation {parent, instantaneous, linear}
+
 @export var speaker: GvnEnums.characters
 @export var emotion: GvnEnums.emotions
 @export var replica: String

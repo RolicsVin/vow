@@ -101,8 +101,12 @@ func ping() -> Dictionary:
 # --- internals -------------------------------------------------------------
 
 func _request(msg: Dictionary) -> Dictionary:
-	if not is_running:
-		return _error("Python bridge is not running")
+	if not is_running and not start():
+		return _error("Failed to start Python bridge")
+	
+	if not await wait_until_ready():
+		return _error("Python bridge did not become ready")
+	
 	var id := _next_id
 	_next_id += 1
 	msg["id"] = id

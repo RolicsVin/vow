@@ -26,7 +26,7 @@ func on():
 	for i in container.get_children():
 		i.queue_free()
 	
-	for i in GVN._get_buffer()['history']:
+	for i in GVisualNovel._get_buffer()['history']:
 		var text: Label = Label.new()
 		text.add_theme_font_override("font", load("res://assets/fonts/Constantine.ttf"))
 		text.size.x = container.size.x

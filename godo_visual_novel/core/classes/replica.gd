@@ -49,14 +49,14 @@ func get_behind() -> String:
 	if custom_name:
 		behind = custom_name
 	else:
-		if GVN.has_character_name(speaker):
-			behind = GVN.get_character_name(speaker)
+		if GVisualNovel.has_character_name(speaker):
+			behind = GVisualNovel.get_character_name(speaker)
 		else:
 			behind = Character.CharacterType.keys()[speaker]
 	
 	var emotion_buffer: String = '('
-	if GVN.has_emotion_name(emotion):
-		emotion_buffer += GVN.get_emotion_name(emotion)
+	if GVisualNovel.has_emotion_name(emotion):
+		emotion_buffer += GVisualNovel.get_emotion_name(emotion)
 	else:
 		emotion_buffer += str(Replica.Emotion.keys()[emotion])
 	
@@ -82,20 +82,20 @@ func get_emotion() -> Replica.Emotion:
 
 func get_replica() -> String:
 	"""Вернёт реплику персонажа."""
-	if language == GVN.get_language():
-		return replica.replace('@', GVN.get_player_name())
-	elif GVN.get_language() in languages:
-		return languages[GVN.get_language()].replace('@', GVN.get_player_name())
+	if language == GVisualNovel.get_language():
+		return replica.replace('@', GVisualNovel.get_player_name())
+	elif GVisualNovel.get_language() in languages:
+		return languages[GVisualNovel.get_language()].replace('@', GVisualNovel.get_player_name())
 	else:
-		return replica.replace('@', GVN.get_player_name())
+		return replica.replace('@', GVisualNovel.get_player_name())
 
 
 func get_color() -> Color:
 	"""Вернёт цвет имени персонажа."""
 	if custom_color:
 		return custom_color
-	if GVN.has_character_color(speaker):
-		return GVN.get_character_color(speaker)
+	if GVisualNovel.has_character_color(speaker):
+		return GVisualNovel.get_character_color(speaker)
 	
 	return Color.WHITE
 

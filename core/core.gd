@@ -40,7 +40,7 @@ func save_data() -> void:
 	
 	var data = {
 		'godo_combat': GCombat.get_save(),
-		'godo_visual_novel': GVN.get_save(),
+		'godo_visual_novel': await GVN.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),
 		'data': time_tools.get_date(),

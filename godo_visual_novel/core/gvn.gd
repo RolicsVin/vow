@@ -28,7 +28,7 @@ func set_language(language: Replica.Language) -> void:
 
 func get_save() -> Dictionary:
 	_update_language_protection()
-	print('Печатает служба Godo Visual Novel-------------------------------------')
+	print('Печатает служба Godo Visual Novel---------------------------------------------------------')
 	print('the save is being prepared....')
 	
 	if 'chat' not in _buffer:
@@ -51,15 +51,19 @@ func get_save() -> Dictionary:
 	}
 	
 	print('the preservation has been issued:')
-	PythonBridge.call_function('stdout', 'pretty_print', [save])
-	print('----------------------------------------------------------------------')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	print('------------------------------------------------------------------------------------------')
 	print()
 	
 	return save
 
 
 func load_save(save: Dictionary) -> void:
-	print('Печатает служба Godo Visual Novel-------------------------------------')
+	print('Печатает служба Godo Visual Novel---------------------------------------------------------')
 	print('the resulting save:')
 	print('loading...')
 	_buffer['chat'] = save['chat']
@@ -71,7 +75,7 @@ func load_save(save: Dictionary) -> void:
 	set_language(save['language'])
 	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
 	print('loaded')
-	print('----------------------------------------------------------------------')
+	print('------------------------------------------------------------------------------------------')
 	print()
 
 

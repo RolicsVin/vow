@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://cw2e8p7y0lhg5"]
 
-[ext_resource type="Texture2D" path="res://scenes/chapter1_prologue/boat_on_short.png" id="1_l6cm7"]
 [ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="2_bqqt6"]
-[ext_resource type="Texture2D" path="res://assets/icons/logo/game_logo.png" id="2_ekxnf"]
 [ext_resource type="Script" uid="uid://bcfvkrvnfiito" path="res://scenes/saving_buttons.gd" id="3_5dd4i"]
 [ext_resource type="Script" uid="uid://dbvhkyheli2yv" path="res://scenes/start.gd" id="3_lgwnu"]
-[ext_resource type="Script" uid="uid://cpsqcnxlbbk31" path="res://assets/scripts/paralax.gd" id="4_wu84c"]
+[ext_resource type="Script" uid="uid://cpsqcnxlbbk31" path="res://core/classes/ui/paralax.gd" id="4_wu84c"]
 [ext_resource type="Texture2D" uid="uid://d4mf43gmlyrjl" path="res://assets/ui/continio-Photoroom.png" id="5_tbmy8"]
 [ext_resource type="Script" uid="uid://srejthmud1dp" path="res://core/classes/ui/linear_visible.gd" id="6_jk1qb"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="7_5dd4i"]
@@ -667,7 +665,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_l6cm7")
 expand_mode = 1
 stretch_mode = 6
 
@@ -709,7 +706,6 @@ offset_left = -1053.0
 offset_top = -283.0
 offset_bottom = 770.0
 grow_horizontal = 0
-texture = ExtResource("2_ekxnf")
 expand_mode = 1
 stretch_mode = 6
 script = ExtResource("4_wu84c")
@@ -961,7 +957,6 @@ layout_mode = 1
 stream = ExtResource("14_5pajh")
 volume_db = -10.0
 autoplay = true
-sound_type = 3
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="LinearSound" type="Node" parent="RainSounds" unique_id=864120637]

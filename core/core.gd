@@ -24,8 +24,10 @@ func _end_log() -> void:
 
 
 func _ready() -> void:
-	save_data()
-	load_save(await get_save(get_saves()[-1]))
+	await save_data()
+	var save_name: String = get_saves()[-1]
+	var save: Dictionary = await get_save(save_name)
+	await load_save(save)
 
 
 func save_data() -> void:
@@ -100,14 +102,14 @@ func get_save(save_name: String) -> Dictionary:
 	return data
 
 
-func load_save(_save: Dictionary):
+func load_save(_save: Dictionary) -> void:
 	_print_log()
 	
 	print('Загрузка сохранения...')
-	GCombat.load_save(_save['godo_combat'])
+	await GCombat.load_save(_save['godo_combat'])
 	if _save.has('godo_mini_game'):
-		GM.load_save(_save['godo_mini_game'])
-	GVN.load_save(_save['godo_visual_novel'])
+		await GM.load_save(_save['godo_mini_game'])
+	await GVN.load_save(_save['godo_visual_novel'])
 	Core.scene_tools.change_scene(_save['scene'])
 	print('Сохранение загружено.')
 	

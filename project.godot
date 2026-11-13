@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="vow"
+config/description="Визуальная новелла, про человека решившего подняться на самую высокую гору и сразить богов."
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://oq7wstoos8ko"

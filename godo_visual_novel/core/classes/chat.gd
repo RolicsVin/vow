@@ -53,7 +53,7 @@ var _hidding: bool = false
 var is_loading: bool = false
 
 func _ready() -> void:
-	text_speed = GVN.get_text_speed()
+	text_speed = GVisualNovel.get_text_speed()
 	if not default_text_size:
 		default_text_size = get_theme_font_size("font_size")
 	if not small_text_size:
@@ -102,7 +102,7 @@ func chat_back():
 
 
 func load_save_on_buffer() -> void:
-	var buffer = GVN._get_buffer()
+	var buffer = GVisualNovel._get_buffer()
 	if 'chat' in buffer:
 		is_loading = true
 		var save = buffer['chat']
@@ -390,13 +390,13 @@ func set_replica(replica: Replica):
 		perform_an_action_end(_last_replica)
 		replica_ended.emit(_last_replica)
 	
-	GVN._write_buffer({
+	GVisualNovel._write_buffer({
 		'scene': Core.scene_tools.get_scene_path(),
 		'linear_dialog': current_dialog.get_dialog_name(),
 		'index': index,
 		'name': name}, 'chat')
 	
-	GVN._get_buffer()['history'].append(replica.get_behind() + ': ' + replica.get_replica())
+	GVisualNovel._get_buffer()['history'].append(replica.get_behind() + ': ' + replica.get_replica())
 	
 	if replica.get_background():
 		background.background(replica.get_background())
@@ -411,7 +411,7 @@ func set_replica(replica: Replica):
 	else:
 		for character in characters:
 			if character.get_character() == replica.get_speaker():
-				character.set_emotion(GVN.get_character_emotion(replica.get_emotion()))
+				character.set_emotion(GVisualNovel.get_character_emotion(replica.get_emotion()))
 	
 	_last_replica = replica
 	replica_started.emit(replica)
@@ -442,7 +442,7 @@ func set_replica(replica: Replica):
 		add_theme_font_size_override("font_size", default_text_size)
 	
 	auto_text_swith_timer.stop()
-	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GVN.get_automatic_text_switching_speed())
+	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GVisualNovel.get_automatic_text_switching_speed())
 	
 	perform_an_action_start(replica)
 

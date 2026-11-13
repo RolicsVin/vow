@@ -1,56 +1,68 @@
-def pretty_print(data, indent=0, max_length=150):
+def pretty_print(data, indent=0, max_length=150, ignore_keys=None):
     """
-    Рекурсивно выводит словари и списки.
+    Рекурсивно форматирует словари и списки.
 
-    Если длина компактного представления структуры превышает
-    max_length, содержимое выводится в несколько строк.
+    Короткие списки выводятся в одну строку, длинные — развёрнуто.
 
     Args:
         data: Словарь, список или другое значение.
         indent: Текущий уровень отступа.
-        max_length: Максимальная длина строки.
+        max_length: Максимальная длина компактного представления.
+        ignore_keys: Ключи словаря, которые нужно игнорировать.
+
+    Returns:
+        str: Отформатированное представление данных.
     """
-    prefix = " " * indent
+    if ignore_keys is None:
+        ignore_keys = {"icon_data", "icon"}
 
-    if isinstance(data, dict):
-        if not data:
-            print("{}")
-            return
+    lines = []
 
-        print("{")
+    def format_value(value, indent):
+        prefix = " " * indent
 
-        for key, value in data.items():
-            print(f"{' ' * (indent + 4)}{key!r}: ", end="")
+        if isinstance(value, dict):
+            items = [
+                (key, val)
+                for key, val in value.items()
+                if key not in ignore_keys
+            ]
 
-            if isinstance(value, (dict, list)):
-                pretty_print(value, indent + 4, max_length)
-            else:
-                print(repr(value))
+            if not items:
+                lines.append(f"{prefix}{{}}")
+                return
 
-        print(f"{prefix}}}")
+            lines.append(f"{prefix}{{")
 
-    elif isinstance(data, list):
-        compact = repr(data)
+            for key, val in items:
+                if isinstance(val, (dict, list)):
+                    lines.append(f"{' ' * (indent + 4)}{key!r}:")
+                    format_value(val, indent + 4)
+                else:
+                    lines.append(f"{' ' * (indent + 4)}{key!r}: {val!r}")
 
-        if len(compact) <= max_length:
-            print(compact)
-            return
+            lines.append(f"{prefix}}}")
 
-        if not data:
-            print("[]")
-            return
+        elif isinstance(value, list):
+            if len(repr(value)) <= max_length:
+                lines.append(f"{prefix}{value!r}")
+                return
 
-        print("[")
+            if not value:
+                lines.append(f"{prefix}[]")
+                return
 
-        for item in data:
-            print(f"{' ' * (indent + 4)}", end="")
+            lines.append(f"{prefix}[")
 
-            if isinstance(item, (dict, list)):
-                pretty_print(item, indent + 4, max_length)
-            else:
-                print(repr(item))
+            for item in value:
+                format_value(item, indent + 4)
 
-        print(f"{prefix}]")
+            lines.append(f"{prefix}]")
 
-    else:
-        print(repr(data))
+        else:
+            lines.append(f"{prefix}{value!r}")
+
+    format_value(data, indent)
+    
+    print("\n".join(lines))
+    return "\n".join(lines)

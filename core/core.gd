@@ -24,14 +24,15 @@ func _end_log() -> void:
 
 
 func _ready() -> void:
-	await save_data()
+	await get_tree().create_timer(1).timeout
+	save_data()
 
 
 func save_data() -> void:
 	_print_log()
 	print('Создание сохранения...')
 	
-	var save_name = 'lake_of_souls_save_' + tools.get_project_version() + '_number' + str(len(get_saves())) + '.save'
+	var save_name = 'vow' + tools.get_project_version() + '_number' + str(len(get_saves())) + '.save'
 	
 	var icon = window_tools.take_screenshot()
 	var screen_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
@@ -89,6 +90,7 @@ func get_save(save_name: String) -> Dictionary:
 	
 	print('Сохранение прочитано.')
 	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	print(response.result)
 	if not response.get("ok", false):
 		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	_end_log()

@@ -51,6 +51,7 @@ func get_save() -> Dictionary:
 	}
 	
 	print('the preservation has been issued:')
+	PythonBridge.call_function('stdout', 'pretty_print', [save])
 	print('----------------------------------------------------------------------')
 	print()
 	

@@ -91,7 +91,7 @@ func _prepare_dialog_tree() -> void:
 				replica.type_of_interpolation = dialog.get_interpolation()
 
 
-func chat_back() -> void:
+func chat_back():
 	if not current_dialog:
 		return
 
@@ -140,18 +140,18 @@ func _load_symbol_on_byffer() -> void:
 	text = text_buffer.substr(0, len(text) + 1)
 
 
-func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0) -> void:
+func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0):
 	_start_dialog(get_linear_dialog(dialog_name), idx, true)
 
 
-func load_linear_dialog_in_libriary(linear_dialog: LinearDialog) -> void:
+func load_linear_dialog_in_libriary(linear_dialog: LinearDialog):
 	if linear_dialog.dialog_name:
 		dialog_tree.append(linear_dialog)
 	else:
 		Core.push_fatal_error('У линейного диалога отсутствует имя!')
 
 
-func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0) -> void:
+func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
 	_start_dialog(linear_dialog, idx, false)
 
 
@@ -181,7 +181,7 @@ func get_linear_dialog(dialog_name: String):
 			return linear_dialog
 
 
-func perform_an_action_start(replica: Replica) -> void:
+func perform_an_action_start(replica: Replica):
 	_perform_replica_actions(
 		replica.get_on_start_fast_action(),
 		replica.get_on_start_action(),
@@ -189,7 +189,7 @@ func perform_an_action_start(replica: Replica) -> void:
 	)
 
 
-func perform_an_action_end(replica: Replica) -> void:
+func perform_an_action_end(replica: Replica):
 	_perform_replica_actions(
 		replica.get_on_end_fast_action(),
 		replica.get_on_end_action(),
@@ -331,7 +331,7 @@ func _finish_dialog() -> void:
 	timer.stop()
 
 
-func set_replica(replica: Replica) -> void:
+func set_replica(replica: Replica):
 	if _last_replica:
 		perform_an_action_end(_last_replica)
 		replica_ended.emit(_last_replica)

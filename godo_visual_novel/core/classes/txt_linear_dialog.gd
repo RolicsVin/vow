@@ -17,12 +17,12 @@ class_name TxtLinearDialog extends LinearDialog
 ##   ~                      вместо текста: реплика без текста (например, только смена фона)
 ##   \n в тексте            перенос строки внутри реплики
 ##   // комментарий         строка-комментарий, игнорируется
-##   lang;En Hello!         перевод реплики на язык из GvnEnums.languages
+##   lang;En Hello!         перевод реплики на язык из Replica.Language
 ##
 ## Свойства реплики:
-##   speaker <Имя>          имя из GvnEnums.characters; неизвестное имя станет custom_name
+##   speaker <Имя>          имя из Character.CharacterType; неизвестное имя станет custom_name
 ##   name <Имя>             custom_name (имя над репликой), без привязки к персонажу
-##   emotion <Эмоция>       имя из GvnEnums.emotions (пробел можно писать вместо "_")
+##   emotion <Эмоция>       имя из Replica.Emotion (пробел можно писать вместо "_")
 ##   background <Имя>       replica.background
 ##   sound <Имя>            replica.sound
 ##   color <цвет>           custom_color (имя цвета или #RRGGBB)
@@ -148,20 +148,20 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 	
 	match key:
 		"speaker":
-			var idx := _find_enum(GvnEnums.characters, value)
+			var idx := _find_enum(Character.CharacterType, value)
 			if idx == -1:
-				_warn(line_no, "персонаж «%s» не найден в GvnEnums.characters, использую как custom_name" % value)
+				_warn(line_no, "персонаж «%s» не найден в Character.CharacterType, использую как custom_name" % value)
 				replica.custom_name = value
 			else:
-				replica.speaker = idx as GvnEnums.characters
+				replica.speaker = idx as Character.CharacterType
 		"name":
 			replica.custom_name = value
 		"emotion":
-			var idx := _find_enum(GvnEnums.emotions, value)
+			var idx := _find_enum(Replica.Emotion, value)
 			if idx == -1:
-				_warn(line_no, "эмоция «%s» не найдена в GvnEnums.emotions" % value)
+				_warn(line_no, "эмоция «%s» не найдена в Replica.Emotion" % value)
 			else:
-				replica.emotion = idx as GvnEnums.emotions
+				replica.emotion = idx as Replica.Emotion
 		"background":
 			replica.background = value
 		"sound":
@@ -177,11 +177,11 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 		"character_emotion":
 			replica.custom_character_emotion = value
 		"interpolation":
-			var idx := _find_enum(GvnEnums.types_of_interpolation, value)
+			var idx := _find_enum(Replica.Interpolation, value)
 			if idx == -1:
 				_error(line_no, "тип интерполяции «%s» не найден (parent / instantaneous / linear)" % value)
 			else:
-				replica.type_of_interpolation = idx as GvnEnums.types_of_interpolation
+				replica.type_of_interpolation = idx as Replica.Interpolation
 		"reset_text_buffer":
 			var flag: Variant = _parse_bool(line_no, value)
 			if flag != null:
@@ -191,22 +191,22 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 			if flag != null:
 				replica.small_text = flag
 		"language":
-			var idx := _find_enum(GvnEnums.languages, value)
+			var idx := _find_enum(Replica.Language, value)
 			if idx == -1:
-				_error(line_no, "язык «%s» не найден в GvnEnums.languages" % value)
+				_error(line_no, "язык «%s» не найден в Replica.Language" % value)
 			else:
-				replica.language = idx as GvnEnums.languages
+				replica.language = idx as Replica.Language
 		"id":
 			replica.unical_id = value
 		"lang":
 			if key_parts.size() != 2:
 				_error(line_no, "ожидалось «lang;<язык> текст»")
 				return
-			var idx := _find_enum(GvnEnums.languages, key_parts[1])
+			var idx := _find_enum(Replica.Language, key_parts[1])
 			if idx == -1:
-				_error(line_no, "язык «%s» не найден в GvnEnums.languages" % key_parts[1])
+				_error(line_no, "язык «%s» не найден в Replica.Language" % key_parts[1])
 			else:
-				replica.languages[idx as GvnEnums.languages] = value.replace("\\n", "\n")
+				replica.languages[idx as Replica.Language] = value.replace("\\n", "\n")
 		"action":
 			_apply_action(replica, line_no, key_parts, value)
 		_:
@@ -224,7 +224,7 @@ func _apply_action(replica: Replica, line_no: int, key_parts: PackedStringArray,
 		_error(line_no, "в action первым словом должно быть start или end, а не «%s»" % key_parts[1])
 		return
 	
-	var type_idx := _find_enum(GvnEnums.action_types, key_parts[2])
+	var type_idx := _find_enum(Action.Type, key_parts[2])
 	if type_idx == -1:
 		_error(line_no, "тип действия «%s» не найден (visible / sound / music)" % key_parts[2])
 		return
@@ -253,7 +253,7 @@ func _apply_action(replica: Replica, line_no: int, key_parts: PackedStringArray,
 	var action := Action.new()
 	action.path_node = " ".join(tokens)
 	action.action = enable
-	action.action_type = type_idx as GvnEnums.action_types
+	action.action_type = type_idx as Action.Type
 	
 	if when == "start":
 		(replica.fast_action_start if fast else replica.on_start).append(action)
@@ -278,23 +278,23 @@ func _apply_dialog_line(line_no: int, line: String) -> void:
 		"mini_game":
 			mini_game = value
 		"start":
-			var idx := _find_enum(GvnEnums.types_of_linear_dialog_interpolation, value)
+			var idx := _find_enum(LinearDialog.Interpolation, value)
 			if idx == -1:
 				_error(line_no, "тип «%s» не найден (instantaneous / linear)" % value)
 			else:
-				type_of_start = idx as GvnEnums.types_of_linear_dialog_interpolation
+				type_of_start = idx as LinearDialog.Interpolation
 		"end":
-			var idx := _find_enum(GvnEnums.types_of_linear_dialog_interpolation, value)
+			var idx := _find_enum(LinearDialog.Interpolation, value)
 			if idx == -1:
 				_error(line_no, "тип «%s» не найден (instantaneous / linear)" % value)
 			else:
-				type_of_end = idx as GvnEnums.types_of_linear_dialog_interpolation
+				type_of_end = idx as LinearDialog.Interpolation
 		"interpolation":
-			var idx := _find_enum(GvnEnums.types_of_interpolation, value)
+			var idx := _find_enum(Replica.Interpolation, value)
 			if idx == -1:
 				_error(line_no, "тип «%s» не найден (parent / instantaneous / linear)" % value)
 			else:
-				type_of_interpolation = idx as GvnEnums.types_of_interpolation
+				type_of_interpolation = idx as Replica.Interpolation
 		_:
 			_error(line_no, "неизвестное свойство диалога «%s»" % split[0])
 

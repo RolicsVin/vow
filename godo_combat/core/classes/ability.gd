@@ -1,5 +1,9 @@
 class_name Ability extends Resource
 
+
+enum Type {FREE, MINI_GAME_LOW, MINI_GAME_HIGT}
+enum EffectType {ONE, RANDOM, FULL}
+
 @export var name: String
 
 @export var damage: float = 10.0
@@ -10,8 +14,8 @@ class_name Ability extends Resource
 @export var mana: float = 0.0
 
 @export var effects: Array[Effect]
-@export var type: GcEnum.ability_type = GcEnum.ability_type.FREE
-@export var type_effects: GcEnum.ability_effect_type = GcEnum.ability_effect_type.FULL
+@export var type: Ability.Type = Ability.Type.FREE
+@export var type_effects: Ability.EffectType = Ability.EffectType.FULL
 
 @export var critical: float = 30.0
 @export_range(0, 100) var critical_change: float = 10.0
@@ -54,16 +58,16 @@ func get_attack() -> Array:
 	var _effects: Array[Effect]
 	
 	match type_effects:
-		GcEnum.ability_effect_type.ONE:
+		Ability.EffectType.ONE:
 			_effects.append(effects.pick_random())
-		GcEnum.ability_effect_type.RANDOM:
+		Ability.EffectType.RANDOM:
 			for effect in effects:
-				if GodoTools.chance(50):
+				if Core.tools.chance(50):
 					_effects.append(effect)
-		GcEnum.ability_effect_type.FULL:
+		Ability.EffectType.FULL:
 			_effects = effects
 	
-	if GodoTools.chance(critical_change):
+	if Core.tools.chance(critical_change):
 		return [critical + _get_random_damage(), _effects]
 	else:
 		return [damage + _get_random_damage(), _effects]
@@ -85,5 +89,5 @@ func get_animation_name() -> String:
 	return animation
 
 
-func get_type() -> GcEnum.ability_type:
+func get_type() -> Ability.Type:
 	return type

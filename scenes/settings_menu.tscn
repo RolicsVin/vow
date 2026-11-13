@@ -7,7 +7,6 @@
 [ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="4_7jbq7"]
 [ext_resource type="FontFile" uid="uid://bo7wyme1ehd60" path="res://assets/fonts/FoglihtenNo06_076.otf" id="5_orlur"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="6_ga0f5"]
-[ext_resource type="Script" path="res://godo_tools/classes/gt_sound.gd" id="7_0jiyd"]
 [ext_resource type="FontFile" uid="uid://ciwa77kfjl6la" path="res://assets/fonts/Constantine.ttf" id="9_ga0f5"]
 [ext_resource type="Texture2D" uid="uid://d2pgrxovifbir" path="res://assets/vfx/particle_red.png" id="9_orlur"]
 
@@ -334,7 +333,6 @@ libraries/ = SubResource("AnimationLibrary_2atfd")
 [node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Back" unique_id=192926211]
 stream = ExtResource("6_ga0f5")
 volume_db = 10.0
-script = ExtResource("7_0jiyd")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Game" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=1201353415 node_paths=PackedStringArray("animation", "sound", "nodes")]
@@ -372,7 +370,6 @@ libraries/ = SubResource("AnimationLibrary_2atfd")
 [node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Game" unique_id=434907910]
 stream = ExtResource("6_ga0f5")
 volume_db = 10.0
-script = ExtResource("7_0jiyd")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Window" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=1578903671 node_paths=PackedStringArray("animation", "sound", "nodes")]
@@ -410,7 +407,6 @@ libraries/ = SubResource("AnimationLibrary_2atfd")
 [node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Window" unique_id=1987752040]
 stream = ExtResource("6_ga0f5")
 volume_db = 10.0
-script = ExtResource("7_0jiyd")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Graphic" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=532485154 node_paths=PackedStringArray("animation", "sound", "nodes")]
@@ -448,7 +444,6 @@ libraries/ = SubResource("AnimationLibrary_2atfd")
 [node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Graphic" unique_id=70874606]
 stream = ExtResource("6_ga0f5")
 volume_db = 10.0
-script = ExtResource("7_0jiyd")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Soudns" type="TextureButton" parent="Behind/Control/HBoxContainer" unique_id=306879763 node_paths=PackedStringArray("animation", "sound", "nodes")]
@@ -486,7 +481,6 @@ libraries/ = SubResource("AnimationLibrary_2atfd")
 [node name="GTSound" type="AudioStreamPlayer" parent="Behind/Control/HBoxContainer/Soudns" unique_id=640596093]
 stream = ExtResource("6_ga0f5")
 volume_db = 10.0
-script = ExtResource("7_0jiyd")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Root" type="Control" parent="." unique_id=2107087774]

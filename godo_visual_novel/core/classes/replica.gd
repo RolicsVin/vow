@@ -1,7 +1,12 @@
 class_name Replica extends Resource
 
-@export var speaker: GvnEnums.characters
-@export var emotion: GvnEnums.emotions
+
+enum Emotion {Без_эмоции, В_мыслях, Радостно, Счастливо, Смеясь, Веселясь, Хихикая, Грустно, Печально, Огорчённо, Недовольно, Шокированно, Удивлённо, Пугливо, Испуганно, Боясь, Истеря, Плача, Злясь, Злостно, Яростно, Безумно, Неистово, Подозрительно, Раздосадованно, Задумчиво, Насмешливо, Издеваясь, Не_доверчиво, Прищурившись, Присмотревшись, Страсно, Возбуждённо, Влюблённо, Стыдливо, Смущённо}
+enum Language {Ru, En}
+enum Interpolation {parent, instantaneous, linear}
+
+@export var speaker: Character.CharacterType
+@export var emotion: Replica.Emotion
 @export var replica: String
 @export var sound: String
 @export var background: String
@@ -11,8 +16,8 @@ class_name Replica extends Resource
 @export var fast_action_end: Array[Action]
 
 @export_group('language')
-@export var language: GvnEnums.languages = GvnEnums.languages.Ru
-@export var languages: Dictionary[GvnEnums.languages, String]
+@export var language: Replica.Language = Replica.Language.Ru
+@export var languages: Dictionary[Replica.Language, String]
 
 @export_group('adventure')
 @export var reset_text_buffer: bool = true
@@ -28,7 +33,7 @@ class_name Replica extends Resource
 @export var on_start: Array[Action]
 @export var on_end: Array[Action]
 
-@export var type_of_interpolation: GvnEnums.types_of_interpolation = GvnEnums.types_of_interpolation.parent
+@export var type_of_interpolation: Replica.Interpolation = Replica.Interpolation.parent
 @export var unical_id: String
 
 
@@ -44,16 +49,16 @@ func get_behind() -> String:
 	if custom_name:
 		behind = custom_name
 	else:
-		if speaker in GvnData.name_protection:
-			behind = GvnData.name_protection[speaker]
+		if GVisualNovel.has_character_name(speaker):
+			behind = GVisualNovel.get_character_name(speaker)
 		else:
-			behind = GvnEnums.characters.keys()[speaker]
+			behind = Character.CharacterType.keys()[speaker]
 	
 	var emotion_buffer: String = '('
-	if emotion in GvnData.emotion_protection:
-		emotion_buffer += GvnData.emotion_protection[emotion]
+	if GVisualNovel.has_emotion_name(emotion):
+		emotion_buffer += GVisualNovel.get_emotion_name(emotion)
 	else:
-		emotion_buffer += str(GvnEnums.emotions.keys()[emotion])
+		emotion_buffer += str(Replica.Emotion.keys()[emotion])
 	
 	# Если эмоции нет, то очищаем буфер эмоции, иначе закрываем скобку
 	if len(emotion_buffer) < 2:
@@ -64,33 +69,33 @@ func get_behind() -> String:
 	return behind + emotion_buffer
 
 
-func get_speaker() -> GvnEnums.characters:
+func get_speaker() -> Character.CharacterType:
 	"""Вернёт Enum."""
 	if custom_name:
-		return GvnEnums.characters.КастомныйПерсонаж
+		return Character.CharacterType.КастомныйПерсонаж
 	return speaker
 
 
-func get_emotion() -> GvnEnums.emotions:
+func get_emotion() -> Replica.Emotion:
 	return emotion
 
 
 func get_replica() -> String:
 	"""Вернёт реплику персонажа."""
-	if language == GvnData.current_language:
-		return replica.replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
-	elif GvnData.current_language in languages:
-		return languages[GvnData.current_language].replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
+	if language == GVisualNovel.get_language():
+		return replica.replace('@', GVisualNovel.get_player_name())
+	elif GVisualNovel.get_language() in languages:
+		return languages[GVisualNovel.get_language()].replace('@', GVisualNovel.get_player_name())
 	else:
-		return replica.replace('@', GvnData.name_protection[GvnEnums.characters.ГлавныйГерой])
+		return replica.replace('@', GVisualNovel.get_player_name())
 
 
 func get_color() -> Color:
 	"""Вернёт цвет имени персонажа."""
 	if custom_color:
 		return custom_color
-	if speaker in GvnData.characters_color:
-		return GvnData.characters_color[speaker]
+	if GVisualNovel.has_character_color(speaker):
+		return GVisualNovel.get_character_color(speaker)
 	
 	return Color.WHITE
 
@@ -99,7 +104,7 @@ func get_chat_color() -> Color:
 	return chat_color
 
 
-func get_type_of_interpolation() -> GvnEnums.types_of_interpolation:
+func get_type_of_interpolation() -> Replica.Interpolation:
 	return type_of_interpolation
 
 

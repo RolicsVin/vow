@@ -1,6 +1,9 @@
 ## Мини игра 
 class_name MiniGame extends Control
 
+
+enum Interpolation {instantaneous, linear}
+
 signal victory
 signal defeat
 signal end

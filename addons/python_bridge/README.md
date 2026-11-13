@@ -14,6 +14,18 @@ Call Python functions from GDScript and get the results back. Python runs
    (this registers the autoload **`PythonBridge`** and the export plugin).
 2. Put your scripts into `res://py/` (change in Project Settings → `python_bridge/scripts_dir`).
 
+## Editing .py files inside Godot
+On first start the addon adds `py` to the editor setting *docks/filesystem/textfile_extensions*
+(this is a global editor setting, not per project) and offers to restart the editor.
+After that:
+* `.py` files show up in the FileSystem dock and open in the script editor
+  (FileSystem → right click on a folder or empty space → **Create New → Python Script...**, or (experimental, off by default: project setting `python_bridge/script_dialog_hook`) via **Create New → Script...** → *Python* in the language list, or **Project → Tools → New Python script...**).
+* Syntax highlighting using your editor theme colours, 4 spaces for indentation, auto-indent after `:`.
+  Ctrl+K toggles `#` comments.
+* Editor integration can be switched off with the project setting `python_bridge/editor_support`
+  (restart the editor afterwards).
+* Not included: autocompletion, linting, running/debugging - use VS Code / PyCharm when you need those.
+
 ## Usage
 ```python
 # res://py/mymath.py

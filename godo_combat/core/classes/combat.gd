@@ -1,5 +1,8 @@
 class_name Combat extends Control
 
+
+enum CombatType {IN_ORDER, AT_THE_SAME_TIME}
+
 signal is_victory
 signal is_defeat
 signal end_combat
@@ -35,7 +38,7 @@ signal _player_attacked
 
 @export_group('adventure')
 @export var time: float = 0.5
-@export var combat_type: GcEnum.combat_types = GcEnum.combat_types.AT_THE_SAME_TIME
+@export var combat_type: Combat.CombatType = Combat.CombatType.AT_THE_SAME_TIME
 
 var is_combat: bool = true
 
@@ -61,9 +64,9 @@ func reset_inventory() -> void:
 	
 	if 'inventory' in GCombat._buffer:
 		for item_str: String in GCombat._get_buffer()['inventory']:
-			var item: GCItem = GcData.items[item_str]
+			var item: GCItem = GCombat.get_item(item_str)
 			var _button: TextureButton = inventory_button.instantiate()
-			_button.setup(GcData.items[item.get_item_name()], _add_effects_to_player)
+			_button.setup(GCombat.get_item(item.get_item_name()), _add_effects_to_player)
 			inventory.add_child(_button)
 
 
@@ -187,19 +190,19 @@ func attack_player():
 	print('------------------------------------------------------------')
 	button_box.show()
 	await _selected_ability
-	if GCombat._get_obj_on_buffer('ability').get_type() == GcEnum.ability_type.MINI_GAME_LOW:
+	if GCombat._get_obj_on_buffer('ability').get_type() == Ability.Type.MINI_GAME_LOW:
 		var mini_game = mini_game_low.pick_random().instantiate()
 		mini_game_root.add_child(mini_game)
 		player.attack(enemy, GCombat._get_obj_on_buffer('ability'), mini_game)
 		await player.attacks
 		_player_attacked.emit()
-	elif GCombat._get_obj_on_buffer('ability').get_type() == GcEnum.ability_type.MINI_GAME_HIGT:
+	elif GCombat._get_obj_on_buffer('ability').get_type() == Ability.Type.MINI_GAME_HIGT:
 		var mini_game = mini_game_hight.pick_random().instantiate()
 		mini_game_root.add_child(mini_game)
 		player.attack(enemy, GCombat._get_obj_on_buffer('ability'), mini_game)
 		await player.attacks
 		_player_attacked.emit()
-	elif GCombat._get_obj_on_buffer('ability').get_type() == GcEnum.ability_type.FREE:
+	elif GCombat._get_obj_on_buffer('ability').get_type() == Ability.Type.FREE:
 		player.attack(enemy, GCombat._get_obj_on_buffer('ability'))
 		_player_attacked.emit()
 	print('     ')

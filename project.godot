@@ -16,20 +16,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Core="*uid://depffqo3r1or4"
 PythonBridge="*uid://cq4qjfjivev80"
-GvnData="*uid://dcjyojtxtecup"
-GvnEnums="*uid://bebjo64fkan0"
-GodoTools="*uid://7e6b42h11ide"
-GmEnum="*uid://c2ehw1hdjtdx4"
-GM="*uid://xbv5awfux18e"
-GVN="*uid://cmxvv28i33boy"
+Core="*uid://b1ub3rwkwvhl4"
+Data="*uid://dyngiq76w8jak"
+GminiGame="*uid://xbv5awfux18e"
+GVisualNovel="*uid://cmxvv28i33boy"
 GCombat="*uid://dr5e8hjtl7gu1"
-GcEnum="*uid://cdvrwufcv2ngr"
-GcData="*uid://dape3ufi7p0nr"
-Data="*uid://bfhhpidro8m27"
-GtData="*uid://b5odvo7se8xbm"
-GtEnums="*uid://by4q75pvtbytq"
 
 [display]
 
@@ -46,9 +38,26 @@ folder_colors={
 "res://core/": "red"
 }
 
+[input]
+
+space={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":32,"location":0,"echo":false,"script":null)
+]
+}
+esc={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
+
+[python_bridge]
+
+scripts_dir="res://core/py"
 
 [rendering]
 

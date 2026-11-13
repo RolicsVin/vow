@@ -13,7 +13,7 @@ signal defeat
 
 @export var texture_button: TextureRect
 
-@export var interpolation: GmEnum.types_interpolation = GmEnum.types_interpolation.linear
+@export var interpolation: MiniGame.Interpolation = MiniGame.Interpolation.linear
 
 var _clicked: int = 0
 var _is_started: bool = false
@@ -66,7 +66,7 @@ func start() -> void:
 	if _is_started:
 		return
 	
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 1
 	else:
 		_is_showing = true
@@ -84,7 +84,7 @@ func start() -> void:
 
 
 func _end():
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 0
 		hide()
 	else:

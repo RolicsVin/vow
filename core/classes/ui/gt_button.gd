@@ -69,22 +69,29 @@ func _process(_delta: float) -> void:
 			_pressed()
 	
 	if is_hovered():
-		if animation:
-			animation.play('hovered', 0.5)
-	
+		_play_animation(&"hovered", 0.5)
 	else:
-		if animation:
-			animation.play('state', 0.5)
+		_play_animation(&"state", 0.5)
 
 
 func _pressed() -> void:
-	if not is_visible_in_tree():
-		return
-	
 	for i in nodes:
 		if i:
 			i.visible = nodes[i]
 	
-	if animation:
-		animation.play('pressed', 0.5)
+	if not is_visible_in_tree():
+		return
+	
+	if _play_animation(&"pressed", 0.5):
 		await animation.animation_finished
+
+
+func _play_animation(animation_name: StringName, custom_blend: float = -1.0) -> bool:
+	if not is_instance_valid(animation):
+		return false
+	
+	if not animation.has_animation(animation_name):
+		return false
+	
+	animation.play(animation_name, custom_blend)
+	return true

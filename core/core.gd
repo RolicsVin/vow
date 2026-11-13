@@ -47,8 +47,8 @@ func save_data() -> String:
 	
 	var data = {
 		'godo_combat': await GCombat.get_save(),
-		'godo_mini_game': await GM.get_save(),
-		'godo_visual_novel': await GVN.get_save(),
+		'godo_mini_game': await GminiGame.get_save(),
+		'godo_visual_novel': await GVisualNovel.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),
 		'data': time_tools.get_date(),
@@ -136,8 +136,8 @@ func load_save(_save: Dictionary) -> void:
 	print('Загрузка сохранения...')
 	await GCombat.load_save(_save['godo_combat'])
 	if _save.has('godo_mini_game'):
-		await GM.load_save(_save['godo_mini_game'])
-	await GVN.load_save(_save['godo_visual_novel'])
+		await GminiGame.load_save(_save['godo_mini_game'])
+	await GVisualNovel.load_save(_save['godo_visual_novel'])
 	Core.scene_tools.change_scene(_save['scene'])
 	print('Сохранение загружено.')
 	

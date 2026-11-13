@@ -24,13 +24,18 @@ func _end_log() -> void:
 
 
 func _ready() -> void:
-	await save_data()
-	var save_name: String = get_saves()[-1]
+	var save_name: String = await save_data()
+	if save_name.is_empty():
+		return
+	
 	var save: Dictionary = await get_save(save_name)
+	if save.is_empty():
+		return
+	
 	await load_save(save)
 
 
-func save_data() -> void:
+func save_data() -> String:
 	_print_log()
 	print('Создание сохранения...')
 	
@@ -61,11 +66,18 @@ func save_data() -> void:
 	print('Запись сохранения...')
 	
 	var file = FileAccess.open((save_path + save_name).replace('"', ''), FileAccess.WRITE)
+	if file == null:
+		push_error("[Core] Не удалось создать файл сохранения: %s" % save_name)
+		_end_log()
+		return ""
+	
 	file.store_var(data)
+	file.close()
 	
 	print('Сохранение записано.')
 	
 	_end_log()
+	return save_name
 
 
 func get_saves(): ##Возращает список файлов(Array[String]), если такая папка существует
@@ -84,8 +96,24 @@ func get_save(save_name: String) -> Dictionary:
 	_print_log()
 	print('Чтение сохранения...')
 	var file = FileAccess.open(save_path + save_name, FileAccess.READ)
-	var data: Dictionary = file.get_var()
-	 
+	if file == null:
+		push_error("[Core] Не удалось открыть сохранение для чтения: %s" % save_name)
+		_end_log()
+		return {}
+	
+	var raw_data: Variant = file.get_var()
+	file.close()
+	if not raw_data is Dictionary:
+		push_error("[Core] Файл сохранения повреждён или пуст: %s" % save_name)
+		_end_log()
+		return {}
+	
+	var data: Dictionary = raw_data
+	if not data.has('icon_data'):
+		push_error("[Core] В сохранении отсутствуют данные иконки: %s" % save_name)
+		_end_log()
+		return {}
+	
 	var icon = Image.new()
 	icon.load_jpg_from_buffer(data['icon_data'])
 	

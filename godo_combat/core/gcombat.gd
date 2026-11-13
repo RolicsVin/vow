@@ -36,13 +36,22 @@ func get_save() -> Dictionary:
 		'abilitys': abilitys
 	}
 	
-	return {
+	var save := {
 		'player': _buffer['player'],
 		'inventory': _buffer['inventory'],
 		'weapons': _buffer['weapons'],
 		'equiped_weapons': _buffer['equiped_weapons'],
 		'money': _buffer['money']
-		}
+	}
+	
+	print("[GCombat] Сохранение модуля:")
+	var response: Dictionary = await PythonBridge.call_function("stdout", "pretty_print", [save])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[GCombat] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	
+	return save
 
 
 func load_save(save: Dictionary):

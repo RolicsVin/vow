@@ -1,12 +1,10 @@
-## Ядро игры.
-## Объединяет игровые модули и централизованно управляет SQL-сохранениями.
+## Ядро игры. 
+## Объединяет игровые модули. 
 extends Node
 
-const SAVE_INTERVAL := 15.0
+const save_path: String = 'user://'
 
 var _buffer: Dictionary = {}
-var _save_elapsed: float = 0.0
-var _data_loaded: bool = false
 
 # Инструменты
 var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
@@ -16,55 +14,94 @@ var scene_tools: SceneTools = ToolFactory.make_tool(self, "res://core/tools/scen
 var platform_tools: PlatformTools = ToolFactory.make_tool(self, "res://core/tools/platform_tools.gd", "PlatformTools")
 
 
+func _print_log() -> void:
+	print("Печатает центральное ядро игры. (core.gd)-------------------------------------------------")
+
+
+func _end_log() -> void:
+	print("------------------------------------------------------------------------------------------")
+	print()
+
+
 func _ready() -> void:
-	# Сцена Map и её бассейны должны завершить _ready() до загрузки модульных данных.
-	call_deferred("_load_after_scene_ready")
-
-
-func _load_after_scene_ready() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
-	load_data()
-
-
-func _process(delta: float) -> void:
-	if not _data_loaded:
-		return
-
-	_save_elapsed += delta
-	if _save_elapsed >= SAVE_INTERVAL:
-		_save_elapsed = 0.0
-		save_data()
-
-
-func _get_modules() -> Array[Node]:
-	var modules: Array[Node] = []
-	for child in get_children():
-		if child.has_method("get_save_data") and child.has_method("load_data"):
-			modules.append(child)
-	return modules
+	save_data()
 
 
 func save_data() -> void:
-	pass
+	_print_log()
+	print('Создание сохранения...')
+	
+	var save_name = 'lake_of_souls_save_' + tools.get_project_version() + '_number' + str(len(get_saves())) + '.save'
+	
+	var icon = window_tools.take_screenshot()
+	var screen_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
+	icon.resize(round(screen_size.x / 3), round(screen_size.y / 3), Image.INTERPOLATE_CUBIC)
+	
+	var data = {
+		'godo_combat': GCombat.get_save(),
+		'godo_visual_novel': GVN.get_save(),
+		'scene': get_tree().current_scene.scene_file_path,
+		'version': tools.get_project_version(),
+		'data': time_tools.get_date(),
+		'time': time_tools.get_time(),
+		'icon_data': icon.save_jpg_to_buffer()
+	}
+	
+	print('Сохранение создано: ')
+	PythonBridge.call_function('stdout', 'pretty_print', [data])
+	print()
+	print('Запись сохранения...')
+	
+	var file = FileAccess.open((save_path + save_name).replace('"', ''), FileAccess.WRITE)
+	file.store_var(data)
+	
+	print('Сохранение записано.')
+	
+	_end_log()
 
 
-func load_data() -> void:
-	pass
-
-
-func _notification(what: int) -> void:
-	if not _data_loaded:
+func get_saves():
+	"""Возращает список файлов(Array[String]), если такая папка существует."""
+	var dir = DirAccess.open(save_path)
+	
+	if dir == null:
+		_print_log()
+		print("Не удалось открыть папку")
+		_end_log()
 		return
-
-	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
-		save_data()
-	elif what == NOTIFICATION_APPLICATION_RESUMED:
-		load_data()
+	
+	return dir.get_files()
 
 
-func _print_log() -> void:
-	print("Печатает ядро игры. (core.gd)")
+func get_save(save_name: String) -> Dictionary:
+	_print_log()
+	print('Чтение сохранения...')
+	var file = FileAccess.open(save_path + save_name, FileAccess.READ)
+	var data: Dictionary = file.get_var()
+	 
+	var icon = Image.new()
+	icon.load_jpg_from_buffer(data['icon_data'])
+	
+	data['icon'] = icon
+	data.erase('icon_data')
+	
+	print('Сохранение прочитано.')
+	PythonBridge.call_function('stdout', 'pretty_print', [data])
+	_end_log()
+	
+	return data
+
+
+func load_save(_save: Dictionary):
+	_print_log()
+	
+	print('Загрузка сохранения...')
+	GCombat.load_save(_save['godo_combat'])
+	GVN.load_save(_save['godo_visual_novel'])
+	Core.scene_tools.change_scene(_save['scene'])
+	print('Сохранение загружено.')
+	
+	_end_log()
 
 
 func _get_obj_on_buffer(k):
@@ -80,6 +117,7 @@ func _write_buffer(obj, k) -> void:
 
 
 func clear_buffer() -> void:
+	push_warning('Буффер был очищен')
 	_buffer.clear()
 
 
@@ -87,3 +125,30 @@ func push_fatal_error(message: String) -> void:
 	print(message)
 	push_error(message)
 	Engine.get_main_loop().quit()
+
+
+func print_all_singleton_variables() -> void:
+	_print_log()
+	print('Запрошен лог всех синглтонов')
+	push_warning('Запрошен лог всех синглтонов')
+	print()
+	
+	var root := get_tree().root
+	
+	for singleton in root.get_children():
+		var properties := singleton.get_property_list()
+		var has_variables := false
+		
+		for property in properties:
+			# Берём только переменные, объявленные в скрипте
+			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+				if not has_variables:
+					print("\n========== ", singleton.name, " ==========")
+					has_variables = true
+				
+				var variable_name: String = property.name
+				var value = singleton.get(variable_name)
+				
+				print(variable_name, " = ", value)
+	
+	_end_log()

@@ -1,7 +1,5 @@
 class_name SceneTools extends Node
 
-const SAVE_PATH: String = 'user://'
-
 
 func get_scene_path() -> String: ## Выдаст путь до текущей сцены.
 	return get_tree().current_scene.scene_file_path

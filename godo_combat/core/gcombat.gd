@@ -3,7 +3,7 @@ extends Node
 var _data: Node = ToolFactory.make_tool(self, "res://godo_combat/data/gc_data.gd", "Data")
 
 var _buffer: Dictionary = {
-	'player_entitie': load("res://Assets/entities/player/player.tres")
+	'player_entitie': load("res://assets/entities/player/player.tres")
 }
 
 

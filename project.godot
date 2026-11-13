@@ -16,12 +16,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Core="*uid://depffqo3r1or4"
-PythonBridge="*uid://cq4qjfjivev80"
+Core="*uid://b1ub3rwkwvhl4"
+Data="*uid://dyngiq76w8jak"
 GM="*uid://xbv5awfux18e"
 GVN="*uid://cmxvv28i33boy"
 GCombat="*uid://dr5e8hjtl7gu1"
-Data="*uid://bfhhpidro8m27"
+PythonBridge="*uid://cq4qjfjivev80"
 
 [display]
 
@@ -54,6 +54,10 @@ esc={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+
+[python_bridge]
+
+scripts_dir="res://core/py"
 
 [rendering]
 

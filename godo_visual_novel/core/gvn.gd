@@ -28,6 +28,9 @@ func set_language(language: Replica.Language):
 
 
 func get_save() -> Dictionary:
+	print('Печатает служба Godo Visual Novel-------------------------------------')
+	print('the save is being prepared....')
+	
 	if 'chat' not in _buffer:
 		_buffer['chat'] = {
 			'scene': '',
@@ -46,20 +49,20 @@ func get_save() -> Dictionary:
 		'automatic_text_switching': _data.automatic_text_switching,
 		'automatic_text_switching_speed': _data.automatic_text_switching_speed
 	}
-	print('Печатает служба Godo Visual Novel')
 	
-	print()
-	print('GVNsave_saving-------------------------------------')
-	print(save)
-	print('-----------------------------------------------')
+	print('the preservation has been issued:')
+	PythonBridge.call_function("stdout", "pretty_print", [save])
+	print('----------------------------------------------------------------------')
 	print()
 	
 	return save
 
 
 func load_save(save: Dictionary) -> void:
-	print('Печатает служба Godo Visual Novel')
-	print(save['chat'])
+	print('Печатает служба Godo Visual Novel-------------------------------------')
+	print('the resulting save:')
+	PythonBridge.call_function("stdout", "pretty_print", [save])
+	print('loading...')
 	_buffer['chat'] = save['chat']
 	_data.bookmarks_scenes = save['bookmarks']
 	_data.text_speed = save['text_speed']
@@ -68,11 +71,8 @@ func load_save(save: Dictionary) -> void:
 	_data.video = save['video']
 	set_language(save['language'])
 	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
-	
-	print()
-	print('GVNsave_load-------------------------------------')
-	print(save)
-	print('-----------------------------------------------')
+	print('loaded')
+	print('----------------------------------------------------------------------')
 	print()
 
 
@@ -84,7 +84,6 @@ func add_bookmark(bookmark: String, _name: String) -> void:
 func _get_buffer() -> Dictionary:
 	"""Вернёт буффер модуля godo_visual_novel."""
 	return _buffer
-
 
 func _write_buffer(obj, k) -> void:
 	"""Допишет в буфер информацию по ключу. Если ключ уже существует, то информация будет перезаписана."""

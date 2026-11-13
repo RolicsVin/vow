@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://baek1lyp2auop"]
 
+[ext_resource type="Script" uid="uid://bgx0cyqwute8m" path="res://assets/scripts/visible_scene.gd" id="1_hgt2k"]
 [ext_resource type="Script" uid="uid://srejthmud1dp" path="res://core/classes/ui/linear_visible.gd" id="1_shhb4"]
 
 [node name="VisibleScene" type="ColorRect" unique_id=134337691]
@@ -12,6 +13,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+script = ExtResource("1_hgt2k")
 
 [node name="LinearVisible" type="Node" parent="." unique_id=1017504861]
 script = ExtResource("1_shhb4")

@@ -16,7 +16,7 @@ func _ready() -> void:
 			if i is VideoStreamPlayer:
 				video = i
 	
-	if GVN.is_video_enabled() and video:
+	if GVisualNovel.is_video_enabled() and video:
 		texture = null
 		self_modulate.a = 0
 		video.show()

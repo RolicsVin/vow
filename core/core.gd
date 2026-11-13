@@ -1,77 +1,148 @@
-## Ядро игры.
-## Объединяет игровые модули и централизованно управляет SQL-сохранениями.
+## Ядро игры. 
+## Объединяет игровые модули. 
 extends Node
 
-const SAVE_INTERVAL := 15.0
+const save_path: String = 'user://'
 
 var _buffer: Dictionary = {}
-var _save_elapsed: float = 0.0
-var _data_loaded: bool = false
 
 # Инструменты
-var tools: GTTools = _make_tool("res://core/tools/tools.gd", "Tools")
-var window_tools: WindowTools = _make_tool("res://core/tools/window_tools.gd", "WindowTools")
-var time_tools: TimeTools = _make_tool("res://core/tools/time_tools.gd", "TimeTools")
-var scene_tools: SceneTools = _make_tool("res://core/tools/scene_tools.gd", "SceneTools")
-var platform_tools: PlatformTools = _make_tool("res://core/tools/platform_tools.gd", "PlatformTools")
-
-
-func _make_tool(path: String, tool_name: String) -> Node:
-	var node: Node = load(path).new()
-	node.name = tool_name
-	add_child(node)
-	return node
-
-
-func _ready() -> void:
-	# Сцена Map и её бассейны должны завершить _ready() до загрузки модульных данных.
-	call_deferred("_load_after_scene_ready")
-
-
-func _load_after_scene_ready() -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
-	load_data()
-
-
-func _process(delta: float) -> void:
-	if not _data_loaded:
-		return
-
-	_save_elapsed += delta
-	if _save_elapsed >= SAVE_INTERVAL:
-		_save_elapsed = 0.0
-		save_data()
-
-
-func _get_modules() -> Array[Node]:
-	var modules: Array[Node] = []
-	for child in get_children():
-		if child.has_method("get_save_data") and child.has_method("load_data"):
-			modules.append(child)
-	return modules
-
-
-func save_data() -> void:
-	pass
-
-
-func load_data() -> void:
-	pass
-
-
-func _notification(what: int) -> void:
-	if not _data_loaded:
-		return
-
-	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
-		save_data()
-	elif what == NOTIFICATION_APPLICATION_RESUMED:
-		load_data()
+var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
+var window_tools: WindowTools = ToolFactory.make_tool(self, "res://core/tools/window_tools.gd", "WindowTools")
+var time_tools: TimeTools = ToolFactory.make_tool(self, "res://core/tools/time_tools.gd", "TimeTools")
+var scene_tools: SceneTools = ToolFactory.make_tool(self, "res://core/tools/scene_tools.gd", "SceneTools")
+var platform_tools: PlatformTools = ToolFactory.make_tool(self, "res://core/tools/platform_tools.gd", "PlatformTools")
 
 
 func _print_log() -> void:
-	print("Печатает ядро игры. (core.gd)")
+	print("Печатает центральное ядро игры. (core.gd)-------------------------------------------------")
+
+
+func _end_log() -> void:
+	print("------------------------------------------------------------------------------------------")
+	print()
+
+
+func _ready() -> void:
+	pass
+	#var save_name: String = await save_data()
+	#if save_name.is_empty():
+		#return
+	#
+	#var save: Dictionary = await get_save(save_name)
+	#if save.is_empty():
+		#return
+	#
+	#await load_save(save)
+
+
+func save_data() -> String:
+	_print_log()
+	print('Создание сохранения...')
+	
+	var save_name = 'vow' + tools.get_project_version() + '_number' + str(len(get_saves())) + '.save'
+	
+	var icon = window_tools.take_screenshot()
+	var screen_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
+	icon.resize(round(screen_size.x / 3), round(screen_size.y / 3), Image.INTERPOLATE_CUBIC)
+	
+	var data = {
+		'godo_combat': await GCombat.get_save(),
+		'godo_mini_game': await GminiGame.get_save(),
+		'godo_visual_novel': await GVisualNovel.get_save(),
+		'scene': get_tree().current_scene.scene_file_path,
+		'version': tools.get_project_version(),
+		'data': time_tools.get_date(),
+		'time': time_tools.get_time(),
+		'icon_data': icon.save_jpg_to_buffer()
+	}
+	
+	print('Сохранение создано: ')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	print()
+	print('Запись сохранения...')
+	
+	var file = FileAccess.open((save_path + save_name).replace('"', ''), FileAccess.WRITE)
+	if file == null:
+		push_error("[Core] Не удалось создать файл сохранения: %s" % save_name)
+		_end_log()
+		return ""
+	
+	file.store_var(data)
+	file.close()
+	
+	print('Сохранение записано.')
+	
+	_end_log()
+	return save_name
+
+
+func get_saves(): ##Возращает список файлов(Array[String]), если такая папка существует
+	var dir = DirAccess.open(save_path)
+	
+	if dir == null:
+		_print_log()
+		print("Не удалось открыть папку")
+		_end_log()
+		return
+	
+	return dir.get_files()
+
+
+func get_save(save_name: String) -> Dictionary:
+	_print_log()
+	print('Чтение сохранения...')
+	var file = FileAccess.open(save_path + save_name, FileAccess.READ)
+	if file == null:
+		push_error("[Core] Не удалось открыть сохранение для чтения: %s" % save_name)
+		_end_log()
+		return {}
+	
+	var raw_data: Variant = file.get_var()
+	file.close()
+	if not raw_data is Dictionary:
+		push_error("[Core] Файл сохранения повреждён или пуст: %s" % save_name)
+		_end_log()
+		return {}
+	
+	var data: Dictionary = raw_data
+	if not data.has('icon_data'):
+		push_error("[Core] В сохранении отсутствуют данные иконки: %s" % save_name)
+		_end_log()
+		return {}
+	
+	var icon = Image.new()
+	icon.load_jpg_from_buffer(data['icon_data'])
+	
+	data['icon'] = icon
+	data.erase('icon_data')
+	
+	print('Сохранение прочитано.')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	print(response.result)
+	if not response.get("ok", false):
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	_end_log()
+	
+	return data
+
+
+func load_save(_save: Dictionary) -> void:
+	_print_log()
+	
+	print('Загрузка сохранения...')
+	await GCombat.load_save(_save['godo_combat'])
+	if _save.has('godo_mini_game'):
+		await GminiGame.load_save(_save['godo_mini_game'])
+	await GVisualNovel.load_save(_save['godo_visual_novel'])
+	Core.scene_tools.change_scene(_save['scene'])
+	print('Сохранение загружено.')
+	
+	_end_log()
 
 
 func _get_obj_on_buffer(k):
@@ -87,6 +158,7 @@ func _write_buffer(obj, k) -> void:
 
 
 func clear_buffer() -> void:
+	push_warning('Буффер был очищен')
 	_buffer.clear()
 
 
@@ -94,3 +166,30 @@ func push_fatal_error(message: String) -> void:
 	print(message)
 	push_error(message)
 	Engine.get_main_loop().quit()
+
+
+func print_all_singleton_variables() -> void:
+	_print_log()
+	print('Запрошен лог всех синглтонов')
+	push_warning('Запрошен лог всех синглтонов')
+	print()
+	
+	var root := get_tree().root
+	
+	for singleton in root.get_children():
+		var properties := singleton.get_property_list()
+		var has_variables := false
+		
+		for property in properties:
+			# Берём только переменные, объявленные в скрипте
+			if property.usage & PROPERTY_USAGE_SCRIPT_VARIABLE:
+				if not has_variables:
+					print("\n========== ", singleton.name, " ==========")
+					has_variables = true
+				
+				var variable_name: String = property.name
+				var value = singleton.get(variable_name)
+				
+				print(variable_name, " = ", value)
+	
+	_end_log()

@@ -36,7 +36,7 @@ signal dialog_exited(dialog: LinearDialog)
 
 @export_group('linear_interpolation')
 @export var timer: Timer
-@export var text_speed: float = GvnData.text_speed
+@export var text_speed: float = 0.03
 
 @export_group('experienced')
 @export var show_speed: float = 0.3
@@ -53,6 +53,7 @@ var _hidding: bool = false
 var is_loading: bool = false
 
 func _ready() -> void:
+	text_speed = GVisualNovel.get_text_speed()
 	if not default_text_size:
 		default_text_size = get_theme_font_size("font_size")
 	if not small_text_size:
@@ -76,12 +77,12 @@ func _ready() -> void:
 	
 	for dialog in dialog_tree:
 		if not dialog.get_dialog_name():
-			GodoTools.push_fatal_error('У линейного диалога отсутствует имя!')
+			Core.push_fatal_error('У линейного диалога отсутствует имя!')
 	
 	# Если у реплики установлет тип интерполяции "Родитель", то устанавливаем интерполяцию от родителя
 	for linear_dialog in dialog_tree:
 		for replica in linear_dialog.get_replicas():
-			if replica.get_type_of_interpolation() == GvnEnums.types_of_interpolation.parent:
+			if replica.get_type_of_interpolation() == Replica.Interpolation.parent:
 				replica.type_of_interpolation = linear_dialog.get_interpolation()
 	
 	await get_tree().create_timer(0.5).timeout
@@ -101,11 +102,11 @@ func chat_back():
 
 
 func load_save_on_buffer() -> void:
-	var buffer = GVN._get_buffer()
+	var buffer = GVisualNovel._get_buffer()
 	if 'chat' in buffer:
 		is_loading = true
 		var save = buffer['chat']
-		if name == save['name'] and save['scene'] == GodoTools.get_scene_path():
+		if name == save['name'] and save['scene'] == Core.scene_tools.get_scene_path():
 			play_linear_dialog_on_libriary(save['linear_dialog'], save['index'])
 
 
@@ -145,7 +146,7 @@ func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0):
 	index = idx
 	current_dialog = get_linear_dialog(dialog_name)
 	
-	if current_dialog.get_dialog_start_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+	if current_dialog.get_dialog_start_type() == LinearDialog.Interpolation.instantaneous:
 		modulate = default_color
 	
 	set_replica(current_dialog.get_replica_to_id(index))
@@ -156,7 +157,7 @@ func load_linear_dialog_in_libriary(linear_dialog: LinearDialog):
 	if linear_dialog.dialog_name:
 		dialog_tree.append(linear_dialog)
 	else:
-		GodoTools.push_fatal_error('У линейного диалога отсутствует имя!')
+		Core.push_fatal_error('У линейного диалога отсутствует имя!')
 
 
 func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
@@ -166,7 +167,7 @@ func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
 	timer.start()
 	current_dialog = linear_dialog
 	
-	if current_dialog.get_dialog_start_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+	if current_dialog.get_dialog_start_type() == LinearDialog.Interpolation.instantaneous:
 		modulate = default_color
 	
 	set_replica(current_dialog.get_replica_to_id(index))
@@ -188,17 +189,17 @@ func perform_an_action_start(replica: Replica):
 	for action_fast_last in replica.get_on_start_fast_action(): # основной цикл
 		if action_fast_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.show_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.play_sound(action_fast_last.get_path_node())
 			else:
 				music.play_music(action_fast_last.get_path_node())
 		else: # если action false
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.hide_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.stop_sound(action_fast_last.get_path_node())
 			else:
 				music.stop_music(action_fast_last.get_path_node())
@@ -208,13 +209,13 @@ func perform_an_action_start(replica: Replica):
 		var node = get_node(action_last.get_path_node())
 		if action_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_show()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -232,7 +233,7 @@ func perform_an_action_start(replica: Replica):
 					node.play()
 		else:
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearVisible:
@@ -241,7 +242,7 @@ func perform_an_action_start(replica: Replica):
 						continue
 				if not success:
 					node.hide()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -264,17 +265,17 @@ func perform_an_action_end(replica: Replica):
 	for action_fast_last in replica.get_on_end_fast_action(): # основной цикл
 		if action_fast_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.show_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.play_sound(action_fast_last.get_path_node())
 			else:
 				music.play_music(action_fast_last.get_path_node())
 		else: # если action false
 			# проверки на типы и действия
-			if action_fast_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_fast_last.get_action_type() == Action.Type.visible:
 				fast_action.hide_child(action_fast_last.get_path_node())
-			elif action_fast_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_fast_last.get_action_type() == Action.Type.sound:
 				sounds.stop_sound(action_fast_last.get_path_node())
 			else:
 				music.stop_music(action_fast_last.get_path_node())
@@ -284,13 +285,13 @@ func perform_an_action_end(replica: Replica):
 		var node = get_node(action_last.get_path_node())
 		if action_last.get_action(): # если action true
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_show()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -308,13 +309,13 @@ func perform_an_action_end(replica: Replica):
 					node.play()
 		else:
 			# проверки на типы и действия
-			if action_last.get_action_type() == GvnEnums.action_types.visible:
+			if action_last.get_action_type() == Action.Type.visible:
 				for child in node.get_children():
 					if child is LinearVisible:
 						child.linear_hide()
 						continue
 				node.show()
-			elif action_last.get_action_type() == GvnEnums.action_types.sound:
+			elif action_last.get_action_type() == Action.Type.sound:
 				var success: bool = false
 				for child in node.get_children():
 					if child is LinearSound:
@@ -356,7 +357,7 @@ func next() -> void:
 			play_linear_dialog_on_libriary(current_dialog.get_next_dialog())
 			return
 		
-		if current_dialog.get_dialog_end_type() == GvnEnums.types_of_linear_dialog_interpolation.instantaneous:
+		if current_dialog.get_dialog_end_type() == LinearDialog.Interpolation.instantaneous:
 			hide()
 			behind.hide()
 			modulate.a = 0
@@ -389,13 +390,13 @@ func set_replica(replica: Replica):
 		perform_an_action_end(_last_replica)
 		replica_ended.emit(_last_replica)
 	
-	GVN._write_buffer({
-		'scene': GodoTools.get_scene_path(),
+	GVisualNovel._write_buffer({
+		'scene': Core.scene_tools.get_scene_path(),
 		'linear_dialog': current_dialog.get_dialog_name(),
 		'index': index,
 		'name': name}, 'chat')
 	
-	GVN._get_buffer()['history'].append(replica.get_behind() + ': ' + replica.get_replica())
+	GVisualNovel._get_buffer()['history'].append(replica.get_behind() + ': ' + replica.get_replica())
 	
 	if replica.get_background():
 		background.background(replica.get_background())
@@ -410,7 +411,7 @@ func set_replica(replica: Replica):
 	else:
 		for character in characters:
 			if character.get_character() == replica.get_speaker():
-				character.set_emotion(GvnData.character_emotion_protection[replica.get_emotion()])
+				character.set_emotion(GVisualNovel.get_character_emotion(replica.get_emotion()))
 	
 	_last_replica = replica
 	replica_started.emit(replica)
@@ -432,7 +433,7 @@ func set_replica(replica: Replica):
 		modulate = default_color
 		modulate.a = alpha
 	
-	if replica.get_type_of_interpolation() == GvnEnums.types_of_interpolation.instantaneous:
+	if replica.get_type_of_interpolation() == Replica.Interpolation.instantaneous:
 		_load_text_on_buffer()
 	
 	if replica.get_small_text():
@@ -441,7 +442,7 @@ func set_replica(replica: Replica):
 		add_theme_font_size_override("font_size", default_text_size)
 	
 	auto_text_swith_timer.stop()
-	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GvnData.automatic_text_switching_speed)
+	auto_text_swith_timer.start(len(replica.get_replica().split(" ")) * GVisualNovel.get_automatic_text_switching_speed())
 	
 	perform_an_action_start(replica)
 

@@ -1,15 +1,12 @@
 [gd_scene format=3 uid="uid://cw2e8p7y0lhg5"]
 
-[ext_resource type="Texture2D" path="res://scenes/chapter1_prologue/boat_on_short.png" id="1_l6cm7"]
 [ext_resource type="Shader" uid="uid://dl5cu3mv7iot6" path="res://assets/shaders/bloom_like_directional_streaks.gdshader" id="2_bqqt6"]
-[ext_resource type="Texture2D" path="res://assets/icons/logo/game_logo.png" id="2_ekxnf"]
 [ext_resource type="Script" uid="uid://bcfvkrvnfiito" path="res://scenes/saving_buttons.gd" id="3_5dd4i"]
 [ext_resource type="Script" uid="uid://dbvhkyheli2yv" path="res://scenes/start.gd" id="3_lgwnu"]
-[ext_resource type="Script" uid="uid://cpsqcnxlbbk31" path="res://assets/scripts/paralax.gd" id="4_wu84c"]
+[ext_resource type="Script" uid="uid://cpsqcnxlbbk31" path="res://core/classes/ui/paralax.gd" id="4_wu84c"]
 [ext_resource type="Texture2D" uid="uid://d4mf43gmlyrjl" path="res://assets/ui/continio-Photoroom.png" id="5_tbmy8"]
 [ext_resource type="Script" uid="uid://srejthmud1dp" path="res://core/classes/ui/linear_visible.gd" id="6_jk1qb"]
 [ext_resource type="AudioStream" uid="uid://bn7mdssthgkv2" path="res://assets/ui/hover.ogg" id="7_5dd4i"]
-[ext_resource type="Script" path="res://godo_tools/classes/gt_sound.gd" id="8_lgwnu"]
 [ext_resource type="Shader" uid="uid://c38esbjplmhjs" path="res://assets/shaders/alpha_gradient.gdshader" id="9_jk1qb"]
 [ext_resource type="Texture2D" uid="uid://fnwy1ciunyub" path="res://assets/ui/new_game.png" id="12_j7ex8"]
 [ext_resource type="PackedScene" uid="uid://baek1lyp2auop" path="res://assets/scripts/visible_scene.tscn" id="12_rcqid"]
@@ -668,7 +665,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_l6cm7")
 expand_mode = 1
 stretch_mode = 6
 
@@ -710,7 +706,6 @@ offset_left = -1053.0
 offset_top = -283.0
 offset_bottom = 770.0
 grow_horizontal = 0
-texture = ExtResource("2_ekxnf")
 expand_mode = 1
 stretch_mode = 6
 script = ExtResource("4_wu84c")
@@ -759,7 +754,6 @@ metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="GTSound" type="AudioStreamPlayer" parent="NewGame" unique_id=1526252944]
 stream = ExtResource("7_5dd4i")
-script = ExtResource("8_lgwnu")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Continio" type="TextureButton" parent="." unique_id=1566941655 node_paths=PackedStringArray("animation", "sound")]
@@ -805,7 +799,6 @@ metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="GTSound" type="AudioStreamPlayer" parent="Continio" unique_id=571117696]
 stream = ExtResource("7_5dd4i")
-script = ExtResource("8_lgwnu")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Awards" type="TextureButton" parent="." unique_id=1516893493 node_paths=PackedStringArray("animation", "sound")]
@@ -853,7 +846,6 @@ metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="GTSound" type="AudioStreamPlayer" parent="Awards" unique_id=1857690274]
 stream = ExtResource("7_5dd4i")
-script = ExtResource("8_lgwnu")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Settings" type="TextureButton" parent="." unique_id=2052303259 node_paths=PackedStringArray("animation", "sound")]
@@ -901,7 +893,6 @@ metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="GTSound" type="AudioStreamPlayer" parent="Settings" unique_id=1184999395]
 stream = ExtResource("7_5dd4i")
-script = ExtResource("8_lgwnu")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="Exit" type="TextureButton" parent="." unique_id=1644531746 node_paths=PackedStringArray("animation", "sound")]
@@ -948,7 +939,6 @@ metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="GTSound" type="AudioStreamPlayer" parent="Exit" unique_id=1220393285]
 stream = ExtResource("7_5dd4i")
-script = ExtResource("8_lgwnu")
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="SettingsMenu" parent="." unique_id=144951887 instance=ExtResource("18_a8gd2")]
@@ -967,8 +957,6 @@ layout_mode = 1
 stream = ExtResource("14_5pajh")
 volume_db = -10.0
 autoplay = true
-script = ExtResource("8_lgwnu")
-sound_type = 3
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
 [node name="LinearSound" type="Node" parent="RainSounds" unique_id=864120637]

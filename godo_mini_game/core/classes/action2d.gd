@@ -15,7 +15,7 @@ signal defeat
 @export var object: DraggableArea2D
 @export var path: Area2D
 @export var end_point: Area2D
-@export var interpolation: GmEnum.types_interpolation = GmEnum.types_interpolation.linear
+@export var interpolation: MiniGame.Interpolation = MiniGame.Interpolation.linear
 
 var _has_victory: bool = false
 var _play: bool = false
@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 
 func start():
 	show()
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 1
 	else:
 		_is_showing = true
@@ -89,7 +89,7 @@ func _defeat():
 
 
 func _end():
-	if interpolation == GmEnum.types_interpolation.instantaneous:
+	if interpolation == MiniGame.Interpolation.instantaneous:
 		modulate.a = 0
 		hide()
 	else:

@@ -1,110 +1,110 @@
 extends Node
 
 var characters_color: Dictionary = {
-	GvnEnums.characters.Нет: Color.WHITE,
-	GvnEnums.characters.Вы: Color.WHITE,
-	GvnEnums.characters.Ты: Color.WHITE,
-	GvnEnums.characters.ГлавныйГерой: Color.WHITE,
-	GvnEnums.characters.Алиса: Color.ORANGE,
-	GvnEnums.characters.Катя: Color.BURLYWOOD,
-	GvnEnums.characters.Валя: Color.DARK_SLATE_GRAY,
-	GvnEnums.characters.Гальхя: Color.CHOCOLATE,
-	GvnEnums.characters.Фейхья: Color.PEACH_PUFF,
-	GvnEnums.characters.Калия: Color.WHITE,
-	GvnEnums.characters.Лира: Color.ALICE_BLUE,
-	GvnEnums.characters.Дорман: Color.ROSY_BROWN,
-	GvnEnums.characters.Сигурд: Color.DARK_RED,
-	GvnEnums.characters.ЗверьГнева: Color.RED,
-	GvnEnums.characters.ЗверьСмерти: Color.BLACK,
+	Character.CharacterType.Нет: Color.WHITE,
+	Character.CharacterType.Вы: Color.WHITE,
+	Character.CharacterType.Ты: Color.WHITE,
+	Character.CharacterType.ГлавныйГерой: Color.WHITE,
+	Character.CharacterType.Алиса: Color.ORANGE,
+	Character.CharacterType.Катя: Color.BURLYWOOD,
+	Character.CharacterType.Валя: Color.DARK_SLATE_GRAY,
+	Character.CharacterType.Гальхя: Color.CHOCOLATE,
+	Character.CharacterType.Фейхья: Color.PEACH_PUFF,
+	Character.CharacterType.Калия: Color.WHITE,
+	Character.CharacterType.Лира: Color.ALICE_BLUE,
+	Character.CharacterType.Дорман: Color.ROSY_BROWN,
+	Character.CharacterType.Сигурд: Color.DARK_RED,
+	Character.CharacterType.ЗверьГнева: Color.RED,
+	Character.CharacterType.ЗверьСмерти: Color.BLACK,
 }
 
 var bookmarks_scenes: Dictionary = {}
 
 var name_protection: Dictionary = {
-	GvnEnums.characters.Нет: ''
+	Character.CharacterType.Нет: ''
 }
 
 var name_ru_protection: Dictionary = {
-	GvnEnums.characters.ГлавныйГерой: 'Главный герой',
-	GvnEnums.characters.Нет: ''
+	Character.CharacterType.ГлавныйГерой: 'Главный герой',
+	Character.CharacterType.Нет: ''
 	}
 
 var name_en_protection: Dictionary = {
-	GvnEnums.characters.ГлавныйГерой: 'The main character',
-	GvnEnums.characters.Нет: '',
-	GvnEnums.characters.Вы: 'You',
-	GvnEnums.characters.Ты: 'You',
-	GvnEnums.characters.Алиса: 'Alisa',
-	GvnEnums.characters.Катя: 'Katya',
-	GvnEnums.characters.Валя: 'Valia',
-	GvnEnums.characters.Гальхя: 'Galkhya',
-	GvnEnums.characters.Фейхья: 'Feihya',
-	GvnEnums.characters.Калия: 'Kalia',
-	GvnEnums.characters.Лира: 'Lira',
-	GvnEnums.characters.Дорман: 'Dorman',
-	GvnEnums.characters.Фея: 'Feya',
-	GvnEnums.characters.ЗверьГнева: 'The beast of wrath',
-	GvnEnums.characters.ЗверьСмерти: 'The Beast of Death',
-	GvnEnums.characters.Незнакомец: 'Stranger',
-	GvnEnums.characters.Незнакомка: 'Stranger',
-	GvnEnums.characters.Прохожий: 'Passerby',
-	GvnEnums.characters.Мужчина: 'Man',
-	GvnEnums.characters.Женщина: 'Woman',
-	GvnEnums.characters.Девушка: 'Girl',
-	GvnEnums.characters.Подросток: 'Teenager',
-	GvnEnums.characters.Мальчик: 'Boy',
-	GvnEnums.characters.Девочка: 'Girl',
+	Character.CharacterType.ГлавныйГерой: 'The main character',
+	Character.CharacterType.Нет: '',
+	Character.CharacterType.Вы: 'You',
+	Character.CharacterType.Ты: 'You',
+	Character.CharacterType.Алиса: 'Alisa',
+	Character.CharacterType.Катя: 'Katya',
+	Character.CharacterType.Валя: 'Valia',
+	Character.CharacterType.Гальхя: 'Galkhya',
+	Character.CharacterType.Фейхья: 'Feihya',
+	Character.CharacterType.Калия: 'Kalia',
+	Character.CharacterType.Лира: 'Lira',
+	Character.CharacterType.Дорман: 'Dorman',
+	Character.CharacterType.Фея: 'Feya',
+	Character.CharacterType.ЗверьГнева: 'The beast of wrath',
+	Character.CharacterType.ЗверьСмерти: 'The Beast of Death',
+	Character.CharacterType.Незнакомец: 'Stranger',
+	Character.CharacterType.Незнакомка: 'Stranger',
+	Character.CharacterType.Прохожий: 'Passerby',
+	Character.CharacterType.Мужчина: 'Man',
+	Character.CharacterType.Женщина: 'Woman',
+	Character.CharacterType.Девушка: 'Girl',
+	Character.CharacterType.Подросток: 'Teenager',
+	Character.CharacterType.Мальчик: 'Boy',
+	Character.CharacterType.Девочка: 'Girl',
 	}
 	
 var emotion_protection: Dictionary = {
-	GvnEnums.emotions.Без_эмоции: ''
+	Replica.Emotion.Без_эмоции: ''
 }
 
 var emotion_ru_protection: Dictionary = {
-	GvnEnums.emotions.Без_эмоции: '',
-	GvnEnums.emotions.В_мыслях: 'В мыслях',
-	GvnEnums.emotions.Не_доверчиво: 'Не доверчиво',
+	Replica.Emotion.Без_эмоции: '',
+	Replica.Emotion.В_мыслях: 'В мыслях',
+	Replica.Emotion.Не_доверчиво: 'Не доверчиво',
 }
 
 var emotion_en_protection: Dictionary = {
-	GvnEnums.emotions.Без_эмоции: '',
-	GvnEnums.emotions.В_мыслях: 'In your mind',
-	GvnEnums.emotions.Радостно: 'Joyfully',
-	GvnEnums.emotions.Счастливо: 'Happily',
-	GvnEnums.emotions.Смеясь: 'Laughing',
-	GvnEnums.emotions.Веселясь: 'Having fun',
-	GvnEnums.emotions.Хихикая: 'Laughing',
-	GvnEnums.emotions.Грустно: 'Sadly',
-	GvnEnums.emotions.Печально: 'Sadly',
-	GvnEnums.emotions.Огорчённо: 'Disappointed',
-	GvnEnums.emotions.Недовольно: 'Unsatisfied',
-	GvnEnums.emotions.Истеря: 'Hysteria',
-	GvnEnums.emotions.Плача: 'Crying',
-	GvnEnums.emotions.Злясь: 'Angry',
-	GvnEnums.emotions.Злостно: 'Maliciously',
-	GvnEnums.emotions.Яростно: 'Violently',
-	GvnEnums.emotions.Безумно: 'Madly',
-	GvnEnums.emotions.Неистово: 'Violently',
-	GvnEnums.emotions.Подозрительно: 'Suspiciously',
-	GvnEnums.emotions.Раздосадованно: 'Annoyed',
-	GvnEnums.emotions.Задумчиво: 'Thoughtfully',
-	GvnEnums.emotions.Не_доверчиво: 'Not trusting',
-	GvnEnums.emotions.Прищурившись: 'Taking a closer look',
-	GvnEnums.emotions.Присмотревшись: 'Taking a closer look',
-	GvnEnums.emotions.Страсно: 'Passionately',
-	GvnEnums.emotions.Возбуждённо: 'Excited',
-	GvnEnums.emotions.Влюблённо: 'Lovingly',
-	GvnEnums.emotions.Стыдливо: 'Shamefully',
-	GvnEnums.emotions.Смущённо: 'Embarrassed'
+	Replica.Emotion.Без_эмоции: '',
+	Replica.Emotion.В_мыслях: 'In your mind',
+	Replica.Emotion.Радостно: 'Joyfully',
+	Replica.Emotion.Счастливо: 'Happily',
+	Replica.Emotion.Смеясь: 'Laughing',
+	Replica.Emotion.Веселясь: 'Having fun',
+	Replica.Emotion.Хихикая: 'Laughing',
+	Replica.Emotion.Грустно: 'Sadly',
+	Replica.Emotion.Печально: 'Sadly',
+	Replica.Emotion.Огорчённо: 'Disappointed',
+	Replica.Emotion.Недовольно: 'Unsatisfied',
+	Replica.Emotion.Истеря: 'Hysteria',
+	Replica.Emotion.Плача: 'Crying',
+	Replica.Emotion.Злясь: 'Angry',
+	Replica.Emotion.Злостно: 'Maliciously',
+	Replica.Emotion.Яростно: 'Violently',
+	Replica.Emotion.Безумно: 'Madly',
+	Replica.Emotion.Неистово: 'Violently',
+	Replica.Emotion.Подозрительно: 'Suspiciously',
+	Replica.Emotion.Раздосадованно: 'Annoyed',
+	Replica.Emotion.Задумчиво: 'Thoughtfully',
+	Replica.Emotion.Не_доверчиво: 'Not trusting',
+	Replica.Emotion.Прищурившись: 'Taking a closer look',
+	Replica.Emotion.Присмотревшись: 'Taking a closer look',
+	Replica.Emotion.Страсно: 'Passionately',
+	Replica.Emotion.Возбуждённо: 'Excited',
+	Replica.Emotion.Влюблённо: 'Lovingly',
+	Replica.Emotion.Стыдливо: 'Shamefully',
+	Replica.Emotion.Смущённо: 'Embarrassed'
 }
 
 var character_emotion_protection: Dictionary = {
-	GvnEnums.emotions.Без_эмоции: 'default',
-	GvnEnums.emotions.Злясь: 'evil'
+	Replica.Emotion.Без_эмоции: 'default',
+	Replica.Emotion.Злясь: 'evil'
 }
 var video: bool = true
 
 var text_speed: float = 0.03
 var automatic_text_switching: bool = true
 var automatic_text_switching_speed: float = 3.0
-var current_language: GvnEnums.languages = GvnEnums.languages.En
+var current_language: Replica.Language = Replica.Language.En

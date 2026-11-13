@@ -5,7 +5,7 @@ class_name GCItem extends Resource
 
 @export var effects: Array[Effect]
 @export var effects_change: int = 50
-@export var type_effects: GcEnum.ability_effect_type = GcEnum.ability_effect_type.FULL
+@export var type_effects: Ability.EffectType = Ability.EffectType.FULL
 
 @export_group('textures')
 @export var hover: Texture2D
@@ -31,16 +31,16 @@ func get_item_icon_pressed() -> Texture2D:
 func get_item_effects() -> Array[Effect]:
 	var _effects: Array[Effect] = []
 	match type_effects:
-		GcEnum.ability_effect_type.ONE:
+		Ability.EffectType.ONE:
 			_effects.append(effects.pick_random())
-		GcEnum.ability_effect_type.RANDOM:
+		Ability.EffectType.RANDOM:
 			for effect in effects:
-				if GodoTools.chance(effects_change):
+				if Core.tools.chance(effects_change):
 					_effects.append(effect)
-		GcEnum.ability_effect_type.FULL:
+		Ability.EffectType.FULL:
 			_effects = effects
 	return _effects
 
 
-func get_item_type_effects() -> GcEnum.ability_effect_type:
+func get_item_type_effects() -> Ability.EffectType:
 	return type_effects

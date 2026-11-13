@@ -35,13 +35,13 @@ var mana: float = mana_max:
 @export var effects: Array[Effect]
 
 @export var equiped_weapons: Dictionary = {
-	GcEnum.weapon_type.HEAD: null,
-	GcEnum.weapon_type.CHEST: null,
-	GcEnum.weapon_type.LEGS: null,
-	GcEnum.weapon_type.BOOTS: null,
-	GcEnum.weapon_type.ARMS: null,
-	GcEnum.weapon_type.ARML: null,
-	GcEnum.weapon_type.ARMR: null
+	Weapon.Type.HEAD: null,
+	Weapon.Type.CHEST: null,
+	Weapon.Type.LEGS: null,
+	Weapon.Type.BOOTS: null,
+	Weapon.Type.ARMS: null,
+	Weapon.Type.ARML: null,
+	Weapon.Type.ARMR: null
 }
 
 @export var experience: float = 10.0
@@ -62,7 +62,7 @@ func _reset_weapons() -> void:
 	
 	if 'equiped_weapons' in GCombat._get_buffer():
 		for i in GCombat._get_buffer()['equiped_weapons']:
-			var weapon: Weapon = GcData.weapons[i]
+			var weapon: Weapon = GCombat.get_weapon(i)
 			
 			equiped_weapons[weapon.get_type()] = weapon
 			damage += weapon.damage
@@ -72,7 +72,7 @@ func _reset_weapons() -> void:
 
 func equip_weapon(weapon_name: String) -> void:
 	GCombat.remowe_weapon_to_player_inventory(weapon_name)
-	var weapon: Weapon = GcData.weapons[weapon_name]
+	var weapon: Weapon = GCombat.get_weapon(weapon_name)
 	
 	if not equiped_weapons[weapon.get_type()]:
 		equiped_weapons[weapon.get_type()] = weapon
@@ -96,7 +96,7 @@ func unequip_weapon(weapon_name: String) -> void:
 	GCombat.add_weapon_to_player_inventory(weapon_name)
 	GCombat._get_buffer()['equiped_weapons'].remove_at(GCombat._get_buffer()['equiped_weapons'].find(weapon_name))
 	
-	var weapon: Weapon = GcData.weapons[weapon_name]
+	var weapon: Weapon = GCombat.get_weapon(weapon_name)
 	
 	damage -= equiped_weapons[weapon.get_type()].damage
 	armor -= equiped_weapons[weapon.get_type()].armor
@@ -124,7 +124,7 @@ func attack(entitie: Entitie, ability: Ability = null, _mini_game: MiniGame = nu
 				mana -= ability.get_mana()
 				break
 	
-	if ability.get_type() == GcEnum.ability_type.MINI_GAME_LOW or ability.get_type() == GcEnum.ability_type.MINI_GAME_HIGT:
+	if ability.get_type() == Ability.Type.MINI_GAME_LOW or ability.get_type() == Ability.Type.MINI_GAME_HIGT:
 		mini_game = _mini_game
 		mini_game.victory.connect(_victory)
 		mini_game.defeat.connect(_defeat)

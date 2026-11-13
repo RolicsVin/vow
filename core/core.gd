@@ -23,6 +23,11 @@ func _end_log() -> void:
 	print()
 
 
+func _ready() -> void:
+	save_data()
+	load_save(await get_save(get_saves()[-1]))
+
+
 func save_data() -> void:
 	_print_log()
 	print('Создание сохранения...')
@@ -61,8 +66,7 @@ func save_data() -> void:
 	_end_log()
 
 
-func get_saves():
-	"""Возращает список файлов(Array[String]), если такая папка существует."""
+func get_saves(): ##Возращает список файлов(Array[String]), если такая папка существует
 	var dir = DirAccess.open(save_path)
 	
 	if dir == null:

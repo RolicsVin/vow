@@ -7,7 +7,18 @@ var _buffer: Dictionary = {
 }
 
 
+func _print_log() -> void:
+	print("Печатает служба GComabt. (gcombat.gd)-----------------------------------------------------")
+
+
+func _end_log() -> void:
+	print("------------------------------------------------------------------------------------------")
+	print()
+
+
 func get_save() -> Dictionary:
+	_print_log()
+	print('Собирается сохранение...')
 	if 'inventory' not in _buffer:
 		_buffer['inventory'] = []
 	if 'weapons' not in _buffer:
@@ -44,17 +55,21 @@ func get_save() -> Dictionary:
 		'money': _buffer['money']
 	}
 	
-	print("[GCombat] Сохранение модуля:")
+	print("Сохранение собрано:")
 	var response: Dictionary = await PythonBridge.call_function("stdout", "pretty_print", [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:
 		push_error("[GCombat] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	
+	_end_log()
+	
 	return save
 
 
 func load_save(save: Dictionary):
+	_print_log()
+	print('loading...')
 	_buffer['inventory'] = save['inventory']
 	_buffer['weapons'] = save['weapons']
 	_buffer['equiped_weapons'] = save['equiped_weapons']
@@ -77,6 +92,14 @@ func load_save(save: Dictionary):
 	_buffer['player_entitie'].experience = player['experience']
 	_buffer['player_entitie'].level = player['level']
 	_buffer['player_entitie'].abilitys = abilitys
+	
+	print('loaded:')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	_end_log()
 
 
 func _get_obj_on_buffer(k):

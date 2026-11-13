@@ -7,6 +7,15 @@ var _buffer: Dictionary = {
 }
 
 
+func _print_log() -> void:
+	print("Печатает служба GVisualNovel. (g_visual_novel.gd)-----------------------------------------")
+
+
+func _end_log() -> void:
+	print("------------------------------------------------------------------------------------------")
+	print()
+
+
 func _ready() -> void:
 	_update_language_protection()
 
@@ -28,7 +37,7 @@ func set_language(language: Replica.Language) -> void:
 
 func get_save() -> Dictionary:
 	_update_language_protection()
-	print('Печатает служба Godo Visual Novel---------------------------------------------------------')
+	_print_log()
 	print('the save is being prepared....')
 	
 	if 'chat' not in _buffer:
@@ -56,15 +65,14 @@ func get_save() -> Dictionary:
 		print(response.get("result", ""))
 	else:
 		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
-	print('------------------------------------------------------------------------------------------')
-	print()
+		
+	_end_log()
 	
 	return save
 
 
 func load_save(save: Dictionary) -> void:
-	print('Печатает служба Godo Visual Novel---------------------------------------------------------')
-	print('the resulting save:')
+	_print_log()
 	print('loading...')
 	_buffer['chat'] = save['chat']
 	_data.bookmarks_scenes = save['bookmarks']
@@ -74,9 +82,13 @@ func load_save(save: Dictionary) -> void:
 	_data.video = save['video']
 	set_language(save['language'])
 	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
-	print('loaded')
-	print('------------------------------------------------------------------------------------------')
-	print()
+	print('loaded:')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	_end_log()
 
 
 func add_bookmark(bookmark: String, _name: String) -> void:

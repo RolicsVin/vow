@@ -3,23 +3,45 @@ extends Node
 var _buffer: Dictionary = {}
 
 
+func _print_log() -> void:
+	print("Печатает служба GMiniGame. (g_mimi_game.gd)-----------------------------------------------")
+
+
+func _end_log() -> void:
+	print("------------------------------------------------------------------------------------------")
+	print()
+
+
 ## Возвращает и выводит сохранение состояния модуля.
 func get_save() -> Dictionary:
+	_print_log()
+	print('Собирается сохранение')
 	var save := _buffer.duplicate(true)
 	
-	print("[GM] Сохранение модуля:")
+	print('Сохранение собрано:')
 	var response: Dictionary = await PythonBridge.call_function("stdout", "pretty_print", [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:
 		push_error("[GM] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	
+	_end_log()
+	
 	return save
 
 
 ## Восстанавливает состояние модуля из сохранения.
 func load_save(save: Dictionary) -> void:
+	_print_log()
+	print('loading...')
 	_buffer = save.duplicate(true)
+	print('loaded:')
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	_end_log()
 
 
 func _get_obj_on_buffer(k):

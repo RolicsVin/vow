@@ -34,7 +34,8 @@ func save_data() -> void:
 	icon.resize(round(screen_size.x / 3), round(screen_size.y / 3), Image.INTERPOLATE_CUBIC)
 	
 	var data = {
-		'godo_combat': GCombat.get_save(),
+		'godo_combat': await GCombat.get_save(),
+		'godo_mini_game': await GM.get_save(),
 		'godo_visual_novel': await GVN.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),

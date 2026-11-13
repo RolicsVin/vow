@@ -12,6 +12,8 @@ config_version=5
 
 config/name="vow"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://oq7wstoos8ko"
 config/icon="res://icon.svg"
 
 [autoload]
@@ -25,6 +27,9 @@ GCombat="*uid://dr5e8hjtl7gu1"
 
 [display]
 
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
@@ -64,3 +69,4 @@ scripts_dir="res://core/py"
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -23,11 +23,6 @@ func _end_log() -> void:
 	print()
 
 
-func _ready() -> void:
-	await get_tree().create_timer(1).timeout
-	await save_data()
-
-
 func save_data() -> void:
 	_print_log()
 	print('Создание сохранения...')

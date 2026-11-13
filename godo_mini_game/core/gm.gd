@@ -4,7 +4,7 @@ var _buffer: Dictionary = {}
 
 
 func _print_log() -> void:
-	print("Печатает служба GMiniGame. (g_mimi_game.gd)-----------------------------------------------")
+	print("Печатает служба GminiGame. (g_mimi_game.gd)-----------------------------------------------")
 
 
 func _end_log() -> void:

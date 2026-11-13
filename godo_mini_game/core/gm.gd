@@ -17,6 +17,11 @@ func get_save() -> Dictionary:
 	return save
 
 
+## Восстанавливает состояние модуля из сохранения.
+func load_save(save: Dictionary) -> void:
+	_buffer = save.duplicate(true)
+
+
 func _get_obj_on_buffer(k):
 	"""Вернёт объект из буфера по ключу."""
 	return _buffer[k]

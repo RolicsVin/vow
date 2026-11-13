@@ -25,7 +25,7 @@ func _end_log() -> void:
 
 func _ready() -> void:
 	await get_tree().create_timer(1).timeout
-	save_data()
+	await save_data()
 
 
 func save_data() -> void:
@@ -50,7 +50,9 @@ func save_data() -> void:
 	
 	print('Сохранение создано: ')
 	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
-	if not response.get("ok", false):
+	if response.get("ok", false):
+		print(response.get("result", ""))
+	else:
 		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	print()
 	print('Запись сохранения...')

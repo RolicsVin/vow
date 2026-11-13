@@ -26,7 +26,7 @@ func _enter_tree() -> void:
 		_editor_support = EditorSupport.new()
 		add_child(_editor_support)
 		add_tool_menu_item(MENU_NEW_SCRIPT, _editor_support.show_new_script_dialog)
-		_create_menu = CreateMenuPlugin.new(_editor_support.show_new_script_in)
+		_create_menu = CreateMenuPlugin.new(_editor_support.show_new_script_in, _editor_support.get_icon())
 		add_context_menu_plugin(EditorContextMenuPlugin.CONTEXT_SLOT_FILESYSTEM_CREATE, _create_menu)
 
 

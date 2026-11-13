@@ -8,26 +8,26 @@ var _buffer: Dictionary = {
 
 
 func _ready() -> void:
-	if _data.current_language == Replica.Language.En:
-		_data.emotion_protection = _data.emotion_en_protection
-		_data.name_protection = _data.name_en_protection
-	if _data.current_language == Replica.Language.Ru:
-		_data.emotion_protection = _data.emotion_ru_protection
-		_data.name_protection = _data.name_ru_protection
+	_update_language_protection()
 
 
-func set_language(language: Replica.Language):
+func _update_language_protection() -> void:
+	match _data.current_language:
+		Replica.Language.En:
+			_data.emotion_protection = _data.emotion_en_protection
+			_data.name_protection = _data.name_en_protection
+		Replica.Language.Ru:
+			_data.emotion_protection = _data.emotion_ru_protection
+			_data.name_protection = _data.name_ru_protection
+
+
+func set_language(language: Replica.Language) -> void:
 	_data.current_language = language
-	
-	if _data.current_language == Replica.Language.En:
-		_data.emotion_protection = _data.emotion_en_protection
-		_data.name_protection = _data.name_en_protection
-	if _data.current_language == Replica.Language.Ru:
-		_data.emotion_protection = _data.emotion_ru_protection
-		_data.name_protection = _data.name_ru_protection
+	_update_language_protection()
 
 
 func get_save() -> Dictionary:
+	_update_language_protection()
 	print('Печатает служба Godo Visual Novel-------------------------------------')
 	print('the save is being prepared....')
 	

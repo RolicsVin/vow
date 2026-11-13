@@ -3,6 +3,3 @@
 [ext_resource type="PackedScene" uid="uid://e612oyf6jcwk" path="res://scenes/scene.tscn" id="1_errlg"]
 
 [node name="Scene" unique_id=733753458 instance=ExtResource("1_errlg")]
-
-[node name="PostProcessing" parent="." index="14" unique_id=447539963]
-script = null

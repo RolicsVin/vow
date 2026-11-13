@@ -84,8 +84,8 @@ func _prepare_dialog_tree() -> void:
 	for dialog in dialog_tree:
 		if not dialog.get_dialog_name():
 			Core.push_fatal_error('У линейного диалога отсутствует имя!')
-			continue
 
+	for dialog in dialog_tree:
 		for replica in dialog.get_replicas():
 			if replica.get_type_of_interpolation() == Replica.Interpolation.parent:
 				replica.type_of_interpolation = dialog.get_interpolation()
@@ -141,7 +141,7 @@ func _load_symbol_on_byffer() -> void:
 
 
 func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0) -> void:
-	_start_dialog(get_linear_dialog(dialog_name), idx)
+	_start_dialog(get_linear_dialog(dialog_name), idx, true)
 
 
 func load_linear_dialog_in_libriary(linear_dialog: LinearDialog) -> void:
@@ -152,14 +152,15 @@ func load_linear_dialog_in_libriary(linear_dialog: LinearDialog) -> void:
 
 
 func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0) -> void:
-	_start_dialog(linear_dialog, idx)
+	_start_dialog(linear_dialog, idx, false)
 
 
-func _start_dialog(dialog: LinearDialog, idx: int) -> void:
+func _start_dialog(dialog: LinearDialog, idx: int, start_auto_switch: bool) -> void:
 	show()
 	behind.show()
 	timer.start()
-	auto_text_swith_timer.start()
+	if start_auto_switch:
+		auto_text_swith_timer.start()
 	index = idx
 	current_dialog = dialog
 
@@ -274,9 +275,9 @@ func _perform_node_sound_action(node: Node, should_play: bool) -> void:
 
 	if not handled_by_component:
 		if should_play:
-			node.play()
+			node.call("play")
 		else:
-			node.stop()
+			node.call("stop")
 
 
 func next() -> void:

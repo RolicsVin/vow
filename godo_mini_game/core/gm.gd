@@ -23,7 +23,7 @@ func get_save() -> Dictionary:
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:
-		push_error("[GM] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+		push_error("[GminiGame] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	
 	_end_log()
 	

@@ -101,6 +101,8 @@ func load_save(_save: Dictionary):
 	
 	print('Загрузка сохранения...')
 	GCombat.load_save(_save['godo_combat'])
+	if _save.has('godo_mini_game'):
+		GM.load_save(_save['godo_mini_game'])
 	GVN.load_save(_save['godo_visual_novel'])
 	Core.scene_tools.change_scene(_save['scene'])
 	print('Сохранение загружено.')

@@ -24,7 +24,7 @@ func _end_log() -> void:
 
 
 func _ready() -> void:
-	save_data()
+	await save_data()
 
 
 func save_data() -> void:
@@ -48,7 +48,9 @@ func save_data() -> void:
 	}
 	
 	print('Сохранение создано: ')
-	PythonBridge.call_function('stdout', 'pretty_print', [data])
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	if not response.get("ok", false):
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	print()
 	print('Запись сохранения...')
 	
@@ -86,7 +88,9 @@ func get_save(save_name: String) -> Dictionary:
 	data.erase('icon_data')
 	
 	print('Сохранение прочитано.')
-	PythonBridge.call_function('stdout', 'pretty_print', [data])
+	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	if not response.get("ok", false):
+		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
 	_end_log()
 	
 	return data

@@ -51,7 +51,6 @@ func get_save() -> Dictionary:
 	}
 	
 	print('the preservation has been issued:')
-	PythonBridge.call_function("stdout", "pretty_print", [save])
 	print('----------------------------------------------------------------------')
 	print()
 	
@@ -61,7 +60,6 @@ func get_save() -> Dictionary:
 func load_save(save: Dictionary) -> void:
 	print('Печатает служба Godo Visual Novel-------------------------------------')
 	print('the resulting save:')
-	PythonBridge.call_function("stdout", "pretty_print", [save])
 	print('loading...')
 	_buffer['chat'] = save['chat']
 	_data.bookmarks_scenes = save['bookmarks']

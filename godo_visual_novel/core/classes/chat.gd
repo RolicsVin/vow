@@ -254,7 +254,10 @@ func _perform_fast_actions(actions: Array) -> void:
 		match action.get_action_type():
 			Action.Type.visible:
 				if not fast_action:
-					push_warning('[Chat] Не выполнено действие видимости \'%s\': FastAction не назначен' % node_path)
+					push_warning(
+						'[Chat] Не выполнено действие видимости \'%s\': FastAction не назначен'
+						% node_path
+					)
 					continue
 				if should_activate:
 					fast_action.show_child(node_path)

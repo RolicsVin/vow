@@ -168,7 +168,11 @@ func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0):
 	_start_dialog(get_linear_dialog(dialog_name), idx, true)
 
 
-func load_linear_dialog_in_libriary(linear_dialog: LinearDialog):
+func load_linear_dialog_in_libriary(linear_dialog: LinearDialog) -> void:
+	if not linear_dialog:
+		push_warning('[Chat] Не удалось добавить диалог: ресурс LinearDialog отсутствует')
+		return
+
 	if linear_dialog.dialog_name:
 		dialog_tree.append(linear_dialog)
 	else:
@@ -215,8 +219,10 @@ func get_dialog_tree() -> Array[LinearDialog]:
 	return dialog_tree
 
 
-func get_linear_dialog(dialog_name: String):
+func get_linear_dialog(dialog_name: String) -> LinearDialog:
 	for linear_dialog in dialog_tree:
+		if not linear_dialog:
+			continue
 		if linear_dialog.get_dialog_name() == dialog_name:
 			return linear_dialog
 
@@ -288,6 +294,10 @@ func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 			continue
 
 		var node_path: NodePath = NodePath(action.get_path_node())
+		if node_path.is_empty():
+			push_warning('[Chat] У отложенного действия не указан путь к узлу')
+			continue
+
 		var node: Node = get_node_or_null(node_path)
 		if not node:
 			push_warning('[Chat] Не найден узел для действия: \'%s\'' % node_path)
@@ -373,6 +383,10 @@ func next() -> void:
 	if timer:
 		timer.start()
 	var replica: Replica = current_dialog.get_replica_to_id(index)
+	if not replica:
+		push_warning('[Chat] В диалоге отсутствует реплика с индексом %d' % index)
+		return
+
 	if replica.get_reset_text_buffer():
 		text = ''
 	set_replica(replica)
@@ -394,8 +408,9 @@ func _finish_dialog() -> void:
 	else:
 		_hidding = true
 
-	perform_an_action_end(_last_replica)
-	replica_ended.emit(_last_replica)
+	if _last_replica:
+		perform_an_action_end(_last_replica)
+		replica_ended.emit(_last_replica)
 
 	if current_dialog.get_next_mini_game():
 		if not mini_games_root:

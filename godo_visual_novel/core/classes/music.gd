@@ -3,12 +3,12 @@ class_name Music extends Node
 
 
 ## Запускает музыкальную композицию по пути к узлу.
-func play_music(music_name: String) -> void:
+func play_music(music_name: String):
 	_set_music_state(music_name, true)
 
 
 ## Останавливает музыкальную композицию по пути к узлу.
-func stop_music(music_name: String) -> void:
+func stop_music(music_name: String):
 	_set_music_state(music_name, false)
 
 

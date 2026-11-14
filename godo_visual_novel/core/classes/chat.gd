@@ -168,7 +168,7 @@ func play_linear_dialog_on_libriary(dialog_name: String, idx: int = 0):
 	_start_dialog(get_linear_dialog(dialog_name), idx, true)
 
 
-func load_linear_dialog_in_libriary(linear_dialog: LinearDialog) -> void:
+func load_linear_dialog_in_libriary(linear_dialog: LinearDialog):
 	if not linear_dialog:
 		push_warning('[Chat] Не удалось добавить диалог: ресурс LinearDialog отсутствует')
 		return
@@ -219,7 +219,7 @@ func get_dialog_tree() -> Array[LinearDialog]:
 	return dialog_tree
 
 
-func get_linear_dialog(dialog_name: String) -> LinearDialog:
+func get_linear_dialog(dialog_name: String):
 	for linear_dialog in dialog_tree:
 		if not linear_dialog:
 			continue
@@ -431,7 +431,7 @@ func _finish_dialog() -> void:
 		timer.stop()
 
 
-func set_replica(replica: Replica) -> void:
+func set_replica(replica: Replica):
 	if not replica:
 		push_warning('[Chat] Не удалось установить реплику: ресурс Replica отсутствует')
 		return

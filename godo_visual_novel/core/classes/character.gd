@@ -14,6 +14,7 @@ enum CharacterType {
 	ЖительДеревни,
 	ЖительницаДеревни,
 	Старейшина,
+	КастомныйПерсонаж
 }
 
 @export var character: Character.CharacterType = Character.CharacterType.Нет

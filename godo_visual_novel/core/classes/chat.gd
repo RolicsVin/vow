@@ -384,7 +384,10 @@ func _finish_dialog() -> void:
 			if mini_game and mini_game.has_method("start"):
 				mini_game.call("start")
 			else:
-				push_warning("[Chat] Не найдена мини-игра или у неё отсутствует метод start(): '%s'" % mini_game_path)
+				push_warning(
+					"[Chat] Не найдена мини-игра или отсутствует метод start(): '%s'"
+					% mini_game_path
+				)
 
 	current_dialog = null
 	if timer:
@@ -421,7 +424,8 @@ func set_replica(replica: Replica) -> void:
 			background.call("background", background_name)
 		else:
 			push_warning(
-				"[Chat] Не удалось установить фон '%s': компонент Backgrounds не назначен или не поддерживает background()"
+				"[Chat] Не удалось установить фон '%s': Backgrounds не назначен "
+				+ "или не поддерживает background()" 
 				% background_name
 			)
 
@@ -430,7 +434,9 @@ func set_replica(replica: Replica) -> void:
 		if sounds:
 			sounds.play_sound(sound_name)
 		else:
-			push_warning("[Chat] Не удалось воспроизвести звук '%s': компонент Sounds не назначен" % sound_name)
+			push_warning(
+				"[Chat] Не удалось воспроизвести звук '%s': Sounds не назначен" % sound_name
+			)
 
 	_set_character_emotion(replica)
 

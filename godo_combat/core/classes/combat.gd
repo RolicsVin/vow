@@ -111,7 +111,7 @@ func start_combat(_player: Entitie = null, _enemy: Entitie = null, _money: float
 		button_box.add_child(_button)
 	
 	reset_inventory()
-	player._reset_weapons()
+	GCombat.sync_player_equipment()
 	
 	enemy.dead.connect(victory)
 	player.dead.connect(defeat)

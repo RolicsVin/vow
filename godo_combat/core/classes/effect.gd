@@ -13,27 +13,28 @@ var steps_entered: int = 0
 var _is_active: bool = true
 
 
-func _reset() -> void:
-	steps_entered = 0
-
-
 func is_active() -> bool:
 	return _is_active
 
 
+## Сбрасывает счётчик ходов и активирует эффект заново
+func reset() -> void:
+	steps_entered = 0
+	_is_active = true
+
+
+## Применяет разовое действие эффекта за ход: урон и лечение. 
+## Штрафы к урону и броне здесь не меняются, их считает Entitie
 func activate(entitie: Entitie) -> void:
 	_is_active = true
 	entitie.enter_damage(damage)
 	entitie.add_health(health)
-	entitie.armor -= armor
-	entitie.damage -= streeth
 
 
-func deactivate(entitie: Entitie) -> void:
+## Считает прошедший ход и выключает эффект, когда ходы закончились
+func deactivate(_entitie: Entitie) -> void:
 	steps_entered += 1
 	if steps_entered >= steps:
-		entitie.armor += armor
-		entitie.damage += streeth
 		_is_active = false
 
 

@@ -70,41 +70,44 @@ func _reset_weapons() -> void:
 	print('Экипированные предметы(_reset_weapons):     ', equiped_weapons)
 
 
-func equip_weapon(weapon_name: String) -> void:
-	GCombat.remowe_weapon_to_player_inventory(weapon_name)
-	var weapon: Weapon = GCombat.get_weapon(weapon_name)
+## Заменяет кэш экипировки сущности. Вызывается только из GCombat
+func set_equipment(weapons: Array[Weapon]) -> void:
+	for slot in equiped_weapons:
+		equiped_weapons[slot] = null
 	
-	if not equiped_weapons[weapon.get_type()]:
+	for weapon: Weapon in weapons:
 		equiped_weapons[weapon.get_type()] = weapon
-	else:
-		GCombat.add_weapon_to_player_inventory(equiped_weapons[weapon.get_type()].get_weapon_name())
-		equiped_weapons[weapon.get_type()] = weapon
-	
-	if 'equiped_weapons' in GCombat._get_buffer():
-		GCombat._get_buffer()['equiped_weapons'].append(weapon.get_weapon_name())
-	else:
-		GCombat._get_buffer()['equiped_weapons'] = [weapon.get_weapon_name()]
-	
-	damage += equiped_weapons[weapon.get_type()].damage
-	armor += equiped_weapons[weapon.get_type()].armor
-	
-	print('Предмет экипирован')
-	print('Экипированные предметы(equip_weapon):     ', equiped_weapons)
 
 
-func unequip_weapon(weapon_name: String) -> void:
-	GCombat.add_weapon_to_player_inventory(weapon_name)
-	GCombat._get_buffer()['equiped_weapons'].remove_at(GCombat._get_buffer()['equiped_weapons'].find(weapon_name))
+## Возвращает урон с учётом экипировки и активных эффектов
+func get_total_damage() -> float:
+	var total: float = damage
 	
-	var weapon: Weapon = GCombat.get_weapon(weapon_name)
+	for weapon: Weapon in equiped_weapons.values():
+		if weapon:
+			total += weapon.get_damage()
 	
-	damage -= equiped_weapons[weapon.get_type()].damage
-	armor -= equiped_weapons[weapon.get_type()].armor
+	# Штраф от эффекта действует, пока эффект активен
+	for effect: Effect in effects:
+		if effect and effect.is_active():
+			total -= effect.streeth
 	
-	equiped_weapons[weapon.get_type()] = null
+	return total
+
+
+## Возвращает броню с учётом экипировки и активных эффектов
+func get_total_armor() -> float:
+	var total: float = armor
 	
-	print('Предмет убран')
-	print('Экипированные предметы(anequip_weapon):     ', equiped_weapons)
+	for weapon: Weapon in equiped_weapons.values():
+		if weapon:
+			total += weapon.get_armor()
+	
+	for effect: Effect in effects:
+		if effect and effect.is_active():
+			total -= effect.armor
+	
+	return total
 
 
 func attack(entitie: Entitie, ability: Ability = null, _mini_game: MiniGame = null) -> void:
@@ -135,19 +138,19 @@ func attack(entitie: Entitie, ability: Ability = null, _mini_game: MiniGame = nu
 		if is_victory:
 			var attack_effect: Array = ability.get_attack()
 			
-			entitie.enter_damage(damage + attack_effect[0])
+			entitie.enter_damage(get_total_damage() + attack_effect[0])
 			GCombat._write_buffer(ability, 'enemy_ability')
 			for i in ability.get_attack()[1]:
 				entitie.add_effect(i)
 		else:
 			var attack_effect: Array = ability.get_attack()
 			
-			entitie.enter_damage(damage + (attack_effect[0] * ability.unsuccessful_damage_percent))
+			entitie.enter_damage(get_total_damage() + (attack_effect[0] * ability.unsuccessful_damage_percent))
 			GCombat._write_buffer(ability, 'enemy_ability')
 	else:
 		var attack_effect: Array = ability.get_attack()
 		
-		entitie.enter_damage(damage + attack_effect[0])
+		entitie.enter_damage(get_total_damage() + attack_effect[0])
 		GCombat._write_buffer(ability, 'enemy_ability')
 		for i in ability.get_attack()[1]:
 			entitie.add_effect(i)
@@ -166,7 +169,7 @@ func _defeat():
 
 
 func enter_damage(_damage: float):
-	health -= (_damage - armor)
+	health -= (_damage - get_total_armor())
 	print(name, ':     ', health)
 	if health <= 0:
 		dead.emit()
@@ -186,8 +189,10 @@ func append_effects() -> void:
 			effect.activate(self)
 
 
+## Завершает ход эффектов и убирает истёкшие
 func deactivate_effects() -> void:
-	for effect: Effect in effects:
+	# Идём по копии, так как remove_effect изменяет исходный список
+	for effect: Effect in effects.duplicate():
 		if effect:
 			effect.deactivate(self)
 			if not effect.is_active():
@@ -210,8 +215,11 @@ func get_abilitys() -> Array[Ability]:
 	return abilitys
 
 
-func add_effect(effect: Effect):
-	effects.append(effect)
+## Добавляет копию эффекта, чтобы у каждой сущности был свой счётчик ходов
+func add_effect(effect: Effect) -> void:
+	var effect_copy: Effect = effect.duplicate()
+	effect_copy.reset()
+	effects.append(effect_copy)
 
 
 func remove_effect(effect: Effect):

@@ -3,7 +3,11 @@ extends Node
 var _data: Node = ToolFactory.make_tool(self, "res://godo_combat/data/gc_data.gd", "Data")
 
 var _buffer: Dictionary = {
-	'player_entitie': load("res://assets/entities/player/player.tres")
+	'player_entitie': load("res://assets/entities/player/player.tres"),
+	'inventory': [],
+	'weapons': [],
+	'equiped_weapons': [],
+	'money': 0.0
 }
 
 
@@ -92,6 +96,7 @@ func load_save(save: Dictionary):
 	_buffer['player_entitie'].experience = player['experience']
 	_buffer['player_entitie'].level = player['level']
 	_buffer['player_entitie'].abilitys = abilitys
+	sync_player_equipment() # Восстанавливаем экипировку из загруженных списков
 	
 	print('loaded:')
 	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
@@ -99,6 +104,7 @@ func load_save(save: Dictionary):
 		print(response.get("result", ""))
 	else:
 		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
+	
 	_end_log()
 
 
@@ -128,33 +134,45 @@ func remowe_weapon_to_player_inventory(weapon_name: String) -> void:
 	_buffer['weapons'].remove_at(_buffer['weapons'].find(weapon_name))
 
 
-func equip_weapon(weapon_name: String):
+## Экипирует оружие из инвентаря игрока. Если слот того же типа занят, 
+## старое оружие возвращается в инвентарь. 
+func equip_weapon(weapon_name: String) -> void:
 	if weapon_name not in _buffer['weapons']:
 		return
 	
 	var weapon: Weapon = get_weapon(weapon_name)
-	var type = weapon.get_type()
 	
-	if 'equiped_weapons' not in _buffer:
-		_buffer['equiped_weapons'] = []
-	
-	for i: String in _buffer['equiped_weapons']:
-		var _weapon: Weapon = get_weapon(i)
-		if _weapon.get_type() == type:
-			unequip_weapon(_weapon.get_weapon_name())
+	# Берём копию списка, так как unequip_weapon изменяет исходный
+	for equiped_name: String in _buffer['equiped_weapons'].duplicate():
+		if get_weapon(equiped_name).get_type() == weapon.get_type():
+			unequip_weapon(equiped_name)
 	
 	remowe_weapon_to_player_inventory(weapon_name)
-	_buffer['equiped_weapons'].append(weapon.get_weapon_name())
+	_buffer['equiped_weapons'].append(weapon_name)
+	sync_player_equipment()
 
 
-func unequip_weapon(weapon_name: String):
-	if 'equiped_weapons' not in _buffer:
-		return
+## Снимает оружие и возвращает его в инвентарь игрока
+func unequip_weapon(weapon_name: String) -> void:
 	if weapon_name not in _buffer['equiped_weapons']:
 		return
 	
-	_buffer['equiped_weapons'].remove_at(_buffer['equiped_weapons'].find(weapon_name))
+	_buffer['equiped_weapons'].erase(weapon_name)
 	add_weapon_to_player_inventory(weapon_name)
+	sync_player_equipment()
+
+
+## Пересобирает экипировку сущности игрока по списку имён из буфера
+func sync_player_equipment() -> void:
+	var player: Entitie = _buffer['player_entitie']
+	var weapons: Array[Weapon] = []
+	
+	for weapon_name: String in _buffer['equiped_weapons']:
+		var weapon: Weapon = get_weapon(weapon_name)
+		if weapon:
+			weapons.append(weapon)
+	
+	player.set_equipment(weapons)
 
 
 ## Возвращает предмет по идентификатору, не раскрывая хранилище данных модуля.

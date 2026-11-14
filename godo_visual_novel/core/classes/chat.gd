@@ -382,7 +382,7 @@ func _finish_dialog() -> void:
 			var mini_game_path: NodePath = NodePath(current_dialog.get_next_mini_game())
 			var mini_game: Node = mini_games_root.get_node_or_null(mini_game_path)
 			if mini_game and mini_game.has_method('start'):
-				mini_game.call("start")
+				mini_game.call('start')
 			else:
 				push_warning(
 					'[Chat] Не найдена мини-игра или отсутствует метод start(): \'%s\''
@@ -446,7 +446,7 @@ func set_replica(replica: Replica) -> void:
 	if behind:
 		behind.set_text(replica.get_behind())
 	else:
-		push_warning("[Chat] Не удалось отобразить имя персонажа: компонент Behind не назначен")
+		push_warning('[Chat] Не удалось отобразить имя персонажа: компонент Behind не назначен')
 
 	text_buffer = replica.get_replica()
 

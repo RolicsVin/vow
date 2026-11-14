@@ -12,10 +12,6 @@ func show_child(child_name: String) -> void:
 		push_warning('[FastAction] Не указан путь к узлу для отображения')
 		return
 
-	if child_name.is_empty():
-		push_warning('[FastAction] Не указан путь к узлу для скрытия')
-		return
-
 	var target: Node = get_node_or_null(NodePath(child_name))
 	if not target:
 		push_warning('[FastAction] Не найден узел для отображения: \'%s\'' % child_name)
@@ -30,6 +26,10 @@ func show_child(child_name: String) -> void:
 
 ## Скрывает дочерний узел или запускает его LinearVisible.
 func hide_child(child_name: String) -> void:
+	if child_name.is_empty():
+		push_warning('[FastAction] Не указан путь к узлу для скрытия')
+		return
+
 	var target: Node = get_node_or_null(NodePath(child_name))
 	if not target:
 		push_warning('[FastAction] Не найден узел для скрытия: \'%s\'' % child_name)

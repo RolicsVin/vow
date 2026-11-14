@@ -112,7 +112,7 @@ var emotion_en_protection: Dictionary = {
 	Replica.Emotion.Грустно: 'Sad',
 	Replica.Emotion.Печально: 'Sorrowful',
 	Replica.Emotion.Огорчённо: 'Disappointed',
-	Replica.Emotion.Недовольно: ' displeased',
+	Replica.Emotion.Недовольно: 'Displeased',
 	Replica.Emotion.Шокированно: 'Shocked',
 	Replica.Emotion.Удивлённо: 'Surprised',
 	Replica.Emotion.Пугливо: 'Fearfully',

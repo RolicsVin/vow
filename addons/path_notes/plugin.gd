@@ -11,11 +11,17 @@ var context_menu: ContextMenu ## Плагин контекстного меню
 var edit_dialog: ConfirmationDialog ## Диалог редактирования подсказки
 var note_input: TextEdit ## Поле ввода текста подсказки
 var edited_path: String = '' ## Путь, подсказка которого сейчас редактируется
+var tooltip_plugin: NoteTooltip ## Плагин, дополняющий тултипы файлов заметкой
+
+
+## Возвращает текст подсказки для пути или пустую строку, если подсказки нет
+func get_note(path: String) -> String:
+	return notes.get(_normalize(path), '')
 
 
 func _enter_tree() -> void: ## Включение плагина
 	_load_notes()
-
+	
 	# Создаём диалог редактирования
 	edit_dialog = ConfirmationDialog.new()
 	edit_dialog.title = 'Подсказка'
@@ -24,12 +30,17 @@ func _enter_tree() -> void: ## Включение плагина
 	edit_dialog.add_child(note_input)
 	edit_dialog.confirmed.connect(_on_dialog_confirmed)
 	EditorInterface.get_base_control().add_child(edit_dialog)
-
+	
 	# Регистрируем пункт контекстного меню
 	context_menu = ContextMenu.new()
 	context_menu.plugin = self
 	add_context_menu_plugin(EditorContextMenuPlugin.CONTEXT_SLOT_FILESYSTEM, context_menu)
-
+	
+	# Регистрируем плагин тултипов для файлов
+	tooltip_plugin = NoteTooltip.new()
+	tooltip_plugin.plugin = self
+	EditorInterface.get_file_system_dock().add_resource_tooltip_plugin(tooltip_plugin)
+	
 	# Переприменяем подсказки при каждом обновлении файловой системы
 	EditorInterface.get_resource_filesystem().filesystem_changed.connect(_refresh_tooltips)
 	_refresh_tooltips.call_deferred()
@@ -38,6 +49,7 @@ func _enter_tree() -> void: ## Включение плагина
 func _exit_tree() -> void: ## Выключение плагина
 	remove_context_menu_plugin(context_menu)
 	EditorInterface.get_resource_filesystem().filesystem_changed.disconnect(_refresh_tooltips)
+	EditorInterface.get_file_system_dock().remove_resource_tooltip_plugin(tooltip_plugin)
 	edit_dialog.queue_free()
 
 
@@ -98,10 +110,10 @@ func _apply_to_node(node: Node) -> void:
 		_apply_to_node(child)
 
 
-## Ставит тултипы элементу дерева и его потомкам
+## Ставит тултипы элементу дерева и его потомкам (только для папок)
 func _apply_to_tree_item(item: TreeItem) -> void:
 	var meta: Variant = item.get_metadata(0)
-	if meta is String:
+	if meta is String and DirAccess.dir_exists_absolute(meta):
 		var path: String = _normalize(meta)
 		if notes.has(path):
 			item.set_tooltip_text(0, NOTE_MARKER + notes[path] + '\n\n' + path)
@@ -111,11 +123,11 @@ func _apply_to_tree_item(item: TreeItem) -> void:
 		_apply_to_tree_item(child)
 
 
-## Ставит тултипы элементам списка файлов
+## Ставит тултипы папкам в списке файлов
 func _apply_to_item_list(list: ItemList) -> void:
 	for index: int in list.item_count:
 		var meta: Variant = list.get_item_metadata(index)
-		if not meta is String:
+		if not (meta is String and DirAccess.dir_exists_absolute(meta)):
 			continue
 		var path: String = _normalize(meta)
 		if notes.has(path):
@@ -136,3 +148,32 @@ class ContextMenu extends EditorContextMenuPlugin:
 	## Открывает диалог для выбранного пути
 	func _on_item_pressed(paths: PackedStringArray) -> void:
 		plugin.open_editor(paths[0])
+
+
+## Дополняет стандартный тултип файла текстом подсказки
+class NoteTooltip extends EditorResourceTooltipPlugin:
+	var plugin: PathNotesPlugin ## Ссылка на основной плагин
+
+	## Обрабатываем файлы любого типа
+	func _handles(resource_type: String) -> bool:
+		return true
+
+	## Добавляет подсказку в начало стандартного тултипа
+	func _make_tooltip_for_path(path: String, metadata: Dictionary, base: Control) -> Control:
+		var note: String = plugin.get_note(path)
+		if note.is_empty():
+			return base # Подсказки нет - оставляем стандартный тултип
+
+		# Метка с текстом подсказки
+		var note_label: Label = Label.new()
+		note_label.text = PathNotesPlugin.NOTE_MARKER + note
+		note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		note_label.custom_minimum_size.x = 300
+
+		# Вставляем метку и разделитель перед стандартным содержимым
+		base.add_child(note_label)
+		base.move_child(note_label, 0)
+		var separator: HSeparator = HSeparator.new()
+		base.add_child(separator)
+		base.move_child(separator, 1)
+		return base

@@ -18,6 +18,10 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://oq7wstoos8ko"
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://c54rmfxkmd7tm"
+
 [autoload]
 
 PythonBridge="*uid://cq4qjfjivev80"

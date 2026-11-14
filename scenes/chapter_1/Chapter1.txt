@@ -8,34 +8,30 @@ dialog;start linear
 dialog;end linear
 dialog;interpolation linear
 
+// Утро. Дровяной навес у дома.
+Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 background BG_Chapter1_Woodcutter_Shed
 action;start;music Music/Chapter1_ColdMorning
-
 sound SFX_Axe_Wood_Impact
-
-Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 speaker ГлавныйГерой
 emotion Задумчиво
 
-sound SFX_Axe_Wood_Split
-
 Вот и последнее.
+sound SFX_Axe_Wood_Split
 speaker ГлавныйГерой
 emotion Радостно
 
+Ещё немного — и сарай будет полон. Хорошо, что топор не подвёл.
 background BG_Chapter1_Shed_Logs
 sound SFX_Wood_Falling
-
-Ещё немного — и сарай будет полон. Хорошо, что топор не подвёл.
 speaker ГлавныйГерой
 emotion Задумчиво
 
+Надо занести дрова, пока совсем не промокли.
 background BG_Chapter1_House_Interior
 sound SFX_Fireplace_Crackling
 action;start;music Music/Chapter1_Home_Ambience off
 action;start;music Music/Chapter1_Quiet_Tension
-
-Надо занести дрова, пока совсем не промокли.
 speaker ГлавныйГерой
 emotion Без_эмоции
 
@@ -43,10 +39,9 @@ emotion Без_эмоции
 speaker ГлавныйГерой
 emotion Шокированно
 
+Хоть немного согреюсь.
 background BG_Chapter1_Fireplace
 sound SFX_Fireplace_Crackling
-
-Хоть немного согреюсь.
 speaker ГлавныйГерой
 emotion Задумчиво
 
@@ -54,11 +49,10 @@ emotion Задумчиво
 speaker ГлавныйГерой
 emotion Грустно
 
+Баустхен... Самая высокая гора во всех пяти мирах.
 background BG_Chapter1_Window_View
 sound SFX_Rain_Light
 action;start;music Music/Chapter1_Mountain_Storm
-
-Баустхен... Самая высокая гора во всех пяти мирах.
 speaker ГлавныйГерой
 emotion Задумчиво
 
@@ -70,10 +64,9 @@ emotion Подозрительно
 speaker ГлавныйГерой
 emotion Задумчиво
 
+Оленёнок? Где же твоя мать?
 background BG_Chapter1_Road_Deer
 sound SFX_Deer_Steps
-
-Оленёнок? Где же твоя мать?
 speaker ГлавныйГерой
 emotion Удивлённо
 
@@ -81,10 +74,9 @@ emotion Удивлённо
 speaker ГлавныйГерой
 emotion Задумчиво
 
+Что это там? Птица?
 background BG_Chapter1_Distant_Mountain
 sound SFX_Wind_Rising
-
-Что это там? Птица?
 speaker ГлавныйГерой
 emotion Шокированно
 
@@ -92,11 +84,10 @@ emotion Шокированно
 speaker ГлавныйГерой
 emotion Испуганно
 
+Бог первого поколения... Асмунд.
 background BG_Chapter1_Asmund_Landing
 sound SFX_God_Landing
 action;start;music Music/Chapter1_Asmund_Theme
-
-Бог первого поколения... Асмунд.
 speaker ГлавныйГерой
 emotion Испуганно
 
@@ -116,18 +107,16 @@ emotion Задумчиво
 speaker ГлавныйГерой
 emotion Испуганно
 
+Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
 background BG_Chapter1_House_Hiding_Valuables
 sound SFX_Hiding_Objects
-
-Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
 speaker ГлавныйГерой
 emotion Задумчиво
 
+Эй! Выходите! Где хозяин?!
 background BG_Chapter1_Village_Fence
 sound SFX_Fence_Breaking
 action;start;music Music/Chapter1_Village_Attack
-
-Эй! Выходите! Где хозяин?!
 name Асмунд
 emotion Злясь
 
@@ -149,9 +138,8 @@ emotion Шокированно
 name Асмунд
 emotion Злясь
 
-sound SFX_Punch_Heavy
-
 Он ударил его... Просто так.
+sound SFX_Punch_Heavy
 speaker ГлавныйГерой
 emotion Испуганно
 
@@ -164,31 +152,27 @@ emotion Злостно
 name Асмунд
 emotion Безумно
 
+Они ничего не могут ему сделать...
 sound SFX_Fight_Village
 action;start;music Music/Chapter1_Violence
-
-Они ничего не могут ему сделать...
 speaker ГлавныйГерой
 emotion Испуганно
 
+Одежда порвана, лица в крови... Почему он каждый раз выбирает именно нашу деревню?
 background BG_Chapter1_Village_Aftermath
 sound SFX_Wind_Cold
-
-Одежда порвана, лица в крови... Почему он каждый раз выбирает именно нашу деревню?
 speaker ГлавныйГерой
 emotion Грустно
 
+Кто-то идёт по дороге.
 background BG_Chapter1_Village_Road
 sound SFX_Footsteps_Mud
-
-Кто-то идёт по дороге.
 speaker ГлавныйГерой
 emotion Удивлённо
 
+Девушка. Возвращается с базара... Мешок, должно быть, полон картошки.
 background BG_Chapter1_Girl_Returning
 sound SFX_Bag_Shifting
-
-Девушка. Возвращается с базара... Мешок, должно быть, полон картошки.
 speaker ГлавныйГерой
 emotion Задумчиво
 
@@ -205,10 +189,9 @@ speaker Мужчина
 name Отец
 emotion Злостно
 
+Отец?..
 background BG_Chapter1_Father_Grabs_Shovel
 sound SFX_Shovel_Grab
-
-Отец?..
 speaker ГлавныйГерой
 emotion Шокированно
 
@@ -217,9 +200,8 @@ speaker Мужчина
 name Отец
 emotion Яростно
 
-sound SFX_Shovel_Strike
-
 Что?!
+sound SFX_Shovel_Strike
 name Асмунд
 emotion Шокированно
 
@@ -227,11 +209,10 @@ emotion Шокированно
 name Асмунд
 emotion Злясь
 
+Нет! Отец!
 sound SFX_Shovel_Impact
 background BG_Chapter1_Father_Wounded
 action;start;music Music/Chapter1_Tragedy
-
-Нет! Отец!
 speaker ГлавныйГерой
 emotion Испуганно
 
@@ -248,10 +229,9 @@ emotion Яростно
 name Асмунд
 emotion Раздосадованно
 
+Ты... Ты убил его!
 background BG_Chapter1_Father_Fallen
 sound SFX_Body_Fall
-
-Ты... Ты убил его!
 speaker ГлавныйГерой
 emotion Яростно
 
@@ -259,10 +239,9 @@ emotion Яростно
 speaker ГлавныйГерой
 emotion Яростно
 
+Получай! И ещё! И ещё!
 background BG_Chapter1_Confrontation
 sound SFX_Running_Mud
-
-Получай! И ещё! И ещё!
 speaker ГлавныйГерой
 emotion Яростно
 
@@ -270,10 +249,9 @@ emotion Яростно
 name Асмунд
 emotion Раздосадованно
 
+А-а!
 sound SFX_Impact_Throw
 background BG_Chapter1_Mud_Fall
-
-А-а!
 speaker ГлавныйГерой
 emotion Шокированно
 
@@ -281,26 +259,23 @@ emotion Шокированно
 speaker ГлавныйГерой
 emotion Грустно
 
+Он... Он уходит. Просто так?
 background BG_Chapter1_Asmund_Leaving
 sound SFX_God_Leap
 action;start;music Music/Chapter1_Asmund_Theme off
 action;start;music Music/Chapter1_Aftermath
-
-Он... Он уходит. Просто так?
 speaker ГлавныйГерой
 emotion Испуганно
 
+Он одним прыжком преодолел всю деревню... И уже поднимается на Баустхен.
 background BG_Chapter1_Mountain_Asmund_Ascending
 sound SFX_Distant_Thunder
-
-Он одним прыжком преодолел всю деревню... И уже поднимается на Баустхен.
 speaker ГлавныйГерой
 emotion Шокированно
 
+Отец! Отец, держись!
 background BG_Chapter1_Father_Dying
 sound SFX_Running_Footsteps
-
-Отец! Отец, держись!
 speaker ГлавныйГерой
 emotion Испуганно
 
@@ -327,10 +302,9 @@ speaker Мужчина
 name Отец
 emotion Грустно
 
+Нет! Не закрывай глаза! Отец, прошу!
 background BG_Chapter1_Father_Dead
 sound SFX_Fire_Distant
-
-Нет! Не закрывай глаза! Отец, прошу!
 speaker ГлавныйГерой
 emotion Плача
 
@@ -338,11 +312,10 @@ emotion Плача
 speaker ГлавныйГерой
 emotion Плача
 
+Вокруг собрались жители деревни. Кто-то шептался, кто-то смотрел на меня с жалостью.
 background BG_Chapter1_Village_Mourners
 sound SFX_Village_Murmur
 action;start;music Music/Chapter1_Mourning
-
-Вокруг собрались жители деревни. Кто-то шептался, кто-то смотрел на меня с жалостью.
 speaker ГлавныйГерой
 emotion Грустно
 
@@ -358,10 +331,9 @@ emotion Злясь
 speaker ГлавныйГерой
 emotion Яростно
 
+Клянусь... Я покорю Баустхен.
 background BG_Chapter1_Vow
 action;start;music Music/Chapter1_Vow
-
-Клянусь... Я покорю Баустхен.
 speaker ГлавныйГерой
 emotion Яростно
 
@@ -369,10 +341,9 @@ emotion Яростно
 speaker ГлавныйГерой
 emotion Яростно
 
+Хлеб. Вода. Красная ткань с белой клеткой...
 background BG_Chapter1_House_Preparation
 sound SFX_Packing_Bag
-
-Хлеб. Вода. Красная ткань с белой клеткой...
 speaker ГлавныйГерой
 emotion Задумчиво
 
@@ -380,10 +351,9 @@ emotion Задумчиво
 speaker ГлавныйГерой
 emotion Грустно
 
+Мама... Прости. Я должен идти.
 background BG_Chapter1_Mother_Goodbye
 sound SFX_Quiet_Room
-
-Мама... Прости. Я должен идти.
 speaker ГлавныйГерой
 emotion Грустно
 
@@ -396,11 +366,10 @@ emotion Плача
 speaker ГлавныйГерой
 emotion Грустно
 
+Не ходи туда! Ты ведь видел, что стало с твоим отцом!
 background BG_Chapter1_Village_Exit
 sound SFX_Villagers_Protest
 action;start;music Music/Chapter1_Departure
-
-Не ходи туда! Ты ведь видел, что стало с твоим отцом!
 speaker Мужчина
 name Житель деревни
 emotion Испуганно
@@ -428,11 +397,10 @@ emotion Яростно
 speaker ГлавныйГерой
 emotion Яростно
 
+Баустхен... Обитель богов и великих героев.
 background BG_Chapter1_Bausthen_Foot
 sound SFX_Wind_Mountain
 action;start;music Music/Chapter1_Mountain_Journey
-
-Баустхен... Обитель богов и великих героев.
 speaker ГлавныйГерой
 emotion Задумчиво
 

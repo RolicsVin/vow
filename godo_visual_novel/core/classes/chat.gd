@@ -51,20 +51,20 @@ func _ready() -> void:
 	text_speed = GVisualNovel.get_text_speed()
 
 	if not default_text_size:
-		default_text_size = get_theme_font_size("font_size")
+		default_text_size = get_theme_font_size('font_size')
 	if not small_text_size:
 		small_text_size = int(default_text_size / 1.5)
 
 	if auto_text_swith_timer:
 		auto_text_swith_timer.timeout.connect(next)
 	else:
-		push_warning("[Chat] Не назначен таймер автоматического переключения реплик")
+		push_warning('[Chat] Не назначен таймер автоматического переключения реплик')
 
 	hide()
 	if behind:
 		behind.hide()
 	else:
-		push_warning("[Chat] Не назначен компонент Behind")
+		push_warning('[Chat] Не назначен компонент Behind')
 
 	if back_button:
 		back_button.pressed.connect(chat_back)
@@ -73,7 +73,7 @@ func _ready() -> void:
 		timer.wait_time = text_speed
 		timer.timeout.connect(_load_symbol_on_byffer)
 	else:
-		push_warning("[Chat] Не назначен таймер отображения текста")
+		push_warning('[Chat] Не назначен таймер отображения текста')
 
 	autowrap_mode = TextServer.AUTOWRAP_WORD
 	modulate = default_color
@@ -319,7 +319,7 @@ func _perform_node_sound_action(node: Node, should_play: bool) -> void:
 	if handled_by_component:
 		return
 
-	var method_name: StringName = &"play" if should_play else &"stop"
+	var method_name: StringName = &'play' if should_play else &'stop'
 	if node.has_method(method_name):
 		node.call(method_name)
 	else:
@@ -377,15 +377,15 @@ func _finish_dialog() -> void:
 
 	if current_dialog.get_next_mini_game():
 		if not mini_games_root:
-			push_warning("[Chat] Не удалось запустить мини-игру: корневой узел мини-игр не назначен")
+			push_warning('[Chat] Не удалось запустить мини-игру: корневой узел мини-игр не назначен')
 		else:
 			var mini_game_path: NodePath = NodePath(current_dialog.get_next_mini_game())
 			var mini_game: Node = mini_games_root.get_node_or_null(mini_game_path)
-			if mini_game and mini_game.has_method("start"):
+			if mini_game and mini_game.has_method('start'):
 				mini_game.call("start")
 			else:
 				push_warning(
-					"[Chat] Не найдена мини-игра или отсутствует метод start(): '%s'"
+					'[Chat] Не найдена мини-игра или отсутствует метод start(): \'%s\''
 					% mini_game_path
 				)
 
@@ -396,11 +396,11 @@ func _finish_dialog() -> void:
 
 func set_replica(replica: Replica) -> void:
 	if not replica:
-		push_warning("[Chat] Не удалось установить реплику: ресурс Replica отсутствует")
+		push_warning('[Chat] Не удалось установить реплику: ресурс Replica отсутствует')
 		return
 
 	if not current_dialog:
-		push_warning("[Chat] Не удалось установить реплику: текущий диалог отсутствует")
+		push_warning('[Chat] Не удалось установить реплику: текущий диалог отсутствует')
 		return
 
 	if _last_replica:
@@ -420,14 +420,14 @@ func set_replica(replica: Replica) -> void:
 
 	var background_name: String = replica.get_background()
 	if not background_name.is_empty():
-		if background and background.has_method("background"):
-			background.call("background", background_name)
+		if background and background.has_method('background'):
+			background.call('background', background_name)
 		else:
-			push_warning(
-				"[Chat] Не удалось установить фон '%s': Backgrounds не назначен "
-				+ "или не поддерживает background()" 
-				% background_name
-			)
+			var warning_message: String = (
+				'[Chat] Не удалось установить фон \'%s\': Backgrounds не назначен '
+				+ 'или не поддерживает background()'
+			) % background_name
+			push_warning(warning_message)
 
 	var sound_name: String = replica.get_sound()
 	if not sound_name.is_empty():
@@ -435,7 +435,7 @@ func set_replica(replica: Replica) -> void:
 			sounds.play_sound(sound_name)
 		else:
 			push_warning(
-				"[Chat] Не удалось воспроизвести звук '%s': Sounds не назначен" % sound_name
+				'[Chat] Не удалось воспроизвести звук \'%s\': Sounds не назначен' % sound_name
 			)
 
 	_set_character_emotion(replica)
@@ -467,9 +467,9 @@ func set_replica(replica: Replica) -> void:
 		_load_text_on_buffer()
 
 	if replica.get_small_text():
-		add_theme_font_size_override("font_size", small_text_size)
+		add_theme_font_size_override('font_size', small_text_size)
 	else:
-		add_theme_font_size_override("font_size", default_text_size)
+		add_theme_font_size_override('font_size', default_text_size)
 
 	if auto_text_swith_timer:
 		auto_text_swith_timer.stop()

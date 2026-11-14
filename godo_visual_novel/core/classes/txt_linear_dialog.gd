@@ -14,7 +14,7 @@ class_name TxtLinearDialog extends LinearDialog
 ##   action;start;sound MatveySpeak
 ##
 ## Текст:
-##   ~                      вместо текста: реплика без текста (например, только смена фона)
+##   Блок без текста        можно начать сразу со свойства (например, только смена фона)
 ##   \n в тексте            перенос строки внутри реплики
 ##   // комментарий         строка-комментарий, игнорируется
 ##   lang;En Hello!         перевод реплики на язык из Replica.Language
@@ -124,14 +124,19 @@ func load_from_text(source: String, source_name: String = "") -> void:
 func _build_replica(body: Array) -> Replica:
 	var replica := Replica.new()
 	var first: String = body[0][1]
-	
-	if first != "~":
+	var first_key: String = first.split(" ")[0].split(";")[0]
+	var first_is_property: bool = (
+		first_key in _REPLICA_KEYS or first_key == "action" or first_key == "lang"
+	)
+	var property_start: int = 0
+
+	# Если первая строка — свойство, это реплика без текста.
+	# Символ "~" для таких блоков больше не требуется.
+	if not first_is_property:
 		replica.replica = first.replace("\\n", "\n")
-		var head: String = first.split(" ")[0].split(";")[0]
-		if head in _REPLICA_KEYS or head == "action" or head == "lang":
-			_warn(body[0][0], "текст реплики начинается с ключевого слова «%s». Если это свойство, а текста нет - поставь первой строкой ~" % head)
-	
-	for i in range(1, body.size()):
+		property_start = 1
+
+	for i in range(property_start, body.size()):
 		_apply_replica_line(replica, body[i][0], body[i][1])
 	return replica
 

@@ -1,107 +1,185 @@
+## Данные визуальной новеллы: имена, эмоции и настройки отображения
+
 extends Node
 
+## Цвета имён персонажей в диалоговом окне
 var characters_color: Dictionary = {
 	Character.CharacterType.Нет: Color.WHITE,
-	Character.CharacterType.Вы: Color.WHITE,
-	Character.CharacterType.Ты: Color.WHITE,
-	Character.CharacterType.ГлавныйГерой: Color.WHITE,
-	Character.CharacterType.Алиса: Color.ORANGE,
-	Character.CharacterType.Катя: Color.BURLYWOOD,
-	Character.CharacterType.Валя: Color.DARK_SLATE_GRAY,
-	Character.CharacterType.Гальхя: Color.CHOCOLATE,
-	Character.CharacterType.Фейхья: Color.PEACH_PUFF,
-	Character.CharacterType.Калия: Color.WHITE,
-	Character.CharacterType.Лира: Color.ALICE_BLUE,
-	Character.CharacterType.Дорман: Color.ROSY_BROWN,
-	Character.CharacterType.Сигурд: Color.DARK_RED,
-	Character.CharacterType.ЗверьГнева: Color.RED,
-	Character.CharacterType.ЗверьСмерти: Color.BLACK,
+	Character.CharacterType.Подросток: Color.WHITE,
+	Character.CharacterType.Асмунд: Color.CRIMSON,
+	Character.CharacterType.Сосед: Color.LIGHT_GRAY,
+	Character.CharacterType.ДругойСосед: Color.LIGHT_GRAY,
+	Character.CharacterType.Отец: Color.BURLYWOOD,
+	Character.CharacterType.Девушка: Color.PINK,
+	Character.CharacterType.Мать: Color.PEACH_PUFF,
+	Character.CharacterType.ЖительДеревни: Color.LIGHT_GRAY,
+	Character.CharacterType.ЖительницаДеревни: Color.LIGHT_GRAY,
+	Character.CharacterType.Старейшина: Color.TAN,
 }
 
+## Сохранённые закладки сцен
 var bookmarks_scenes: Dictionary = {}
 
+## Защищённые имена, общие для языков
 var name_protection: Dictionary = {
-	Character.CharacterType.Нет: ''
-}
-
-var name_ru_protection: Dictionary = {
-	Character.CharacterType.ГлавныйГерой: 'Главный герой',
-	Character.CharacterType.Нет: ''
-	}
-
-var name_en_protection: Dictionary = {
-	Character.CharacterType.ГлавныйГерой: 'The main character',
 	Character.CharacterType.Нет: '',
-	Character.CharacterType.Вы: 'You',
-	Character.CharacterType.Ты: 'You',
-	Character.CharacterType.Алиса: 'Alisa',
-	Character.CharacterType.Катя: 'Katya',
-	Character.CharacterType.Валя: 'Valia',
-	Character.CharacterType.Гальхя: 'Galkhya',
-	Character.CharacterType.Фейхья: 'Feihya',
-	Character.CharacterType.Калия: 'Kalia',
-	Character.CharacterType.Лира: 'Lira',
-	Character.CharacterType.Дорман: 'Dorman',
-	Character.CharacterType.Фея: 'Feya',
-	Character.CharacterType.ЗверьГнева: 'The beast of wrath',
-	Character.CharacterType.ЗверьСмерти: 'The Beast of Death',
-	Character.CharacterType.Незнакомец: 'Stranger',
-	Character.CharacterType.Незнакомка: 'Stranger',
-	Character.CharacterType.Прохожий: 'Passerby',
-	Character.CharacterType.Мужчина: 'Man',
-	Character.CharacterType.Женщина: 'Woman',
-	Character.CharacterType.Девушка: 'Girl',
-	Character.CharacterType.Подросток: 'Teenager',
-	Character.CharacterType.Мальчик: 'Boy',
-	Character.CharacterType.Девочка: 'Girl',
-	}
-	
-var emotion_protection: Dictionary = {
-	Replica.Emotion.Без_эмоции: ''
 }
 
+## Русские имена персонажей
+var name_ru_protection: Dictionary = {
+	Character.CharacterType.Нет: '',
+	Character.CharacterType.Подросток: 'Подросток',
+	Character.CharacterType.Асмунд: 'Асмунд',
+	Character.CharacterType.Сосед: 'Сосед',
+	Character.CharacterType.ДругойСосед: 'Другой сосед',
+	Character.CharacterType.Отец: 'Отец',
+	Character.CharacterType.Девушка: 'Девушка',
+	Character.CharacterType.Мать: 'Мать',
+	Character.CharacterType.ЖительДеревни: 'Житель деревни',
+	Character.CharacterType.ЖительницаДеревни: 'Жительница деревни',
+	Character.CharacterType.Старейшина: 'Старейшина',
+}
+
+## Английские имена персонажей
+var name_en_protection: Dictionary = {
+	Character.CharacterType.Нет: '',
+	Character.CharacterType.Подросток: 'Teenager',
+	Character.CharacterType.Асмунд: 'Asmund',
+	Character.CharacterType.Сосед: 'Neighbor',
+	Character.CharacterType.ДругойСосед: 'Another neighbor',
+	Character.CharacterType.Отец: 'Father',
+	Character.CharacterType.Девушка: 'Girl',
+	Character.CharacterType.Мать: 'Mother',
+	Character.CharacterType.ЖительДеревни: 'Villager',
+	Character.CharacterType.ЖительницаДеревни: 'Villager',
+	Character.CharacterType.Старейшина: 'Elder',
+}
+
+## Защищённые эмоции, общие для языков
+var emotion_protection: Dictionary = {
+	Replica.Emotion.Без_эмоции: '',
+}
+
+## Русские названия эмоций
 var emotion_ru_protection: Dictionary = {
 	Replica.Emotion.Без_эмоции: '',
 	Replica.Emotion.В_мыслях: 'В мыслях',
-	Replica.Emotion.Не_доверчиво: 'Не доверчиво',
+	Replica.Emotion.Радостно: 'Радостно',
+	Replica.Emotion.Счастливо: 'Счастливо',
+	Replica.Emotion.Смеясь: 'Смеясь',
+	Replica.Emotion.Веселясь: 'Веселясь',
+	Replica.Emotion.Хихикая: 'Хихикая',
+	Replica.Emotion.Грустно: 'Грустно',
+	Replica.Emotion.Печально: 'Печально',
+	Replica.Emotion.Огорчённо: 'Огорчённо',
+	Replica.Emotion.Недовольно: 'Недовольно',
+	Replica.Emotion.Шокированно: 'Шокированно',
+	Replica.Emotion.Удивлённо: 'Удивлённо',
+	Replica.Emotion.Пугливо: 'Пугливо',
+	Replica.Emotion.Испуганно: 'Испуганно',
+	Replica.Emotion.Боясь: 'Боясь',
+	Replica.Emotion.Истеря: 'В истерике',
+	Replica.Emotion.Плача: 'Плача',
+	Replica.Emotion.Злясь: 'Злясь',
+	Replica.Emotion.Злостно: 'Злобно',
+	Replica.Emotion.Яростно: 'Яростно',
+	Replica.Emotion.Безумно: 'Безумно',
+	Replica.Emotion.Неистово: 'Неистово',
+	Replica.Emotion.Подозрительно: 'Подозрительно',
+	Replica.Emotion.Раздосадованно: 'Раздосадованно',
+	Replica.Emotion.Задумчиво: 'Задумчиво',
+	Replica.Emotion.Насмешливо: 'Насмешливо',
+	Replica.Emotion.Издеваясь: 'Издеваясь',
+	Replica.Emotion.Не_доверчиво: 'Недоверчиво',
+	Replica.Emotion.Прищурившись: 'Прищурившись',
+	Replica.Emotion.Присмотревшись: 'Присмотревшись',
+	Replica.Emotion.Страсно: 'Страстно',
+	Replica.Emotion.Возбуждённо: 'Возбуждённо',
+	Replica.Emotion.Влюблённо: 'Влюблённо',
+	Replica.Emotion.Стыдливо: 'Стыдливо',
+	Replica.Emotion.Смущённо: 'Смущённо',
 }
 
+## Английские названия эмоций
 var emotion_en_protection: Dictionary = {
 	Replica.Emotion.Без_эмоции: '',
-	Replica.Emotion.В_мыслях: 'In your mind',
-	Replica.Emotion.Радостно: 'Joyfully',
-	Replica.Emotion.Счастливо: 'Happily',
+	Replica.Emotion.В_мыслях: 'Thoughtful',
+	Replica.Emotion.Радостно: 'Joyful',
+	Replica.Emotion.Счастливо: 'Happy',
 	Replica.Emotion.Смеясь: 'Laughing',
 	Replica.Emotion.Веселясь: 'Having fun',
-	Replica.Emotion.Хихикая: 'Laughing',
-	Replica.Emotion.Грустно: 'Sadly',
-	Replica.Emotion.Печально: 'Sadly',
+	Replica.Emotion.Хихикая: 'Giggling',
+	Replica.Emotion.Грустно: 'Sad',
+	Replica.Emotion.Печально: 'Sorrowful',
 	Replica.Emotion.Огорчённо: 'Disappointed',
-	Replica.Emotion.Недовольно: 'Unsatisfied',
-	Replica.Emotion.Истеря: 'Hysteria',
+	Replica.Emotion.Недовольно: ' displeased',
+	Replica.Emotion.Шокированно: 'Shocked',
+	Replica.Emotion.Удивлённо: 'Surprised',
+	Replica.Emotion.Пугливо: 'Fearfully',
+	Replica.Emotion.Испуганно: 'Frightened',
+	Replica.Emotion.Боясь: 'Afraid',
+	Replica.Emotion.Истеря: 'Hysterical',
 	Replica.Emotion.Плача: 'Crying',
 	Replica.Emotion.Злясь: 'Angry',
-	Replica.Emotion.Злостно: 'Maliciously',
-	Replica.Emotion.Яростно: 'Violently',
-	Replica.Emotion.Безумно: 'Madly',
-	Replica.Emotion.Неистово: 'Violently',
-	Replica.Emotion.Подозрительно: 'Suspiciously',
+	Replica.Emotion.Злостно: 'Malicious',
+	Replica.Emotion.Яростно: 'Furious',
+	Replica.Emotion.Безумно: 'Mad',
+	Replica.Emotion.Неистово: 'Frenzied',
+	Replica.Emotion.Подозрительно: 'Suspicious',
 	Replica.Emotion.Раздосадованно: 'Annoyed',
-	Replica.Emotion.Задумчиво: 'Thoughtfully',
-	Replica.Emotion.Не_доверчиво: 'Not trusting',
-	Replica.Emotion.Прищурившись: 'Taking a closer look',
-	Replica.Emotion.Присмотревшись: 'Taking a closer look',
+	Replica.Emotion.Задумчиво: 'Pensive',
+	Replica.Emotion.Насмешливо: 'Mocking',
+	Replica.Emotion.Издеваясь: 'Taunting',
+	Replica.Emotion.Не_доверчиво: 'Distrustful',
+	Replica.Emotion.Прищурившись: 'Squinting',
+	Replica.Emotion.Присмотревшись: 'Looking closely',
 	Replica.Emotion.Страсно: 'Passionately',
 	Replica.Emotion.Возбуждённо: 'Excited',
 	Replica.Emotion.Влюблённо: 'Lovingly',
-	Replica.Emotion.Стыдливо: 'Shamefully',
-	Replica.Emotion.Смущённо: 'Embarrassed'
+	Replica.Emotion.Стыдливо: 'Shyly',
+	Replica.Emotion.Смущённо: 'Embarrassed',
 }
 
+## Эмоции спрайтов персонажей
 var character_emotion_protection: Dictionary = {
 	Replica.Emotion.Без_эмоции: 'default',
-	Replica.Emotion.Злясь: 'evil'
+	Replica.Emotion.В_мыслях: 'lower_eyes',
+	Replica.Emotion.Радостно: 'happy',
+	Replica.Emotion.Счастливо: 'happy',
+	Replica.Emotion.Смеясь: 'happy2',
+	Replica.Emotion.Веселясь: 'happy2',
+	Replica.Emotion.Хихикая: 'happy2',
+	Replica.Emotion.Грустно: 'lower_eyes',
+	Replica.Emotion.Печально: 'lower_eyes',
+	Replica.Emotion.Огорчённо: 'lower_eyes',
+	Replica.Emotion.Недовольно: 'avert_eyes',
+	Replica.Emotion.Шокированно: 'shocked',
+	Replica.Emotion.Удивлённо: 'shocked',
+	Replica.Emotion.Пугливо: 'screaming',
+	Replica.Emotion.Испуганно: 'screaming',
+	Replica.Emotion.Боясь: 'screaming',
+	Replica.Emotion.Истеря: 'crying',
+	Replica.Emotion.Плача: 'crying',
+	Replica.Emotion.Злясь: 'evil',
+	Replica.Emotion.Злостно: 'evil',
+	Replica.Emotion.Яростно: 'evil',
+	Replica.Emotion.Безумно: 'evil',
+	Replica.Emotion.Неистово: 'evil',
+	Replica.Emotion.Подозрительно: 'avert_eyes',
+	Replica.Emotion.Раздосадованно: 'avert_eyes',
+	Replica.Emotion.Задумчиво: 'lower_eyes',
+	Replica.Emotion.Насмешливо: 'happy2',
+	Replica.Emotion.Издеваясь: 'evil',
+	Replica.Emotion.Не_доверчиво: 'avert_eyes',
+	Replica.Emotion.Прищурившись: 'avert_eyes',
+	Replica.Emotion.Присмотревшись: 'avert_eyes',
+	Replica.Emotion.Страсно: 'happy',
+	Replica.Emotion.Возбуждённо: 'happy',
+	Replica.Emotion.Влюблённо: 'happy',
+	Replica.Emotion.Стыдливо: 'embarrassed',
+	Replica.Emotion.Смущённо: 'embarrassed',
 }
+
 var video: bool = true
 
 var text_speed: float = 0.03

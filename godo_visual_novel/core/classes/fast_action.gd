@@ -7,7 +7,7 @@ func _ready() -> void:
 
 
 ## Показывает дочерний узел или запускает его LinearVisible.
-func show_child(child_name: String) -> void:
+func show_child(child_name: String):
 	if child_name.is_empty():
 		push_warning('[FastAction] Не указан путь к узлу для отображения')
 		return
@@ -25,7 +25,7 @@ func show_child(child_name: String) -> void:
 
 
 ## Скрывает дочерний узел или запускает его LinearVisible.
-func hide_child(child_name: String) -> void:
+func hide_child(child_name: String):
 	if child_name.is_empty():
 		push_warning('[FastAction] Не указан путь к узлу для скрытия')
 		return

@@ -57,15 +57,24 @@ func _ready() -> void:
 
 	if auto_text_swith_timer:
 		auto_text_swith_timer.timeout.connect(next)
+	else:
+		push_warning("[Chat] Не назначен таймер автоматического переключения реплик")
 
 	hide()
-	behind.hide()
+	if behind:
+		behind.hide()
+	else:
+		push_warning("[Chat] Не назначен компонент Behind")
 
 	if back_button:
 		back_button.pressed.connect(chat_back)
 
-	timer.wait_time = text_speed
-	timer.timeout.connect(_load_symbol_on_byffer)
+	if timer:
+		timer.wait_time = text_speed
+		timer.timeout.connect(_load_symbol_on_byffer)
+	else:
+		push_warning("[Chat] Не назначен таймер отображения текста")
+
 	autowrap_mode = TextServer.AUTOWRAP_WORD
 	modulate = default_color
 
@@ -117,13 +126,14 @@ func _process(delta: float) -> void:
 	else:
 		modulate.a = 0
 
-	if behind_set_alpha_to_self_modulate:
+	if behind and behind_set_alpha_to_self_modulate:
 		behind.modulate.a = modulate.a
 
 	if _hidding:
 		modulate.a = clamp(modulate.a - delta, 0, 1)
 		if modulate.a <= 0:
-			behind.hide()
+			if behind:
+				behind.hide()
 			hide()
 			_hidding = false
 
@@ -133,6 +143,9 @@ func _load_text_on_buffer() -> void:
 
 
 func _load_symbol_on_byffer() -> void:
+	if not timer:
+		return
+
 	if text == text_buffer:
 		timer.stop()
 		return
@@ -156,11 +169,27 @@ func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
 
 
 func _start_dialog(dialog: LinearDialog, idx: int, start_auto_switch: bool) -> void:
+	if not dialog:
+		push_warning("[Chat] Не удалось начать диалог: линейный диалог не назначен")
+		return
+
+	if idx < 0 or idx >= dialog.get_dialog_len():
+		push_warning(
+			"[Chat] Не удалось начать диалог '%s': индекс реплики %d выходит за границы"
+			% [dialog.get_dialog_name(), idx]
+		)
+		return
+
 	show()
-	behind.show()
-	timer.start()
-	if start_auto_switch:
+	if behind:
+		behind.show()
+	if timer:
+		timer.start()
+	if start_auto_switch and auto_text_swith_timer:
 		auto_text_swith_timer.start()
+	elif start_auto_switch:
+		push_warning("[Chat] Автоматическое переключение отключено: таймер не назначен")
+
 	index = idx
 	current_dialog = dialog
 
@@ -204,21 +233,30 @@ func _perform_replica_actions(fast_actions: Array, actions: Array, is_start: boo
 
 func _perform_fast_actions(actions: Array) -> void:
 	for action in actions:
-		var node_path = action.get_path_node()
-		var should_activate = action.get_action()
+		var node_path: String = action.get_path_node()
+		var should_activate: bool = action.get_action()
 
 		match action.get_action_type():
 			Action.Type.visible:
+				if not fast_action:
+					push_warning("[Chat] Не выполнено действие видимости '%s': FastAction не назначен" % node_path)
+					continue
 				if should_activate:
 					fast_action.show_child(node_path)
 				else:
 					fast_action.hide_child(node_path)
 			Action.Type.sound:
+				if not sounds:
+					push_warning("[Chat] Не выполнено действие со звуком '%s': Sounds не назначен" % node_path)
+					continue
 				if should_activate:
 					sounds.play_sound(node_path)
 				else:
 					sounds.stop_sound(node_path)
-			_:
+			Action.Type.music:
+				if not music:
+					push_warning("[Chat] Не выполнено действие с музыкой '%s': Music не назначен" % node_path)
+					continue
 				if should_activate:
 					music.play_music(node_path)
 				else:
@@ -227,7 +265,12 @@ func _perform_fast_actions(actions: Array) -> void:
 
 func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 	for action in actions:
-		var node = get_node(action.get_path_node())
+		var node_path: NodePath = NodePath(action.get_path_node())
+		var node: Node = get_node_or_null(node_path)
+		if not node:
+			push_warning("[Chat] Не найден узел для действия: '%s'" % node_path)
+			continue
+
 		_perform_slow_action(node, action, is_start)
 
 
@@ -263,7 +306,7 @@ func _perform_visibility_action(node: Node, should_show: bool, is_start: bool) -
 
 
 func _perform_node_sound_action(node: Node, should_play: bool) -> void:
-	var handled_by_component = false
+	var handled_by_component: bool = false
 
 	for child in node.get_children():
 		if child is LinearSound:
@@ -273,18 +316,24 @@ func _perform_node_sound_action(node: Node, should_play: bool) -> void:
 			else:
 				child.linear_off()
 
-	if not handled_by_component:
-		if should_play:
-			node.call("play")
-		else:
-			node.call("stop")
+	if handled_by_component:
+		return
+
+	var method_name: StringName = &"play" if should_play else &"stop"
+	if node.has_method(method_name):
+		node.call(method_name)
+	else:
+		push_warning(
+			"[Chat] Узел '%s' не поддерживает воспроизведение звука: отсутствует метод '%s'"
+			% [node.get_path(), method_name]
+		)
 
 
 func next() -> void:
-	if back_button.is_hovered():
+	if back_button and back_button.is_hovered():
 		return
 
-	if menu.is_visible_in_tree() or settings_menu.is_visible_in_tree():
+	if (menu and menu.is_visible_in_tree()) or (settings_menu and settings_menu.is_visible_in_tree()):
 		return
 
 	if not current_dialog:
@@ -299,8 +348,9 @@ func next() -> void:
 		_finish_dialog()
 		return
 
-	timer.start()
-	var replica = current_dialog.get_replica_to_id(index)
+	if timer:
+		timer.start()
+	var replica: Replica = current_dialog.get_replica_to_id(index)
 	if replica.get_reset_text_buffer():
 		text = ''
 	set_replica(replica)
@@ -316,7 +366,8 @@ func _finish_dialog() -> void:
 
 	if current_dialog.get_dialog_end_type() == LinearDialog.Interpolation.instantaneous:
 		hide()
-		behind.hide()
+		if behind:
+			behind.hide()
 		modulate.a = 0
 	else:
 		_hidding = true
@@ -325,13 +376,30 @@ func _finish_dialog() -> void:
 	replica_ended.emit(_last_replica)
 
 	if current_dialog.get_next_mini_game():
-		mini_games_root.get_node(current_dialog.get_next_mini_game()).start()
+		if not mini_games_root:
+			push_warning("[Chat] Не удалось запустить мини-игру: корневой узел мини-игр не назначен")
+		else:
+			var mini_game_path: NodePath = NodePath(current_dialog.get_next_mini_game())
+			var mini_game: Node = mini_games_root.get_node_or_null(mini_game_path)
+			if mini_game and mini_game.has_method("start"):
+				mini_game.call("start")
+			else:
+				push_warning("[Chat] Не найдена мини-игра или у неё отсутствует метод start(): '%s'" % mini_game_path)
 
 	current_dialog = null
-	timer.stop()
+	if timer:
+		timer.stop()
 
 
-func set_replica(replica: Replica):
+func set_replica(replica: Replica) -> void:
+	if not replica:
+		push_warning("[Chat] Не удалось установить реплику: ресурс Replica отсутствует")
+		return
+
+	if not current_dialog:
+		push_warning("[Chat] Не удалось установить реплику: текущий диалог отсутствует")
+		return
+
 	if _last_replica:
 		perform_an_action_end(_last_replica)
 		replica_ended.emit(_last_replica)
@@ -347,23 +415,40 @@ func set_replica(replica: Replica):
 		replica.get_behind() + ': ' + replica.get_replica()
 	)
 
-	if replica.get_background():
-		background.background(replica.get_background())
-	if replica.get_sound():
-		sounds.play_sound(replica.get_sound())
+	var background_name: String = replica.get_background()
+	if not background_name.is_empty():
+		if background and background.has_method("background"):
+			background.call("background", background_name)
+		else:
+			push_warning(
+				"[Chat] Не удалось установить фон '%s': компонент Backgrounds не назначен или не поддерживает background()"
+				% background_name
+			)
+
+	var sound_name: String = replica.get_sound()
+	if not sound_name.is_empty():
+		if sounds:
+			sounds.play_sound(sound_name)
+		else:
+			push_warning("[Chat] Не удалось воспроизвести звук '%s': компонент Sounds не назначен" % sound_name)
 
 	_set_character_emotion(replica)
 
 	_last_replica = replica
 	replica_started.emit(replica)
 
-	behind.set_text(replica.get_behind())
+	if behind:
+		behind.set_text(replica.get_behind())
+	else:
+		push_warning("[Chat] Не удалось отобразить имя персонажа: компонент Behind не назначен")
+
 	text_buffer = replica.get_replica()
 
-	var behind_color = replica.get_color()
+	var behind_color: Color = replica.get_color()
 	if behind_set_alpha_to_self_modulate:
 		behind_color.a = modulate.a
-	behind.set_color(behind_color)
+	if behind:
+		behind.set_color(behind_color)
 
 	var alpha = modulate.a
 	if replica.get_chat_color() != Color.BLACK:
@@ -380,10 +465,11 @@ func set_replica(replica: Replica):
 	else:
 		add_theme_font_size_override("font_size", default_text_size)
 
-	auto_text_swith_timer.stop()
-	auto_text_swith_timer.start(
-		len(replica.get_replica().split(" ")) * GVisualNovel.get_automatic_text_switching_speed()
-	)
+	if auto_text_swith_timer:
+		auto_text_swith_timer.stop()
+		auto_text_swith_timer.start(
+			len(replica.get_replica().split(" ")) * GVisualNovel.get_automatic_text_switching_speed()
+		)
 
 	perform_an_action_start(replica)
 

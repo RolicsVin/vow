@@ -5,21 +5,29 @@ func _ready() -> void:
 	show()
 
 
-func show_child(child_name: String):
-	for child in get_children():
-		if child.name == child_name:
-			for i in child.get_children():
-				if i is LinearVisible:
-					i.linear_show()
-					return
-			child.show()
+## Показывает дочерний узел или запускает его LinearVisible.
+func show_child(child_name: String) -> void:
+	var target: Node = get_node_or_null(NodePath(child_name))
+	if not target:
+		push_warning("[FastAction] Не найден узел для отображения: '%s'" % child_name)
+		return
+
+	for child in target.get_children():
+		if child is LinearVisible:
+			child.linear_show()
+			return
+	target.show()
 
 
-func hide_child(child_name: String):
-	for child in get_children():
-		if child.name == child_name:
-			for i in child.get_children():
-				if i is LinearVisible:
-					i.linear_hide()
-					return
-			child.hide()
+## Скрывает дочерний узел или запускает его LinearVisible.
+func hide_child(child_name: String) -> void:
+	var target: Node = get_node_or_null(NodePath(child_name))
+	if not target:
+		push_warning("[FastAction] Не найден узел для скрытия: '%s'" % child_name)
+		return
+
+	for child in target.get_children():
+		if child is LinearVisible:
+			child.linear_hide()
+			return
+	target.hide()

@@ -181,12 +181,12 @@ func play_linear_dialog(linear_dialog: LinearDialog, idx: int = 0):
 
 func _start_dialog(dialog: LinearDialog, idx: int, start_auto_switch: bool) -> void:
 	if not dialog:
-		push_warning("[Chat] Не удалось начать диалог: линейный диалог не назначен")
+		push_warning('[Chat] Не удалось начать диалог: линейный диалог не назначен')
 		return
 
 	if idx < 0 or idx >= dialog.get_dialog_len():
 		push_warning(
-			"[Chat] Не удалось начать диалог '%s': индекс реплики %d выходит за границы"
+			'[Chat] Не удалось начать диалог \'%s\': индекс реплики %d выходит за границы'
 			% [dialog.get_dialog_name(), idx]
 		)
 		return
@@ -199,7 +199,7 @@ func _start_dialog(dialog: LinearDialog, idx: int, start_auto_switch: bool) -> v
 	if start_auto_switch and auto_text_swith_timer:
 		auto_text_swith_timer.start()
 	elif start_auto_switch:
-		push_warning("[Chat] Автоматическое переключение отключено: таймер не назначен")
+		push_warning('[Chat] Автоматическое переключение отключено: таймер не назначен')
 
 	index = idx
 	current_dialog = dialog
@@ -254,7 +254,7 @@ func _perform_fast_actions(actions: Array) -> void:
 		match action.get_action_type():
 			Action.Type.visible:
 				if not fast_action:
-					push_warning("[Chat] Не выполнено действие видимости '%s': FastAction не назначен" % node_path)
+					push_warning('[Chat] Не выполнено действие видимости \'%s\': FastAction не назначен' % node_path)
 					continue
 				if should_activate:
 					fast_action.show_child(node_path)
@@ -262,7 +262,7 @@ func _perform_fast_actions(actions: Array) -> void:
 					fast_action.hide_child(node_path)
 			Action.Type.sound:
 				if not sounds:
-					push_warning("[Chat] Не выполнено действие со звуком '%s': Sounds не назначен" % node_path)
+					push_warning('[Chat] Не выполнено действие со звуком \'%s\': Sounds не назначен' % node_path)
 					continue
 				if should_activate:
 					sounds.play_sound(node_path)
@@ -270,7 +270,7 @@ func _perform_fast_actions(actions: Array) -> void:
 					sounds.stop_sound(node_path)
 			Action.Type.music:
 				if not music:
-					push_warning("[Chat] Не выполнено действие с музыкой '%s': Music не назначен" % node_path)
+					push_warning('[Chat] Не выполнено действие с музыкой \'%s\': Music не назначен' % node_path)
 					continue
 				if should_activate:
 					music.play_music(node_path)
@@ -287,7 +287,7 @@ func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 		var node_path: NodePath = NodePath(action.get_path_node())
 		var node: Node = get_node_or_null(node_path)
 		if not node:
-			push_warning("[Chat] Не найден узел для действия: '%s'" % node_path)
+			push_warning('[Chat] Не найден узел для действия: \'%s\'' % node_path)
 			continue
 
 		_perform_slow_action(node, action, is_start)
@@ -343,7 +343,7 @@ func _perform_node_sound_action(node: Node, should_play: bool) -> void:
 		node.call(method_name)
 	else:
 		push_warning(
-			"[Chat] Узел '%s' не поддерживает воспроизведение звука: отсутствует метод '%s'"
+			'[Chat] Узел \'%s\' не поддерживает воспроизведение звука: отсутствует метод \'%s\''
 			% [node.get_path(), method_name]
 		)
 

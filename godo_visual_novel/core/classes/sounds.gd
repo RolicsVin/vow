@@ -3,12 +3,12 @@ class_name Sounds extends Node
 
 
 ## Запускает звуковой эффект по пути к узлу.
-func play_sound(sound_name: String) -> void:
+func play_sound(sound_name: String):
 	_set_sound_state(sound_name, true)
 
 
 ## Останавливает звуковой эффект по пути к узлу.
-func stop_sound(sound_name: String) -> void:
+func stop_sound(sound_name: String):
 	_set_sound_state(sound_name, false)
 
 

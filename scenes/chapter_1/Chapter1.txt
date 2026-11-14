@@ -8,556 +8,441 @@ dialog;start linear
 dialog;end linear
 dialog;interpolation linear
 
-~
 background BG_Chapter1_Woodcutter_Shed
 action;start;music Music/Chapter1_ColdMorning
 
-// Утро. Дровяной навес у дома.
-~
 sound SFX_Axe_Wood_Impact
 
-~
+Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 speaker ГлавныйГерой
 emotion Задумчиво
-Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 
-~
 sound SFX_Axe_Wood_Split
 
-~
+Вот и последнее.
 speaker ГлавныйГерой
 emotion Радостно
-Вот и последнее.
 
-~
 background BG_Chapter1_Shed_Logs
 sound SFX_Wood_Falling
 
-~
+Ещё немного — и сарай будет полон. Хорошо, что топор не подвёл.
 speaker ГлавныйГерой
 emotion Задумчиво
-Ещё немного — и сарай будет полон. Хорошо, что топор не подвёл.
 
-~
 background BG_Chapter1_House_Interior
 sound SFX_Fireplace_Crackling
 action;start;music Music/Chapter1_Home_Ambience off
 action;start;music Music/Chapter1_Quiet_Tension
 
-~
+Надо занести дрова, пока совсем не промокли.
 speaker ГлавныйГерой
 emotion Без_эмоции
-Надо занести дрова, пока совсем не промокли.
 
-~
+Отец опять за своё... Не хочу на это смотреть.
 speaker ГлавныйГерой
 emotion Шокированно
-Отец опять за своё... Не хочу на это смотреть.
 
-~
 background BG_Chapter1_Fireplace
 sound SFX_Fireplace_Crackling
 
-~
+Хоть немного согреюсь.
 speaker ГлавныйГерой
 emotion Задумчиво
-Хоть немного согреюсь.
 
-~
+Руки совсем окоченели. Погода в последнее время будто нарочно испытывает нас.
 speaker ГлавныйГерой
 emotion Грустно
-Руки совсем окоченели. Погода в последнее время будто нарочно испытывает нас.
 
-~
 background BG_Chapter1_Window_View
 sound SFX_Rain_Light
 action;start;music Music/Chapter1_Mountain_Storm
 
-~
+Баустхен... Самая высокая гора во всех пяти мирах.
 speaker ГлавныйГерой
 emotion Задумчиво
-Баустхен... Самая высокая гора во всех пяти мирах.
 
-~
+Над вершиной опять собираются тучи. Молнии... И ветер поднялся.
 speaker ГлавныйГерой
 emotion Подозрительно
-Над вершиной опять собираются тучи. Молнии... И ветер поднялся.
 
-~
+Асмунд гневается?
 speaker ГлавныйГерой
 emotion Задумчиво
-Асмунд гневается?
 
-~
 background BG_Chapter1_Road_Deer
 sound SFX_Deer_Steps
 
-~
+Оленёнок? Где же твоя мать?
 speaker ГлавныйГерой
 emotion Удивлённо
-Оленёнок? Где же твоя мать?
 
-~
+Странно. Даже ветер будто стал тяжелее...
 speaker ГлавныйГерой
 emotion Задумчиво
-Странно. Даже ветер будто стал тяжелее...
 
-~
 background BG_Chapter1_Distant_Mountain
 sound SFX_Wind_Rising
 
-~
+Что это там? Птица?
 speaker ГлавныйГерой
 emotion Шокированно
-Что это там? Птица?
 
-~
+Нет... Слишком большая. И движется слишком быстро!
 speaker ГлавныйГерой
 emotion Испуганно
-Нет... Слишком большая. И движется слишком быстро!
 
-~
 background BG_Chapter1_Asmund_Landing
 sound SFX_God_Landing
 action;start;music Music/Chapter1_Asmund_Theme
 
-~
+Бог первого поколения... Асмунд.
 speaker ГлавныйГерой
 emotion Испуганно
-Бог первого поколения... Асмунд.
 
-~
+Опять он. Снова пришёл в нашу деревню.
 speaker ГлавныйГерой
 emotion Злостно
-Опять он. Снова пришёл в нашу деревню.
 
-~
+Оленёнок убежал... А вот и его мать.
 speaker ГлавныйГерой
 emotion Испуганно
-Оленёнок убежал... А вот и его мать.
 
-~
+Он пьян. И, похоже, сегодня ему снова захотелось развлечься.
 speaker ГлавныйГерой
 emotion Задумчиво
-Он пьян. И, похоже, сегодня ему снова захотелось развлечься.
 
-~
+Нужно спрятать ценности. Отец велел: под печкой есть тайник. Быстрее!
 speaker ГлавныйГерой
 emotion Испуганно
-Нужно спрятать ценности. Отец велел: под печкой есть тайник. Быстрее!
 
-~
 background BG_Chapter1_House_Hiding_Valuables
 sound SFX_Hiding_Objects
 
-~
+Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
 speaker ГлавныйГерой
 emotion Задумчиво
-Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
 
-~
 background BG_Chapter1_Village_Fence
 sound SFX_Fence_Breaking
 action;start;music Music/Chapter1_Village_Attack
 
-~
+Эй! Выходите! Где хозяин?!
 name Асмунд
 emotion Злясь
-Эй! Выходите! Где хозяин?!
 
-~
+Кто ты такой?! Убирайся отсюда, пока не получил!
 speaker Мужчина
 name Сосед
 emotion Испуганно
-Кто ты такой?! Убирайся отсюда, пока не получил!
 
-~
+Ха! Смелый нашёлся?
 name Асмунд
 emotion Насмешливо
-Ха! Смелый нашёлся?
 
-~
+Постой... Так это же сам Асмунд! Но мы ведь приносили тебе подношения. Зачем ты снова пришёл?!
 speaker Мужчина
 name Сосед
 emotion Шокированно
-Постой... Так это же сам Асмунд! Но мы ведь приносили тебе подношения. Зачем ты снова пришёл?!
 
-~
+Дело не в подношениях.
 name Асмунд
 emotion Злясь
-Дело не в подношениях.
 
-~
 sound SFX_Punch_Heavy
 
-~
+Он ударил его... Просто так.
 speaker ГлавныйГерой
 emotion Испуганно
-Он ударил его... Просто так.
 
-~
+Хватит! Оставь его в покое!
 speaker Мужчина
 name Другой сосед
 emotion Злостно
-Хватит! Оставь его в покое!
 
-~
+А вы ещё кто такие? Все сюда!
 name Асмунд
 emotion Безумно
-А вы ещё кто такие? Все сюда!
 
-~
 sound SFX_Fight_Village
 action;start;music Music/Chapter1_Violence
 
-~
+Они ничего не могут ему сделать...
 speaker ГлавныйГерой
 emotion Испуганно
-Они ничего не могут ему сделать...
 
-~
 background BG_Chapter1_Village_Aftermath
 sound SFX_Wind_Cold
 
-~
+Одежда порвана, лица в крови... Почему он каждый раз выбирает именно нашу деревню?
 speaker ГлавныйГерой
 emotion Грустно
-Одежда порвана, лица в крови... Почему он каждый раз выбирает именно нашу деревню?
 
-~
 background BG_Chapter1_Village_Road
 sound SFX_Footsteps_Mud
 
-~
+Кто-то идёт по дороге.
 speaker ГлавныйГерой
 emotion Удивлённо
-Кто-то идёт по дороге.
 
-~
 background BG_Chapter1_Girl_Returning
 sound SFX_Bag_Shifting
 
-~
+Девушка. Возвращается с базара... Мешок, должно быть, полон картошки.
 speaker ГлавныйГерой
 emotion Задумчиво
-Девушка. Возвращается с базара... Мешок, должно быть, полон картошки.
 
-~
+А ну-ка, красавица! Куда спешишь? Подойди поближе!
 name Асмунд
 emotion Насмешливо
-А ну-ка, красавица! Куда спешишь? Подойди поближе!
 
-~
+Пожалуйста... Пропустите меня.
 speaker Девушка
 emotion Испуганно
-Пожалуйста... Пропустите меня.
 
-~
+Ну что же ты творишь, окаянный?!
 speaker Мужчина
 name Отец
 emotion Злостно
-Ну что же ты творишь, окаянный?!
 
-~
 background BG_Chapter1_Father_Grabs_Shovel
 sound SFX_Shovel_Grab
 
-~
+Отец?..
 speaker ГлавныйГерой
 emotion Шокированно
-Отец?..
 
-~
+Отойди от неё!
 speaker Мужчина
 name Отец
 emotion Яростно
-Отойди от неё!
 
-~
 sound SFX_Shovel_Strike
 
-~
+Что?!
 name Асмунд
 emotion Шокированно
-Что?!
 
-~
+Да кто ты такой, чтобы поднимать на меня руку?!
 name Асмунд
 emotion Злясь
-Да кто ты такой, чтобы поднимать на меня руку?!
 
-~
 sound SFX_Shovel_Impact
 background BG_Chapter1_Father_Wounded
 action;start;music Music/Chapter1_Tragedy
 
-~
+Нет! Отец!
 speaker ГлавныйГерой
 emotion Испуганно
-Нет! Отец!
 
-~
+А-а!..
 speaker Мужчина
 name Отец
 emotion Плача
-А-а!.. 
 
-~
+Оставь его! Слышишь?!
 speaker ГлавныйГерой
 emotion Яростно
-Оставь его! Слышишь?!
 
-~
+Ещё один недостойный. Может, хоть ты окажешься тем самым...
 name Асмунд
 emotion Раздосадованно
-Ещё один недостойный. Может, хоть ты окажешься тем самым...
 
-~
-~
 background BG_Chapter1_Father_Fallen
 sound SFX_Body_Fall
 
-~
-speaker ГлавныйГерой
-emotion Яростно
 Ты... Ты убил его!
-
-~
 speaker ГлавныйГерой
 emotion Яростно
-Я тебя убью!
 
-~
+Я тебя убью!
+speaker ГлавныйГерой
+emotion Яростно
+
 background BG_Chapter1_Confrontation
 sound SFX_Running_Mud
 
-~
+Получай! И ещё! И ещё!
 speaker ГлавныйГерой
 emotion Яростно
-Получай! И ещё! И ещё!
 
-~
+Пошёл вон!
 name Асмунд
 emotion Раздосадованно
-Пошёл вон!
 
-~
 sound SFX_Impact_Throw
 background BG_Chapter1_Mud_Fall
 
-~
+А-а!
 speaker ГлавныйГерой
 emotion Шокированно
-А-а!
 
-~
+Я даже не смог его задеть...
 speaker ГлавныйГерой
 emotion Грустно
-Я даже не смог его задеть...
 
-~
 background BG_Chapter1_Asmund_Leaving
 sound SFX_God_Leap
 action;start;music Music/Chapter1_Asmund_Theme off
 action;start;music Music/Chapter1_Aftermath
 
-~
+Он... Он уходит. Просто так?
 speaker ГлавныйГерой
 emotion Испуганно
-Он... Он уходит. Просто так?
 
-~
 background BG_Chapter1_Mountain_Asmund_Ascending
 sound SFX_Distant_Thunder
 
-~
+Он одним прыжком преодолел всю деревню... И уже поднимается на Баустхен.
 speaker ГлавныйГерой
 emotion Шокированно
-Он одним прыжком преодолел всю деревню... И уже поднимается на Баустхен.
 
-~
 background BG_Chapter1_Father_Dying
 sound SFX_Running_Footsteps
 
-~
+Отец! Отец, держись!
 speaker ГлавныйГерой
 emotion Испуганно
-Отец! Отец, держись!
 
-~
-speaker ГлавныйГерой
-emotion Плача
 Пожалуйста, только не умирай. Я прошу тебя...
-
-~
-speaker Мужчина
-name Отец
-emotion Грустно
-Сынок... Когда-нибудь тебе всё равно пришлось бы идти дальше без меня.
-
-~
-speaker Мужчина
-name Отец
-emotion Грустно
-Будь сильным. Будь мужественным. И помогай матери...
-
-~
 speaker ГлавныйГерой
 emotion Плача
-Нет... Не говори так. Ты сам ей поможешь. Слышишь?
 
-~
+Сынок... Когда-нибудь тебе всё равно пришлось бы идти дальше без меня.
 speaker Мужчина
 name Отец
 emotion Грустно
-...
 
-~
+Будь сильным. Будь мужественным. И помогай матери...
+speaker Мужчина
+name Отец
+emotion Грустно
+
+Нет... Не говори так. Ты сам ей поможешь. Слышишь?
+speaker ГлавныйГерой
+emotion Плача
+
+...
+speaker Мужчина
+name Отец
+emotion Грустно
+
 background BG_Chapter1_Father_Dead
 sound SFX_Fire_Distant
 
-~
-speaker ГлавныйГерой
-emotion Плача
 Нет! Не закрывай глаза! Отец, прошу!
-
-~
 speaker ГлавныйГерой
 emotion Плача
-Почему ты нас оставил?..
 
-~
+Почему ты нас оставил?..
+speaker ГлавныйГерой
+emotion Плача
+
 background BG_Chapter1_Village_Mourners
 sound SFX_Village_Murmur
 action;start;music Music/Chapter1_Mourning
 
-~
-speaker ГлавныйГерой
-emotion Грустно
 Вокруг собрались жители деревни. Кто-то шептался, кто-то смотрел на меня с жалостью.
-
-~
 speaker ГлавныйГерой
 emotion Грустно
-А мать... Она стояла неподвижно. Слёзы текли по её лицу, но она не произнесла ни слова.
 
-~
+А мать... Она стояла неподвижно. Слёзы текли по её лицу, но она не произнесла ни слова.
+speaker ГлавныйГерой
+emotion Грустно
+
+Я никогда прежде не чувствовал ничего подобного.
 speaker ГлавныйГерой
 emotion Злясь
-Я никогда прежде не чувствовал ничего подобного.
 
-~
+Внутри меня поднималась ярость. Такая сильная, что от неё перехватывало дыхание.
 speaker ГлавныйГерой
 emotion Яростно
-Внутри меня поднималась ярость. Такая сильная, что от неё перехватывало дыхание.
 
-~
 background BG_Chapter1_Vow
 action;start;music Music/Chapter1_Vow
 
-~
-speaker ГлавныйГерой
-emotion Яростно
 Клянусь... Я покорю Баустхен.
-
-~
 speaker ГлавныйГерой
 emotion Яростно
-И убью каждого бога, что встанет у меня на пути!
 
-~
+И убью каждого бога, что встанет у меня на пути!
+speaker ГлавныйГерой
+emotion Яростно
+
 background BG_Chapter1_House_Preparation
 sound SFX_Packing_Bag
 
-~
+Хлеб. Вода. Красная ткань с белой клеткой...
 speaker ГлавныйГерой
 emotion Задумчиво
-Хлеб. Вода. Красная ткань с белой клеткой...
 
-~
+И топор отца. Единственная вещь, которую я не оставлю здесь.
 speaker ГлавныйГерой
 emotion Грустно
-И топор отца. Единственная вещь, которую я не оставлю здесь.
 
-~
 background BG_Chapter1_Mother_Goodbye
 sound SFX_Quiet_Room
 
-~
+Мама... Прости. Я должен идти.
 speaker ГлавныйГерой
 emotion Грустно
-Мама... Прости. Я должен идти.
 
-~
+Не уходи... Пожалуйста. Не оставляй меня одну.
 speaker Женщина
 name Мать
 emotion Плача
-Не уходи... Пожалуйста. Не оставляй меня одну.
 
-~
+Я вернусь. Когда всё закончится.
 speaker ГлавныйГерой
 emotion Грустно
-Я вернусь. Когда всё закончится.
 
-~
 background BG_Chapter1_Village_Exit
 sound SFX_Villagers_Protest
 action;start;music Music/Chapter1_Departure
 
-~
+Не ходи туда! Ты ведь видел, что стало с твоим отцом!
 speaker Мужчина
 name Житель деревни
 emotion Испуганно
-Не ходи туда! Ты ведь видел, что стало с твоим отцом!
 
-~
+Даже сильнейшие не возвращаются с этой горы!
 speaker Женщина
 name Жительница деревни
 emotion Испуганно
-Даже сильнейшие не возвращаются с этой горы!
 
-~
+Тем, кто решался пройти склон, требовались годы. Двадцать пять лет — и это лишь минимум.
 speaker Мужчина
 name Старейшина
 emotion Задумчиво
-Тем, кто решался пройти склон, требовались годы. Двадцать пять лет — и это лишь минимум.
 
-~
+А те немногие, кому удавалось преодолеть склон, так и не достигали вершины.
 speaker Мужчина
 name Старейшина
 emotion Грустно
-А те немногие, кому удавалось преодолеть склон, так и не достигали вершины.
 
-~
-speaker ГлавныйГерой
-emotion Яростно
 Мне семнадцать. Я знаю, что вы хотите меня остановить.
-
-~
 speaker ГлавныйГерой
 emotion Яростно
-Но я не передумаю.
 
-~
+Но я не передумаю.
+speaker ГлавныйГерой
+emotion Яростно
+
 background BG_Chapter1_Bausthen_Foot
 sound SFX_Wind_Mountain
 action;start;music Music/Chapter1_Mountain_Journey
 
-~
+Баустхен... Обитель богов и великих героев.
 speaker ГлавныйГерой
 emotion Задумчиво
-Баустхен... Обитель богов и великих героев.
 
-~
-speaker ГлавныйГерой
-emotion Яростно
 Я иду за тобой, Асмунд.
-
-~
 speaker ГлавныйГерой
 emotion Яростно
-И однажды ты ответишь за всё.
 
-~
+И однажды ты ответишь за всё.
+speaker ГлавныйГерой
+emotion Яростно
+
 background BG_Chapter1_Mountain_Path
 action;start;music Music/Chapter1_Vow off

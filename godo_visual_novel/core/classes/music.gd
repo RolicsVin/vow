@@ -20,7 +20,7 @@ func _set_music_state(music_name: String, should_play: bool) -> void:
 
 	var music_node: Node = get_node_or_null(NodePath(music_name))
 	if not music_node:
-		push_warning('[Music] Музыкальная композиция не найдена: '%s'' % music_name)
+		push_warning('[Music] Музыкальная композиция не найдена: \'%s\'' % music_name)
 		return
 
 	var has_linear_sound: bool = false
@@ -40,6 +40,6 @@ func _set_music_state(music_name: String, should_play: bool) -> void:
 		music_node.call(method_name)
 	else:
 		push_warning(
-			'[Music] Узел '%s' не поддерживает управление музыкой: отсутствует метод '%s''
+			'[Music] Узел \'%s\' не поддерживает управление музыкой: отсутствует метод \'%s\''
 			% [music_node.get_path(), method_name]
 		)

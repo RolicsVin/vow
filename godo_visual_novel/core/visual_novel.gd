@@ -49,7 +49,7 @@ func get_save() -> Dictionary:
 		}
 	
 	var save: Dictionary = {
-		'name': _data.name_protection[Character.CharacterType.ГлавныйГерой],
+		'name': _data.name_protection[Character.CharacterType.Подросток],
 		'chat': _buffer['chat'],
 		'video': _data.video,
 		'bookmarks': _data.bookmarks_scenes,
@@ -81,7 +81,7 @@ func load_save(save: Dictionary) -> void:
 	_data.automatic_text_switching_speed = save['automatic_text_switching_speed']
 	_data.video = save['video']
 	set_language(save['language'])
-	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
+	_data.name_protection[Character.CharacterType.Подросток] = save['name']
 	print('loaded:')
 	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
 	if response.get("ok", false):
@@ -127,7 +127,7 @@ func get_character_color(character: int) -> Color:
 
 ## Возвращает защитное имя главного героя.
 func get_player_name() -> String:
-	return get_character_name(Character.CharacterType.ГлавныйГерой)
+	return get_character_name(Character.CharacterType.Подросток)
 
 
 ## Возвращает текущую скорость отображения текста.

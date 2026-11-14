@@ -1,3 +1,4 @@
+## Выполняет быстрые действия над дочерними узлами интерфейса 
 class_name FastAction extends Control
 
 

@@ -9,7 +9,7 @@ func _ready() -> void:
 func show_child(child_name: String) -> void:
 	var target: Node = get_node_or_null(NodePath(child_name))
 	if not target:
-		push_warning('[FastAction] Не найден узел для отображения: '%s'' % child_name)
+		push_warning('[FastAction] Не найден узел для отображения: \'%s\'' % child_name)
 		return
 
 	for child in target.get_children():
@@ -23,7 +23,7 @@ func show_child(child_name: String) -> void:
 func hide_child(child_name: String) -> void:
 	var target: Node = get_node_or_null(NodePath(child_name))
 	if not target:
-		push_warning('[FastAction] Не найден узел для скрытия: '%s'' % child_name)
+		push_warning('[FastAction] Не найден узел для скрытия: \'%s\'' % child_name)
 		return
 
 	for child in target.get_children():

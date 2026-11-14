@@ -20,7 +20,7 @@ func _set_sound_state(sound_name: String, should_play: bool) -> void:
 
 	var sound_node: Node = get_node_or_null(NodePath(sound_name))
 	if not sound_node:
-		push_warning('[Sounds] Звуковой эффект не найден: '%s'' % sound_name)
+		push_warning('[Sounds] Звуковой эффект не найден: \'%s\'' % sound_name)
 		return
 
 	var has_linear_sound: bool = false
@@ -40,6 +40,6 @@ func _set_sound_state(sound_name: String, should_play: bool) -> void:
 		sound_node.call(method_name)
 	else:
 		push_warning(
-			'[Sounds] Узел '%s' не поддерживает управление звуком: отсутствует метод '%s''
+			'[Sounds] Узел \'%s\' не поддерживает управление звуком: отсутствует метод \'%s\''
 			% [sound_node.get_path(), method_name]
 		)

@@ -1,7 +1,4 @@
 // Глава 1. «Обет»
-// Имена, фоновые изображения, звуки и музыкальные узлы являются заглушками.
-// Пути в action должны соответствовать узлам внутри Chat в вашей сцене.
-// Формат каждого блока: первая строка — реплика, ниже — свойства.
 
 dialog;name Глава 1 — Обет
 dialog;start linear
@@ -21,7 +18,7 @@ sound SFX_Axe_Wood_Split
 speaker Подросток
 emotion Радостно
 
-Ещё немного — и сарай будет полон. Хорошо, что топор не подвёл.
+Ещё немного — и сарай будет полон.
 background BG_Chapter1_Shed_Logs
 sound SFX_Wood_Falling
 speaker Подросток
@@ -35,9 +32,20 @@ action;start;music Music/Chapter1_Quiet_Tension
 speaker Подросток
 emotion Без_эмоции
 
-Отец опять за своё... Не хочу на это смотреть.
+Краем глаза я увидел, как отец рубил кур.
 speaker Подросток
-emotion Шокированно
+background BG_Chapter1_cutting_chicken
+
+Не хочу на это смотреть.
+speaker Подросток
+
+Я зашёл в дом.
+background BG_Chapter1_Fireplace
+sound SFX_Fireplace_Crackling
+speaker Подросток
+
+Хоть немного согреюсь.
+speaker Подросток
 
 Хоть немного согреюсь.
 background BG_Chapter1_Fireplace
@@ -47,47 +55,61 @@ emotion Задумчиво
 
 Руки совсем окоченели. Погода в последнее время будто нарочно испытывает нас.
 speaker Подросток
-emotion Грустно
 
 Баустхен... Самая высокая гора во всех пяти мирах.
 background BG_Chapter1_Window_View
 sound SFX_Rain_Light
 action;start;music Music/Chapter1_Mountain_Storm
 speaker Подросток
-emotion Задумчиво
 
+Говорят там обитель богов...
+speaker Подросток
+
+Интересно, это правда?
+speaker Подросток
+
+// Асмунд прибывает.
 Над вершиной опять собираются тучи. Молнии... И ветер поднялся.
 speaker Подросток
-emotion Подозрительно
 
-Асмунд гневается?
+Наверное Асмунд гневается...
 speaker Подросток
-emotion Задумчиво
 
-Оленёнок? Где же твоя мать?
+Вдруг на дорожку выбежал оленёнок
 background BG_Chapter1_Road_Deer
 sound SFX_Deer_Steps
 speaker Подросток
-emotion Удивлённо
+
+Где же твоя мать?
+speaker Подросток
 
 Странно. Даже ветер будто стал тяжелее...
 speaker Подросток
 emotion Задумчиво
 
-Что это там? Птица?
+Вдалеке мне привиелось. что-то летящее в воздухе.
 background BG_Chapter1_Distant_Mountain
 sound SFX_Wind_Rising
 speaker Подросток
-emotion Шокированно
+
+Что это там? Птица?
+speaker Подросток
 
 Нет... Слишком большая. И движется слишком быстро!
 speaker Подросток
 emotion Испуганно
 
-Бог первого поколения... Асмунд.
+На дорогу приземлился мужчина...
 background BG_Chapter1_Asmund_Landing
 sound SFX_God_Landing
 action;start;music Music/Chapter1_Asmund_Theme
+speaker Подросток
+
+На дорогу приземлился мужчина... Я сразу узнал его...
+speaker Подросток
+reset_text_buffer false
+
+Бог первого поколения... Асмунд.
 speaker Подросток
 emotion Испуганно
 
@@ -95,17 +117,16 @@ emotion Испуганно
 speaker Подросток
 emotion Злостно
 
-Оленёнок убежал... А вот и его мать.
+Оленёнок убежал... Из леса выбежала запоздавшая мать и ринулась за ним.
 speaker Подросток
 emotion Испуганно
 
-Он пьян. И, похоже, сегодня ему снова захотелось развлечься.
+Это было не впервой для меня. Я вспомнил наказ отца:
 speaker Подросток
 emotion Задумчиво
 
-Нужно спрятать ценности. Отец велел: под печкой есть тайник. Быстрее!
+Спрятать ценности под тайник
 speaker Подросток
-emotion Испуганно
 
 Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
 background BG_Chapter1_House_Hiding_Valuables
@@ -113,28 +134,39 @@ sound SFX_Hiding_Objects
 speaker Подросток
 emotion Задумчиво
 
-Эй! Выходите! Где хозяин?!
+// Асмунд буянит.
+Богу стало скучно и он стал ломать соседский забор.
+speaker Подросток
+
+Тот ращлетался в щепки.
+speaker Подросток
+
+Эй! Выходите! Где хозяин?! - крикнул пьяный бог.
 background BG_Chapter1_Village_Fence
 sound SFX_Fence_Breaking
 action;start;music Music/Chapter1_Village_Attack
 speaker Асмунд
 emotion Злясь
 
+Из дома вышел сосед, он стал стремительно приближатся к Асмунду.
+speaker Подросток
+
 Кто ты такой?! Убирайся отсюда, пока не получил!
 speaker Сосед
-emotion Испуганно
+emotion Злясь
 
-Ха! Смелый нашёлся?
-speaker Асмунд
-emotion Насмешливо
+Сосед резко збавил темп шага, а его лицо исказилось от страха.
+speaker Подросток
 
-Постой... Так это же сам Асмунд! Но мы ведь приносили тебе подношения. Зачем ты снова пришёл?!
+Видимо он, всё же, признал бога.
+speaker Подросток
+
+Постой... что... но мы ведь уже приносили тебе подношения... Зачем ты снова пришёл?
 speaker Сосед
 emotion Шокированно
 
 Дело не в подношениях.
 speaker Асмунд
-emotion Злясь
 
 Он ударил его... Просто так.
 sound SFX_Punch_Heavy
@@ -145,9 +177,9 @@ emotion Испуганно
 speaker ДругойСосед
 emotion Злостно
 
-А вы ещё кто такие? Все сюда!
-speaker Асмунд
-emotion Безумно
+Несколько мужчин попытались дать отпор Асмунду, но тот оказался сильней.
+speaker Подросток
+emotion Испуганно
 
 Они ничего не могут ему сделать...
 sound SFX_Fight_Village
@@ -155,13 +187,14 @@ action;start;music Music/Chapter1_Violence
 speaker Подросток
 emotion Испуганно
 
-Одежда порвана, лица в крови... Почему он каждый раз выбирает именно нашу деревню?
+Их одежда порвана, их лица в крови... Почему он каждый раз выбирает именно нашу деревню?
 background BG_Chapter1_Village_Aftermath
 sound SFX_Wind_Cold
 speaker Подросток
 emotion Грустно
 
-Кто-то идёт по дороге.
+// Отец погибает.
+Кто-то шёл по дороге.
 background BG_Chapter1_Village_Road
 sound SFX_Footsteps_Mud
 speaker Подросток
@@ -195,8 +228,11 @@ emotion Шокированно
 speaker Отец
 emotion Яростно
 
-Что?!
+Мой отец замахнулся и ударил ублюдка лопатой по спине.
 sound SFX_Shovel_Strike
+speaker Подросток
+
+Что?!
 speaker Асмунд
 emotion Шокированно
 
@@ -204,24 +240,54 @@ emotion Шокированно
 speaker Асмунд
 emotion Злясь
 
+Асмунд ударил его в живот и выхватил лопату.
+speaker Подросток
+emotion Шокированно
+
 Нет! Отец!
+background BG_Chapter1_Father_Wounded
+action;start;music Music/Chapter1_Tragedy
+speaker Подросток
+emotion Испуганно
+
+Сейчас я тебя научу, как надо встречать богов!
+speaker Асмунд
+emotion Злясь
+
+И он проткнул моего папу лопатой.
+speaker Подросток
+emotion Шокированно
+
+Я не смог произнести ни слова
 sound SFX_Shovel_Impact
 background BG_Chapter1_Father_Wounded
 action;start;music Music/Chapter1_Tragedy
 speaker Подросток
 emotion Испуганно
 
-А-а!..
+А-а!.. - очень больно кричал он.
 speaker Отец
 emotion Плача
-
-Оставь его! Слышишь?!
-speaker Подросток
-emotion Яростно
 
 Ещё один недостойный. Может, хоть ты окажешься тем самым...
 speaker Асмунд
 emotion Раздосадованно
+
+Я чувствовал всю боль в этом крике своим нутром.
+speaker Подросток
+emotion Шокированно
+
+он упал, под ним стала растекатся алая лужица.
+speaker Подросток
+emotion Шокированно
+
+// Подросток решает сразится с Асмундом.
+Я выбежал из дома и ринулся к ним.
+speaker Подросток
+
+Оставь его! Слышишь?!
+speaker Подросток
+emotion Яростно
 
 Ты... Ты убил его!
 background BG_Chapter1_Father_Fallen
@@ -229,9 +295,12 @@ sound SFX_Body_Fall
 speaker Подросток
 emotion Яростно
 
-Я тебя убью!
+Я уб-уб-убью т-еб-бя! - заикаясь произнёс я.
 speaker Подросток
 emotion Яростно
+
+Я подбежал к Асмунду и стал колотить его кулаками, что есть сил.
+speaker Подросток
 
 Получай! И ещё! И ещё!
 background BG_Chapter1_Confrontation
@@ -243,55 +312,70 @@ emotion Яростно
 speaker Асмунд
 emotion Раздосадованно
 
+Он оттолкнул меня.
+speaker Подросток
+
 А-а!
 sound SFX_Impact_Throw
 background BG_Chapter1_Mud_Fall
 speaker Подросток
 emotion Шокированно
 
-Я даже не смог его задеть...
+Я упал в лужу и тут же попытался встать.
 speaker Подросток
-emotion Грустно
 
-Он... Он уходит. Просто так?
-background BG_Chapter1_Asmund_Leaving
-sound SFX_God_Leap
-action;start;music Music/Chapter1_Asmund_Theme off
-action;start;music Music/Chapter1_Aftermath
+Но наступив ногой в скользкую грязь лишь ещё раз упал, потянув голень.
 speaker Подросток
-emotion Испуганно
 
-Он одним прыжком преодолел всю деревню... И уже поднимается на Баустхен.
+Адская боль пронзила ногу, я завопил.
+speaker Подросток
+
+Ну всё, мне пора.
+speaker Асмунд
+emotion Раздосадованно
+
+Одним прыжком, он преодолел всю деревню... И уже поднимался на Баустхен.
 background BG_Chapter1_Mountain_Asmund_Ascending
 sound SFX_Distant_Thunder
 speaker Подросток
 emotion Шокированно
 
+Несмотря на невероятную боль в голени я встал и, прихрамывая, пошёл к отцу.
+speaker Подросток
+
+// Обет.
 Отец! Отец, держись!
 background BG_Chapter1_Father_Dying
 sound SFX_Running_Footsteps
 speaker Подросток
 emotion Испуганно
 
+Я подошёл к нему и наклонился.
+speaker Подросток
+
 Пожалуйста, только не умирай. Я прошу тебя...
 speaker Подросток
 emotion Плача
 
+Я приобнял его.
+speaker Подросток
+
 Сынок... Когда-нибудь тебе всё равно пришлось бы идти дальше без меня.
 speaker Отец
-emotion Грустно
+
+Нет... Папа! Всё не должно было произойти так! - последние слова вырвались почти криком.
+speaker Подросток
+emotion Рыдая
 
 Будь сильным. Будь мужественным. И помогай матери...
 speaker Отец
-emotion Грустно
 
-Нет... Не говори так. Ты сам ей поможешь. Слышишь?
+Нет... Не говори так. Слышишь?
 speaker Подросток
 emotion Плача
 
 ...
 speaker Отец
-emotion Грустно
 
 Нет! Не закрывай глаза! Отец, прошу!
 background BG_Chapter1_Father_Dead
@@ -299,7 +383,7 @@ sound SFX_Fire_Distant
 speaker Подросток
 emotion Плача
 
-Почему ты нас оставил?..
+Почему ты нас оставил?... - кричал я, что есть сил.
 speaker Подросток
 emotion Плача
 
@@ -322,19 +406,30 @@ emotion Злясь
 speaker Подросток
 emotion Яростно
 
-Клянусь... Я покорю Баустхен.
+Я даю обет! - задыхаясь от ярости произнёс я.
 background BG_Chapter1_Vow
 action;start;music Music/Chapter1_Vow
 speaker Подросток
 emotion Яростно
 
-И убью каждого бога, что встанет у меня на пути!
+Я покорю Баустхен.
 speaker Подросток
 emotion Яростно
 
-Хлеб. Вода. Красная ткань с белой клеткой...
+Все взгляды были прикованы ко мне.
+speaker Подросток
+
+И убью всех богов! - криком сорвалось с моих уст.
+speaker Подросток
+emotion Яростно
+
+// Главный герой уходит.
+Я стал собиратся.
 background BG_Chapter1_House_Preparation
 sound SFX_Packing_Bag
+speaker Подросток
+
+Хлеб. Вода. Красная ткань с белой клеткой...
 speaker Подросток
 emotion Задумчиво
 
@@ -361,11 +456,9 @@ background BG_Chapter1_Village_Exit
 sound SFX_Villagers_Protest
 action;start;music Music/Chapter1_Departure
 speaker ЖительДеревни
-emotion Испуганно
 
 Даже сильнейшие не возвращаются с этой горы!
 speaker ЖительницаДеревни
-emotion Испуганно
 
 Тем, кто решался пройти склон, требовались годы. Двадцать пять лет — и это лишь минимум.
 speaker Старейшина
@@ -373,15 +466,12 @@ emotion Задумчиво
 
 А те немногие, кому удавалось преодолеть склон, так и не достигали вершины.
 speaker Старейшина
-emotion Грустно
 
 Мне семнадцать. Я знаю, что вы хотите меня остановить.
 speaker Подросток
-emotion Яростно
 
 Но я не передумаю.
 speaker Подросток
-emotion Яростно
 
 Баустхен... Обитель богов и великих героев.
 background BG_Chapter1_Bausthen_Foot
@@ -392,11 +482,9 @@ emotion Задумчиво
 
 Я иду за тобой, Асмунд.
 speaker Подросток
-emotion Яростно
 
 И однажды ты ответишь за всё.
 speaker Подросток
-emotion Яростно
 
 background BG_Chapter1_Mountain_Path
 action;start;music Music/Chapter1_Vow off

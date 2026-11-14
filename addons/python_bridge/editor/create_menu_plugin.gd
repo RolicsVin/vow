@@ -3,18 +3,16 @@ extends EditorContextMenuPlugin
 ## Adds "Python Script..." to FileSystem dock -> right click -> Create New.
 
 var _on_create: Callable  # func(dir: String)
+var _icon: Texture2D
 
 
-func _init(on_create: Callable) -> void:
+func _init(on_create: Callable, icon: Texture2D = null) -> void:
 	_on_create = on_create
+	_icon = icon
 
 
 func _popup_menu(_paths: PackedStringArray) -> void:
-	var icon: Texture2D = null
-	var theme := EditorInterface.get_editor_theme()
-	if theme != null and theme.has_icon("Script", "EditorIcons"):
-		icon = theme.get_icon("Script", "EditorIcons")
-	add_context_menu_item("Python Script...", _on_item, icon)
+	add_context_menu_item("Python Script...", _on_item, _icon)
 
 
 func _on_item(paths: PackedStringArray) -> void:

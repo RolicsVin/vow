@@ -1,0 +1,59 @@
+{
+	"notes": [
+		{
+			"path": "res://core",
+			"text": "Центральное ядро игры: связывает в себе модули",
+			"uid": ""
+		},
+		{
+			"path": "res://entry_point.tscn",
+			"text": "Точка входа в игру. Здесь пишите свою логику перед запуском основной сцены в игре",
+			"uid": "uid://cfrunyyn51m1w"
+		},
+		{
+			"path": "res://godo_combat",
+			"text": "Модуль, отвечающий за бой",
+			"uid": ""
+		},
+		{
+			"path": "res://godo_mini_game",
+			"text": "Модуль, отвечающий за мини-игры",
+			"uid": ""
+		},
+		{
+			"path": "res://godo_visual_novel",
+			"text": "Модуль, отвечающий за визуальную новеллу",
+			"uid": ""
+		},
+		{
+			"path": "res://scenes/scene.tscn",
+			"text": "Сцена-основа, для создания визуальных новел",
+			"uid": "uid://e612oyf6jcwk"
+		},
+		{
+			"path": "res://scenes/settings_menu.tscn",
+			"text": "Меню настроек",
+			"uid": "uid://cdmvmkaab0an"
+		},
+		{
+			"path": "res://scenes/test.tscn",
+			"text": "Тестовая сцена, на основе res:/scenes/scene.tscn. Здесь можно эксперементировать",
+			"uid": "uid://bmb1dk37kyqce"
+		},
+		{
+			"path": "res://scenes/empty_scene.tscn",
+			"text": "Пустая сцена. Для тестов и эксперементов",
+			"uid": "uid://c0cyyt86lk6rr"
+		},
+		{
+			"path": "res://scenes/main_menu.tscn",
+			"text": "Главное меню",
+			"uid": "uid://cw2e8p7y0lhg5"
+		},
+		{
+			"path": "res://README.md",
+			"text": "Прочитай меня",
+			"uid": ""
+		}
+	]
+}

@@ -25,15 +25,6 @@ func _end_log() -> void:
 
 func _ready() -> void:
 	pass
-	#var save_name: String = await save_data()
-	#if save_name.is_empty():
-		#return
-	#
-	#var save: Dictionary = await get_save(save_name)
-	#if save.is_empty():
-		#return
-	#
-	#await load_save(save)
 
 
 func save_data() -> String:

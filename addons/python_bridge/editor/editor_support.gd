@@ -12,7 +12,11 @@ const PATCHED_META := "python_bridge_patched"
 const PREV_LANG_META := "python_bridge_prev_language"
 const SCRIPT_DIALOG_CLASS := "ScriptCreateDialog"
 
+const ICON_PATH := "res://addons/python_bridge/icons/python.png"
+
 var _patched: Array[Dictionary] = []
+var _icon: Texture2D
+var _icon_size := 0
 
 var _prototype: EditorSyntaxHighlighter
 
@@ -22,7 +26,7 @@ func _ready() -> void:
 	var timer := Timer.new()
 	timer.wait_time = 1.0
 	timer.autostart = true
-	timer.timeout.connect(_scan_editors)
+	timer.timeout.connect(_tick)
 	add_child(timer)
 
 	if _hook_enabled():
@@ -38,6 +42,53 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	_unpatch_script_dialogs()
+
+
+func _tick() -> void:
+	_scan_editors()
+	_decorate_file_system()
+
+
+# --- Python icon -----------------------------------------------------------
+
+## The addon icon scaled to the editor's icon size (16 px * editor scale). Null if missing.
+func get_icon() -> Texture2D:
+	var size := maxi(int(round(16.0 * EditorInterface.get_editor_scale())), 16)
+	if _icon != null and _icon_size == size:
+		return _icon
+	var image := Image.load_from_file(ICON_PATH)
+	if image == null or image.is_empty():
+		push_warning("[PythonBridge] Cannot load icon %s" % ICON_PATH)
+		return null
+	image.resize(size, size, Image.INTERPOLATE_LANCZOS)
+	_icon = ImageTexture.create_from_image(image)
+	_icon_size = size
+	return _icon
+
+
+## The FileSystem dock rebuilds its entries now and then, so icons are re-applied
+## on every tick (only entries whose icon differs are touched).
+func _decorate_file_system() -> void:
+	var icon := get_icon()
+	var dock := EditorInterface.get_file_system_dock()
+	if icon == null or dock == null:
+		return
+	for node in dock.find_children("*", "Tree", true, false):
+		var tree := node as Tree
+		_decorate_tree_item(tree.get_root(), icon)
+	for node in dock.find_children("*", "ItemList", true, false):
+		var list := node as ItemList
+		for i in list.item_count:
+			if str(list.get_item_metadata(i)).get_extension() == "py" and list.get_item_icon(i) != icon:
+				list.set_item_icon(i, icon)
+
+
+func _decorate_tree_item(item: TreeItem, icon: Texture2D) -> void:
+	while item != null:
+		if str(item.get_metadata(0)).get_extension() == "py" and item.get_icon(0) != icon:
+			item.set_icon(0, icon)
+		_decorate_tree_item(item.get_first_child(), icon)
+		item = item.get_next()
 
 
 # --- .py as a text file ----------------------------------------------------
@@ -88,6 +139,9 @@ func _scan_editors() -> void:
 				continue
 			if not _is_python_item(list.get_item_text(i), list.get_item_tooltip(i)):
 				continue
+			var icon := get_icon()
+			if icon != null and list.get_item_icon(i) != icon:
+				list.set_item_icon(i, icon)
 			var tab := tabs.get_tab_control(tab_index)
 			if tab == null or not tab.has_method("get_base_editor"):
 				continue

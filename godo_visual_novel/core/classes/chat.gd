@@ -1,3 +1,4 @@
+## Управляет отображением реплик, диалогами и связанными игровыми действиями 
 class_name Chat extends Label
 
 signal dialog_entered(dialog: LinearDialog)
@@ -91,11 +92,21 @@ func _ready() -> void:
 
 func _prepare_dialog_tree() -> void:
 	for dialog in dialog_tree:
+		if not dialog:
+			push_warning('[Chat] В дереве диалогов обнаружен пустой элемент')
+			continue
 		if not dialog.get_dialog_name():
 			Core.push_fatal_error('У линейного диалога отсутствует имя!')
 
 	for dialog in dialog_tree:
+		if not dialog:
+			continue
 		for replica in dialog.get_replicas():
+			if not replica:
+				push_warning(
+					'[Chat] В диалоге \'%s\' обнаружена пустая реплика' % dialog.get_dialog_name()
+				)
+				continue
 			if replica.get_type_of_interpolation() == Replica.Interpolation.parent:
 				replica.type_of_interpolation = dialog.get_interpolation()
 
@@ -233,6 +244,10 @@ func _perform_replica_actions(fast_actions: Array, actions: Array, is_start: boo
 
 func _perform_fast_actions(actions: Array) -> void:
 	for action in actions:
+		if not action:
+			push_warning('[Chat] Пропущено пустое быстрое действие')
+			continue
+
 		var node_path: String = action.get_path_node()
 		var should_activate: bool = action.get_action()
 
@@ -265,6 +280,10 @@ func _perform_fast_actions(actions: Array) -> void:
 
 func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 	for action in actions:
+		if not action:
+			push_warning('[Chat] Пропущено пустое отложенное действие')
+			continue
+
 		var node_path: NodePath = NodePath(action.get_path_node())
 		var node: Node = get_node_or_null(node_path)
 		if not node:
@@ -474,18 +493,20 @@ func set_replica(replica: Replica) -> void:
 	if auto_text_swith_timer:
 		auto_text_swith_timer.stop()
 		auto_text_swith_timer.start(
-			len(replica.get_replica().split(" ")) * GVisualNovel.get_automatic_text_switching_speed()
+			len(replica.get_replica().split(' ')) * GVisualNovel.get_automatic_text_switching_speed()
 		)
 
 	perform_an_action_start(replica)
 
 
 func _set_character_emotion(replica: Replica) -> void:
-	var emotion = replica.get_custom_character_emotion()
+	var emotion: String = replica.get_custom_character_emotion()
 	if not emotion:
 		emotion = GVisualNovel.get_character_emotion(replica.get_emotion())
 
 	for character in characters:
+		if not character:
+			continue
 		if character.get_character() == replica.get_speaker():
 			character.set_emotion(emotion)
 

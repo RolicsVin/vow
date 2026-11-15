@@ -149,7 +149,7 @@ func _can_show_automatic_completion(code_edit: CodeEdit) -> bool:
 func _fill_completion_options(code_edit: CodeEdit, manual: bool) -> void:
 	var line_index: int = code_edit.get_caret_line()
 	var column: int = code_edit.get_caret_column()
-	var line_text: String = code_edit.get_line(line_index).substr(0, column).strip_edges(true, false)
+	var line_text: String = code_edit.get_line(line_index).substr(0, column).replace('\t', ' ').strip_edges(true, false)
 
 	if line_text.begins_with('//'):
 		code_edit.update_code_completion_options(true)
@@ -356,6 +356,7 @@ func _refresh_diagnostics(code_edit: CodeEdit) -> void:
 
 ## Проверить директиву настройки диалога
 func _validate_dialog_line(line_text: String) -> String:
+	line_text = line_text.replace('\t', ' ')
 	var split: PackedStringArray = line_text.split(' ', false, 1)
 	var key_parts: PackedStringArray = split[0].split(';')
 
@@ -382,6 +383,8 @@ func _validate_dialog_line(line_text: String) -> String:
 
 ## Проверить свойство реплики или директиву действия
 func _validate_replica_line(line_text: String) -> String:
+	line_text = line_text.replace('\t', ' ')
+
 	if line_text.begins_with('action;'):
 		var action_parts: PackedStringArray = line_text.split(';')
 		if action_parts.size() != 3:

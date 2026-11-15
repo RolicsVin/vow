@@ -358,7 +358,7 @@ func _validate_dialog_line(line_text: String) -> String:
 		return 'Не указано значение свойства диалога'
 
 	if key_parts[1] in ['start', 'end']:
-		if value.to_lower() not in PackedStringArray(ENUM_VALUES[key_parts[1]]).map(func(item: String) -> String: return item.to_lower()):
+		if not _contains_value(ENUM_VALUES[key_parts[1]], value):
 			return 'Допустимые значения: ' + ', '.join(ENUM_VALUES[key_parts[1]])
 
 	if key_parts[1] == 'interpolation':
@@ -415,10 +415,10 @@ func _validate_replica_line(line_text: String) -> String:
 	if split[0] == 'language' and value.to_lower() not in ['ru', 'en']:
 		return 'Допустимые значения: Ru или En'
 
-	if split[0] == 'speaker' and value not in ENUM_VALUES['speaker']:
+	if split[0] == 'speaker' and not _contains_value(ENUM_VALUES['speaker'], value):
 		return 'Персонаж не найден в Character.CharacterType'
 
-	if split[0] == 'emotion' and value not in ENUM_VALUES['emotion']:
+	if split[0] == 'emotion' and not _contains_value(ENUM_VALUES['emotion'], value):
 		return 'Эмоция не найдена в Replica.Emotion'
 
 	return ''
@@ -439,3 +439,12 @@ func _mark_issue(code_edit: CodeEdit, line_index: int, message: String) -> void:
 	var issues: Dictionary = code_edit.get_meta('txt_dialog_issues', {})
 	issues[line_index] = message
 	code_edit.set_meta('txt_dialog_issues', issues)
+
+
+## Проверить наличие значения без учёта регистра
+func _contains_value(values: Array, target: String) -> bool:
+	for value: String in values:
+		if value.to_lower() == target.to_lower():
+			return true
+
+	return false

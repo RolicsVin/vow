@@ -126,7 +126,7 @@ func _is_first_content_line(text_edit: TextEdit, line: int) -> bool:
 		if previous_text.is_empty():
 			return true
 
-		if previous_text.begins_with('//'):
+		if previous_text.begins_with('//') or previous_text.begins_with('dialog;'):
 			continue
 
 		return false

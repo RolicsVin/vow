@@ -310,7 +310,7 @@ func _is_first_replica_line(code_edit: CodeEdit, line_index: int) -> bool:
 func _refresh_diagnostics(code_edit: CodeEdit) -> void:
 	var issues: Dictionary = {}
 	for line_index in range(code_edit.get_line_count()):
-		code_edit.clear_line_background_color(line_index)
+		code_edit.set_line_background_color(line_index, Color.TRANSPARENT)
 
 	code_edit.set_meta('txt_dialog_issues', issues)
 

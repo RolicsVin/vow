@@ -391,7 +391,12 @@ func _validate_replica_line(line_text: String) -> String:
 			return 'Формат: action;<start|end>;<visible|sound|music> <путь>'
 		if action_parts[1].to_lower() not in ENUM_VALUES['when']:
 			return 'Первый параметр action должен быть start или end'
+		if action_parts[2].strip_edges().is_empty():
+			return 'Не указан тип действия и путь к ноде'
+
 		var action_value: PackedStringArray = action_parts[2].split(' ', false, 1)
+		if action_value.is_empty():
+			return 'Не указан тип действия и путь к ноде'
 		if action_value[0].to_lower() not in ENUM_VALUES['action_type']:
 			return 'Тип действия: visible, sound или music'
 		if action_value.size() < 2 or action_value[1].strip_edges().is_empty():

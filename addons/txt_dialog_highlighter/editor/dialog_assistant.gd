@@ -290,6 +290,13 @@ func _update_hint(code_edit: CodeEdit) -> void:
 		return
 
 	var key: String = line_text.get_slice(' ', 0).get_slice(';', 0)
+	if line_text.begins_with('dialog;'):
+		key = line_text.get_slice(' ', 0).get_slice(';', 1)
+	elif line_text.begins_with('action;'):
+		key = 'action'
+	elif line_text.begins_with('lang;'):
+		key = 'lang'
+
 	var description: String = _get_description(key)
 
 	if description.is_empty():

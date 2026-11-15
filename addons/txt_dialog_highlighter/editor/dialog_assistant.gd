@@ -149,7 +149,8 @@ func _can_show_automatic_completion(code_edit: CodeEdit) -> bool:
 func _fill_completion_options(code_edit: CodeEdit, manual: bool) -> void:
 	var line_index: int = code_edit.get_caret_line()
 	var column: int = code_edit.get_caret_column()
-	var line_text: String = code_edit.get_line(line_index).substr(0, column).replace('\t', ' ').strip_edges(true, false)
+	var line_text: String = code_edit.get_line(line_index).substr(0, column)
+	line_text = line_text.replace('\t', ' ').strip_edges(true, false)
 
 	if line_text.begins_with('//'):
 		code_edit.update_code_completion_options(true)
@@ -426,7 +427,10 @@ func _validate_replica_line(line_text: String) -> String:
 		return 'Не указано значение свойства ' + split[0]
 
 	if split[0] in ['reset_text_buffer', 'small_text']:
-		if value.to_lower() not in ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off', 'да', 'нет', 'вкл', 'выкл']:
+		if value.to_lower() not in [
+			'true', 'false', '1', '0', 'yes', 'no', 'on', 'off',
+			'да', 'нет', 'вкл', 'выкл',
+		]:
 			return 'Ожидается логическое значение true или false'
 
 	if split[0] == 'interpolation' and value.to_lower() not in ENUM_VALUES['interpolation']:

@@ -152,10 +152,12 @@ func _fill_completion_options(code_edit: CodeEdit, manual: bool) -> void:
 	var line_text: String = code_edit.get_line(line_index).substr(0, column).strip_edges(true, false)
 
 	if line_text.begins_with('//'):
+		code_edit.update_code_completion_options(true)
 		return
 
 	var options: Array[String] = _get_completion_values(code_edit, line_index, line_text, manual)
 	if options.is_empty():
+		code_edit.update_code_completion_options(true)
 		return
 
 	code_edit.add_code_completion_option(
@@ -267,7 +269,7 @@ func _get_description(symbol: String) -> String:
 		return SYNTAX_HINTS[symbol]
 
 	if ENUM_VALUES.has(symbol):
-		return 'Допустимые значения: ' + ', '.join(ENUM_VALUES[symbol])
+		return 'Допустимые значения: ' + _join_values(ENUM_VALUES[symbol])
 
 	for enum_name: String in ENUM_VALUES:
 		if symbol in ENUM_VALUES[enum_name]:
@@ -369,11 +371,11 @@ func _validate_dialog_line(line_text: String) -> String:
 
 	if key_parts[1] in ['start', 'end']:
 		if not _contains_value(ENUM_VALUES[key_parts[1]], value):
-			return 'Допустимые значения: ' + ', '.join(ENUM_VALUES[key_parts[1]])
+			return 'Допустимые значения: ' + _join_values(ENUM_VALUES[key_parts[1]])
 
 	if key_parts[1] == 'interpolation':
 		if value.to_lower() not in ENUM_VALUES['interpolation']:
-			return 'Допустимые значения: ' + ', '.join(ENUM_VALUES['interpolation'])
+			return 'Допустимые значения: ' + _join_values(ENUM_VALUES['interpolation'])
 
 	return ''
 
@@ -453,3 +455,13 @@ func _contains_value(values: Array, target: String) -> bool:
 			return true
 
 	return false
+
+
+## Объединить варианты значений в строку
+func _join_values(values: Array) -> String:
+	var result: PackedStringArray = []
+
+	for value: String in values:
+		result.append(value)
+
+	return ', '.join(result)

@@ -69,9 +69,6 @@ const ENUM_VALUES: Dictionary = {
 ## Цвет фона строки с ошибкой
 const ERROR_LINE_COLOR: Color = Color(0.65, 0.12, 0.12, 0.22)
 
-## Подсветчик синтаксиса для извлечения контекста
-const HIGHLIGHTER_META: StringName = 'txt_linear_dialog_assistant'
-
 
 ## Подключить подсказки к CodeEdit
 func setup(code_edit: CodeEdit) -> void:
@@ -144,7 +141,7 @@ func _can_show_automatic_completion(code_edit: CodeEdit) -> bool:
 func _fill_completion_options(code_edit: CodeEdit, manual: bool) -> void:
 	var line_index: int = code_edit.get_caret_line()
 	var column: int = code_edit.get_caret_column()
-	var line_text: String = code_edit.get_line(line_index).substr(0, column).strip_edges()
+	var line_text: String = code_edit.get_line(line_index).substr(0, column).strip_edges(true, false)
 
 	if line_text.begins_with('//'):
 		return
@@ -182,7 +179,12 @@ func _get_completion_values(
 			return _dictionary_keys(DIALOG_PROPERTIES)
 		if dialog_parts.size() == 2 and not dialog_parts[1].contains(' '):
 			return _matching_values(_dictionary_keys(DIALOG_PROPERTIES), dialog_parts[1])
-		return _get_value_options(dialog_parts[1].split(' ')[0], line_text)
+
+		var dialog_key: String = dialog_parts[1].get_slice(' ', 0)
+		var dialog_value: String = dialog_parts[1].substr(
+			dialog_parts[1].find(' ') + 1
+		).strip_edges()
+		return _get_value_options(dialog_key, dialog_value)
 
 	if line_text.begins_with('action;') or line_text == 'action':
 		var action_parts: PackedStringArray = line_text.split(';')
@@ -190,13 +192,13 @@ func _get_completion_values(
 			return ['start', 'end']
 		if action_parts.size() == 2:
 			return _matching_values(ENUM_VALUES['when'], action_parts[1])
-		if action_parts.size() == 3:
-			return _matching_values(ENUM_VALUES['action_type'], action_parts[2])
 		if line_text.contains(' '):
 			return _matching_values(
 				ENUM_VALUES['action_flag'],
 				line_text.substr(line_text.rfind(' ') + 1)
 			)
+		if action_parts.size() == 3:
+			return _matching_values(ENUM_VALUES['action_type'], action_parts[2])
 
 	if line_text.begins_with('lang;'):
 		var language_parts: PackedStringArray = line_text.split(';')

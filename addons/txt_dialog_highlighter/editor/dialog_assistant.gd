@@ -112,6 +112,11 @@ func _on_caret_changed(code_edit: CodeEdit) -> void:
 
 ## Обновить всплывающую подсказку при наведении на символ
 func _on_symbol_hovered(symbol: String, line: int, column: int, code_edit: CodeEdit) -> void:
+	var issues: Dictionary = code_edit.get_meta('txt_dialog_issues', {})
+	if issues.has(line):
+		code_edit.tooltip_text = issues[line]
+		return
+
 	var description: String = _get_description(symbol)
 	if description.is_empty():
 		return
@@ -178,7 +183,7 @@ func _get_completion_values(
 			return _matching_values(_dictionary_keys(DIALOG_PROPERTIES), dialog_parts[1])
 		return _get_value_options(dialog_parts[1].split(' ')[0], line_text)
 
-	if line_text.begins_with('action;'):
+	if line_text.begins_with('action;') or line_text == 'action':
 		var action_parts: PackedStringArray = line_text.split(';')
 		if action_parts.size() == 1:
 			return ['start', 'end']
@@ -270,6 +275,10 @@ func _update_hint(code_edit: CodeEdit) -> void:
 		code_edit.set_code_hint('')
 		return
 
+	if _is_first_replica_line(code_edit, line_index) and not _is_known_replica_property(line_text):
+		code_edit.set_code_hint('')
+		return
+
 	code_edit.set_code_hint(description)
 
 
@@ -291,8 +300,11 @@ func _is_first_replica_line(code_edit: CodeEdit, line_index: int) -> bool:
 
 ## Проверить строки файла и отметить простые синтаксические ошибки
 func _refresh_diagnostics(code_edit: CodeEdit) -> void:
+	var issues: Dictionary = {}
 	for line_index in range(code_edit.get_line_count()):
 		code_edit.clear_line_background_color(line_index)
+
+	code_edit.set_meta('txt_dialog_issues', issues)
 
 	var first_replica_line: bool = true
 	for line_index in range(code_edit.get_line_count()):
@@ -410,3 +422,6 @@ func _mark_issue(code_edit: CodeEdit, line_index: int, message: String) -> void:
 		return
 
 	code_edit.set_line_background_color(line_index, ERROR_LINE_COLOR)
+	var issues: Dictionary = code_edit.get_meta('txt_dialog_issues', {})
+	issues[line_index] = message
+	code_edit.set_meta('txt_dialog_issues', issues)

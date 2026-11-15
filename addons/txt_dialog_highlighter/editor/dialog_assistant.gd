@@ -445,7 +445,7 @@ func _validate_replica_line(line_text: String) -> String:
 			return 'Ожидается логическое значение true или false'
 
 	if split[0] == 'interpolation' and value.to_lower() not in ENUM_VALUES['interpolation']:
-		return 'Допустимые значения: ' + ', '.join(ENUM_VALUES['interpolation'])
+		return 'Допустимые значения: ' + _join_values(ENUM_VALUES['interpolation'])
 
 	if split[0] == 'language' and value.to_lower() not in ['ru', 'en']:
 		return 'Допустимые значения: Ru или En'

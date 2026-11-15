@@ -99,6 +99,8 @@ func _on_text_changed(code_edit: CodeEdit) -> void:
 
 	if _can_show_automatic_completion(code_edit):
 		code_edit.request_code_completion(true)
+	else:
+		code_edit.cancel_code_completion()
 
 	_update_hint(code_edit)
 

@@ -6,7 +6,7 @@ const EditorSupport = preload(
 	'res://addons/txt_dialog_highlighter/editor/editor_support.gd'
 )
 
-var _editor_support: Node
+var _editor_support: Node ## Узел, подключающий подсветку к Script Editor
 
 
 ## Подключить поддержку подсветки TXTLinearDialog

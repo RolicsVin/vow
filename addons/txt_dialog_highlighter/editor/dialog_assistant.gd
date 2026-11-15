@@ -328,10 +328,12 @@ func _is_first_replica_line(code_edit: CodeEdit, line_index: int) -> bool:
 
 ## Проверить строки файла и отметить простые синтаксические ошибки
 func _refresh_diagnostics(code_edit: CodeEdit) -> void:
-	var issues: Dictionary = {}
-	for line_index in range(code_edit.get_line_count()):
-		code_edit.set_line_background_color(line_index, Color.TRANSPARENT)
+	var previous_issues: Dictionary = code_edit.get_meta('txt_dialog_issues', {})
+	for line_index: int in previous_issues:
+		if line_index < code_edit.get_line_count():
+			code_edit.set_line_background_color(line_index, Color.TRANSPARENT)
 
+	var issues: Dictionary = {}
 	code_edit.set_meta('txt_dialog_issues', issues)
 
 	var first_replica_line: bool = true

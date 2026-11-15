@@ -47,6 +47,8 @@ const ENUM_VALUES: Dictionary = {
 	'when': ['start', 'end'],
 	'action_type': ['visible', 'sound', 'music'],
 	'boolean': ['true', 'false'],
+	'small_text': ['true', 'false'],
+	'reset_text_buffer': ['true', 'false'],
 	'action_flag': ['on', 'off', 'fast', 'slow'],
 	'speaker': [
 		'Нет', 'Подросток', 'Асмунд', 'Сосед', 'ДругойСосед', 'Отец', 'Девушка',
@@ -99,7 +101,6 @@ func _on_text_changed(code_edit: CodeEdit) -> void:
 	_refresh_diagnostics(code_edit)
 
 	if _can_show_automatic_completion(code_edit):
-		_fill_completion_options(code_edit, false)
 		code_edit.request_code_completion(true)
 
 	_update_hint(code_edit)
@@ -192,7 +193,10 @@ func _get_completion_values(
 		if action_parts.size() == 3:
 			return _matching_values(ENUM_VALUES['action_type'], action_parts[2])
 		if line_text.contains(' '):
-			return _matching_values(ENUM_VALUES['action_flag'], line_text.get_slice(' ', -1))
+			return _matching_values(
+				ENUM_VALUES['action_flag'],
+				line_text.substr(line_text.rfind(' ') + 1)
+			)
 
 	if line_text.begins_with('lang;'):
 		var language_parts: PackedStringArray = line_text.split(';')
@@ -254,6 +258,10 @@ func _get_description(symbol: String) -> String:
 
 	if ENUM_VALUES.has(symbol):
 		return 'Допустимые значения: ' + ', '.join(ENUM_VALUES[symbol])
+
+	for enum_name: String in ENUM_VALUES:
+		if symbol in ENUM_VALUES[enum_name]:
+			return 'Допустимое значение параметра ' + enum_name
 
 	return ''
 
@@ -350,11 +358,11 @@ func _validate_dialog_line(line_text: String) -> String:
 		return 'Не указано значение свойства диалога'
 
 	if key_parts[1] in ['start', 'end']:
-		if value not in ENUM_VALUES[key_parts[1]]:
+		if value.to_lower() not in PackedStringArray(ENUM_VALUES[key_parts[1]]).map(func(item: String) -> String: return item.to_lower()):
 			return 'Допустимые значения: ' + ', '.join(ENUM_VALUES[key_parts[1]])
 
 	if key_parts[1] == 'interpolation':
-		if value not in ENUM_VALUES['interpolation']:
+		if value.to_lower() not in ENUM_VALUES['interpolation']:
 			return 'Допустимые значения: ' + ', '.join(ENUM_VALUES['interpolation'])
 
 	return ''
@@ -366,10 +374,10 @@ func _validate_replica_line(line_text: String) -> String:
 		var action_parts: PackedStringArray = line_text.split(';')
 		if action_parts.size() != 3:
 			return 'Формат: action;<start|end>;<visible|sound|music> <путь>'
-		if action_parts[1] not in ENUM_VALUES['when']:
+		if action_parts[1].to_lower() not in ENUM_VALUES['when']:
 			return 'Первый параметр action должен быть start или end'
 		var action_value: PackedStringArray = action_parts[2].split(' ', false, 1)
-		if action_value[0] not in ENUM_VALUES['action_type']:
+		if action_value[0].to_lower() not in ENUM_VALUES['action_type']:
 			return 'Тип действия: visible, sound или music'
 		if action_value.size() < 2 or action_value[1].strip_edges().is_empty():
 			return 'Не указан путь к ноде'
@@ -378,7 +386,7 @@ func _validate_replica_line(line_text: String) -> String:
 	if line_text.begins_with('lang;'):
 		var language_parts: PackedStringArray = line_text.split(' ', false, 1)
 		var key_parts: PackedStringArray = language_parts[0].split(';')
-		if key_parts.size() != 2 or key_parts[1] not in ENUM_VALUES['lang']:
+		if key_parts.size() != 2 or key_parts[1].to_lower() not in ['ru', 'en']:
 			return 'Формат перевода: lang;<Ru|En> <текст>'
 		if language_parts.size() < 2 or language_parts[1].is_empty():
 			return 'Не указан текст перевода'
@@ -404,8 +412,14 @@ func _validate_replica_line(line_text: String) -> String:
 	if split[0] == 'interpolation' and value not in ENUM_VALUES['interpolation']:
 		return 'Допустимые значения: ' + ', '.join(ENUM_VALUES['interpolation'])
 
-	if split[0] == 'language' and value not in ENUM_VALUES['language']:
+	if split[0] == 'language' and value.to_lower() not in ['ru', 'en']:
 		return 'Допустимые значения: Ru или En'
+
+	if split[0] == 'speaker' and value not in ENUM_VALUES['speaker']:
+		return 'Персонаж не найден в Character.CharacterType'
+
+	if split[0] == 'emotion' and value not in ENUM_VALUES['emotion']:
+		return 'Эмоция не найдена в Replica.Emotion'
 
 	return ''
 

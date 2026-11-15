@@ -421,8 +421,8 @@ shader_parameter/gradient_end = 0.858000040755
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3dsft"]
 shader = ExtResource("8_1id6j")
 shader_parameter/threshold = 0.8
-shader_parameter/intensity = 0.0
-shader_parameter/streak_length = 0.0
+shader_parameter/intensity = 2.0
+shader_parameter/streak_length = 0.02000000095
 shader_parameter/angle = 0.0
 shader_parameter/samples = 20
 shader_parameter/alpha = 0.0
@@ -693,7 +693,7 @@ stream = ExtResource("10_tvkk6")
 volume_db = 5.0
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="Menu" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=961365472 node_paths=PackedStringArray("animation", "sound")]
+[node name="Menu" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=961365472 node_paths=PackedStringArray("animation", "sound", "nodes")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 script = ExtResource("7_7ftgl")
@@ -701,6 +701,9 @@ action = "esc"
 hidding_on_press = false
 animation = NodePath("AnimationPlayer")
 sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Menu"): true
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="ChatRoot/Control/HBoxContainer/Menu" unique_id=758703159]
@@ -902,7 +905,7 @@ color = Color(0, 0, 0, 1)
 stream = ExtResource("18_c7gmr")
 volume_db = -5.0
 
-[node name="Continio" type="TextureButton" parent="Menu" unique_id=185243247]
+[node name="Continio" type="TextureButton" parent="Menu" unique_id=185243247 node_paths=PackedStringArray("nodes")]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -915,6 +918,11 @@ offset_bottom = -117.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
 hidding_on_press = false
+nodes = {
+NodePath(".."): false,
+NodePath("../MainMenu"): true,
+NodePath("../Ready"): false
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/Continio" unique_id=213786879]
@@ -939,7 +947,7 @@ stream = ExtResource("10_tvkk6")
 volume_db = 5.0
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="Settings" type="TextureButton" parent="Menu" unique_id=681030097]
+[node name="Settings" type="TextureButton" parent="Menu" unique_id=681030097 node_paths=PackedStringArray("nodes")]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -952,6 +960,9 @@ offset_bottom = -15.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
 hidding_on_press = false
+nodes = {
+NodePath("../../SettingsMenu"): true
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/Settings" unique_id=1210088481]
@@ -976,7 +987,7 @@ stream = ExtResource("10_tvkk6")
 volume_db = 5.0
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="MainMenu" type="TextureButton" parent="Menu" unique_id=449968782]
+[node name="MainMenu" type="TextureButton" parent="Menu" unique_id=449968782 node_paths=PackedStringArray("nodes")]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 1
 anchors_preset = 4
@@ -988,6 +999,9 @@ offset_right = 382.0
 offset_bottom = 94.0
 grow_vertical = 2
 script = ExtResource("7_7ftgl")
+nodes = {
+NodePath("../Ready"): true
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="Menu/MainMenu" unique_id=1627441392]

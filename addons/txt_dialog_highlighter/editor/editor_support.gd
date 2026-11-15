@@ -1,6 +1,6 @@
 @tool
 extends Node
-## Подключает подсветчик TXTLinearDialog к текстовым вкладкам Script Editor
+## Подключает подсветчик и интеллектуальные подсказки TXTLinearDialog к Script Editor
 
 
 ## Путь к настройке расширений текстовых файлов
@@ -9,11 +9,17 @@ const TEXT_EXTENSIONS_SETTING: String = 'docks/filesystem/textfile_extensions'
 ## Метаданные экземпляра подсветчика
 const HIGHLIGHTER_META: StringName = 'txt_linear_dialog_highlighter'
 
+## Метаданные помощника редактора
+const ASSISTANT_META: StringName = 'txt_linear_dialog_assistant'
+
 ## Интервал поиска открытых вкладок
 const SCAN_INTERVAL: float = 0.5
 
 const Highlighter = preload(
 	'res://addons/txt_dialog_highlighter/editor/txt_dialog_highlighter.gd'
+)
+const Assistant = preload(
+	'res://addons/txt_dialog_highlighter/editor/dialog_assistant.gd'
 )
 
 var _timer: Timer ## Таймер периодического поиска открытых вкладок
@@ -74,7 +80,7 @@ func _is_text_item(item_text: String, tooltip: String) -> bool:
 	return file_name.get_extension().to_lower() == 'txt'
 
 
-## Подключить подсветчик к CodeEdit конкретной вкладки
+## Подключить подсветчик и помощник к CodeEdit конкретной вкладки
 func _setup_code_edit(tab: Control, code_edit: CodeEdit) -> void:
 	if not is_instance_valid(code_edit):
 		return
@@ -91,6 +97,11 @@ func _setup_code_edit(tab: Control, code_edit: CodeEdit) -> void:
 
 	if code_edit.syntax_highlighter != highlighter:
 		code_edit.syntax_highlighter = highlighter
+
+	if not code_edit.has_meta(ASSISTANT_META):
+		var assistant: RefCounted = Assistant.new()
+		assistant.setup(code_edit)
+		code_edit.set_meta(ASSISTANT_META, assistant)
 
 
 ## Добавить расширение TXT в список текстовых файлов Godot

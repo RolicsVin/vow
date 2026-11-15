@@ -99,7 +99,7 @@ func _setup_code_edit(tab: Control, code_edit: CodeEdit) -> void:
 		code_edit.syntax_highlighter = highlighter
 
 	if not code_edit.has_meta(ASSISTANT_META):
-		var assistant: RefCounted = Assistant.new()
+		var assistant: Variant = Assistant.new()
 		assistant.setup(code_edit)
 		code_edit.set_meta(ASSISTANT_META, assistant)
 

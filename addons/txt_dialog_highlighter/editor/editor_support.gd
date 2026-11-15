@@ -16,7 +16,7 @@ const Highlighter = preload(
 	'res://addons/txt_dialog_highlighter/editor/txt_dialog_highlighter.gd'
 )
 
-var _timer: Timer
+var _timer: Timer ## Таймер периодического поиска открытых вкладок
 
 
 ## Запустить поиск текстовых вкладок

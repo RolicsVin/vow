@@ -47,7 +47,7 @@ func _scan_editors() -> void:
 		var list: ItemList = node as ItemList
 		for item_index in range(list.item_count):
 			var tab_index: Variant = list.get_item_metadata(item_index)
-			if not tab_index is int:
+			if not (tab_index is int):
 				continue
 			if tab_index < 0 or tab_index >= tabs.get_tab_count():
 				continue

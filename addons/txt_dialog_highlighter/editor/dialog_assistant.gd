@@ -432,7 +432,7 @@ func _validate_replica_line(line_text: String) -> String:
 ## Проверить, является ли строка известным свойством реплики
 func _is_known_replica_property(line_text: String) -> bool:
 	var key: String = line_text.get_slice(' ', 0).get_slice(';', 0)
-	return REPLICA_PROPERTIES.has(key) or key in ['action', 'lang']
+	return REPLICA_PROPERTIES.has(key) or key in ['action', 'lang', 'dialog']
 
 
 ## Отметить строку с диагностикой

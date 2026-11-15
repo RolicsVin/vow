@@ -95,7 +95,8 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 
 	var separator: int = _find_separator(normalized_line)
 	if separator == -1:
-		_set_color(result, offset, colors['property'])
+		var key_color: Color = _get_key_color(normalized_line, colors)
+		_set_color(result, offset, key_color)
 		return result
 
 	var key: String = normalized_line.substr(0, separator)
@@ -105,18 +106,10 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 			break
 		value_start += 1
 
-	var key_color: Color = colors['unknown_property']
+	var key_color: Color = _get_key_color(key, colors)
 	var value_color: Color = colors['value']
-
-	if key.begins_with('dialog;'):
-		key_color = colors['dialog_property']
-	elif key.begins_with('lang;'):
-		key_color = colors['property']
+	if key.begins_with('lang;'):
 		value_color = colors['dialogue_text']
-	elif key.begins_with('action;'):
-		key_color = colors['action']
-	elif key in REPLICA_KEYS:
-		key_color = colors['property']
 
 	_set_color(result, offset, key_color)
 	if value_start < normalized_line.length():
@@ -153,6 +146,23 @@ func _is_property_line(line: String) -> bool:
 		return true
 
 	return key in REPLICA_KEYS
+
+
+## Получить цвет ключа в соответствии с синтаксисом
+func _get_key_color(key: String, colors: Dictionary) -> Color:
+	if key.begins_with('dialog;'):
+		return colors['dialog_property']
+
+	if key.begins_with('lang;'):
+		return colors['property']
+
+	if key.begins_with('action;') or key == 'action':
+		return colors['action']
+
+	if key in REPLICA_KEYS or key == 'lang':
+		return colors['property']
+
+	return colors['unknown_property']
 
 
 ## Найти разделитель между ключом и значением

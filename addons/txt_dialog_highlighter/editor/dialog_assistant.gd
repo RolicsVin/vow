@@ -115,10 +115,12 @@ func _on_symbol_hovered(symbol: String, line: int, column: int, code_edit: CodeE
 		code_edit.tooltip_text = issues[line]
 		return
 
-	var description: String = _get_description(symbol)
-	if description.is_empty():
+	var hovered_line: String = code_edit.get_line(line).strip_edges()
+	if _is_first_replica_line(code_edit, line) and not _is_known_replica_property(hovered_line):
+		code_edit.tooltip_text = ''
 		return
 
+	var description: String = _get_description(symbol)
 	code_edit.tooltip_text = description
 
 
@@ -132,7 +134,13 @@ func _can_show_automatic_completion(code_edit: CodeEdit) -> bool:
 		return false
 
 	if _is_first_replica_line(code_edit, line):
-		return false
+		var is_directive: bool = (
+			line_text.begins_with('dialog;')
+			or line_text.begins_with('action;')
+			or line_text.begins_with('lang;')
+		)
+		if not is_directive:
+			return false
 
 	return true
 
@@ -411,17 +419,12 @@ func _validate_replica_line(line_text: String) -> String:
 		if value.to_lower() not in ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off', 'да', 'нет', 'вкл', 'выкл']:
 			return 'Ожидается логическое значение true или false'
 
-	if split[0] == 'interpolation' and value not in ENUM_VALUES['interpolation']:
+	if split[0] == 'interpolation' and value.to_lower() not in ENUM_VALUES['interpolation']:
 		return 'Допустимые значения: ' + ', '.join(ENUM_VALUES['interpolation'])
 
 	if split[0] == 'language' and value.to_lower() not in ['ru', 'en']:
 		return 'Допустимые значения: Ru или En'
 
-	if split[0] == 'speaker' and not _contains_value(ENUM_VALUES['speaker'], value):
-		return 'Персонаж не найден в Character.CharacterType'
-
-	if split[0] == 'emotion' and not _contains_value(ENUM_VALUES['emotion'], value):
-		return 'Эмоция не найдена в Replica.Emotion'
 
 	return ''
 

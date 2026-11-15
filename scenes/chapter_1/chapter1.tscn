@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://csdwhicd745af"]
+
+[ext_resource type="PackedScene" uid="uid://e612oyf6jcwk" path="res://scenes/scene.tscn" id="1_cgoi1"]
+[ext_resource type="Script" uid="uid://ubqpel73dg6o" path="res://godo_visual_novel/core/classes/linear_dialog.gd" id="2_o3h8a"]
+[ext_resource type="Script" uid="uid://ba3bu5tnfw5l7" path="res://godo_visual_novel/core/classes/replica.gd" id="3_n3s8v"]
+[ext_resource type="Script" uid="uid://ds60nmvsajp50" path="res://godo_visual_novel/core/classes/txt_linear_dialog.gd" id="4_8e8sd"]
+
+[sub_resource type="Resource" id="Resource_cgoi1"]
+script = ExtResource("4_8e8sd")
+txt_path = "res://scenes/chapter_1/сhapter1.txt"
+dialog_name = "Глава 1 — Обет"
+metadata/_custom_type_script = "uid://ds60nmvsajp50"
+
+[node name="Scene" unique_id=733753458 instance=ExtResource("1_cgoi1")]
+
+[node name="Chat" parent="ChatRoot" parent_id_path=PackedInt32Array(765098785) index="1" unique_id=1260149037]
+linear_dialog_play_ready = "Глава 1 — Обет"
+dialog_tree = Array[ExtResource("2_o3h8a")]([SubResource("Resource_cgoi1")])
+
+[node name="Menu" parent="ChatRoot/Control/HBoxContainer" parent_id_path=PackedInt32Array(1358434576) index="2" unique_id=961365472 node_paths=PackedStringArray("nodes")]
+nodes = {
+NodePath("../../../../Menu"): true
+}
+
+[node name="Continio" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="1" unique_id=185243247 node_paths=PackedStringArray("nodes")]
+nodes = {
+NodePath(".."): false,
+NodePath("../MainMenu"): true,
+NodePath("../Ready"): false
+}
+
+[node name="Settings" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="2" unique_id=681030097 node_paths=PackedStringArray("nodes")]
+nodes = {
+NodePath("../../SettingsMenu"): true
+}
+
+[node name="MainMenu" parent="Menu" parent_id_path=PackedInt32Array(506455870) index="3" unique_id=449968782 node_paths=PackedStringArray("nodes")]
+nodes = {
+NodePath("../Ready"): true
+}

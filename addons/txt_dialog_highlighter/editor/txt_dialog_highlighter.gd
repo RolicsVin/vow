@@ -95,8 +95,8 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 
 	var separator: int = _find_separator(normalized_line)
 	if separator == -1:
-		var key_color: Color = _get_key_color(normalized_line, colors)
-		_set_color(result, offset, key_color)
+		var single_key_color: Color = _get_key_color(normalized_line, colors)
+		_set_color(result, offset, single_key_color)
 		return result
 
 	var key: String = normalized_line.substr(0, separator)
@@ -145,7 +145,7 @@ func _is_property_line(line: String) -> bool:
 	if key.begins_with('action;'):
 		return true
 
-	return key in REPLICA_KEYS
+	return key in REPLICA_KEYS or key == 'action' or key == 'lang'
 
 
 ## Получить цвет ключа в соответствии с синтаксисом

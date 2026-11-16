@@ -76,6 +76,7 @@ func get_speaker() -> int:
 	return speaker
 
 
+## Возвращает идентификатор эмоции реплики
 func get_emotion() -> int:
 	return emotion
 

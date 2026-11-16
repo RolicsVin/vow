@@ -174,20 +174,20 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 	
 	match key:
 		"speaker":
-			var idx := _find_enum(Character.CharacterType, value)
+			var idx := GVisualNovel.get_character_type_id(value)
 			if idx == -1:
-				_warn(line_no, "персонаж «%s» не найден в Character.CharacterType, использую как custom_name" % value)
+				_warn(line_no, "персонаж «%s» не найден в каталоге CharacterTypes, использую как custom_name" % value)
 				replica.custom_name = value
 			else:
-				replica.speaker = idx as Character.CharacterType
+				replica.speaker = idx
 		"name":
 			replica.custom_name = value
 		"emotion":
-			var idx := _find_enum(Replica.Emotion, value)
+			var idx := GVisualNovel.get_emotion_id(value)
 			if idx == -1:
-				_warn(line_no, "эмоция «%s» не найдена в Replica.Emotion" % value)
+				_warn(line_no, "эмоция «%s» не найдена в каталоге CharacterEmotions" % value)
 			else:
-				replica.emotion = idx as Replica.Emotion
+				replica.emotion = idx
 		"background":
 			replica.background = value
 		"sound":

@@ -194,9 +194,9 @@ func get_emotion_id(value: String) -> int:
 		if not entry:
 			continue
 		if (
-		\tString(entry.key).to_lower() == value.to_lower()
-		\tor entry.name_ru.to_lower() == value.to_lower()
-		\tor entry.name_en.to_lower() == value.to_lower()
-	\t):
+			String(entry.key).to_lower() == value.to_lower()
+			or entry.name_ru.to_lower() == value.to_lower()
+			or entry.name_en.to_lower() == value.to_lower()
+		):
 			return entry.id
 	return -1

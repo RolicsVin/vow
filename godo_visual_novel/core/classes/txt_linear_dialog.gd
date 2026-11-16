@@ -23,9 +23,9 @@ class_name TxtLinearDialog extends LinearDialog
 ##   lang;En Hello!         перевод реплики на язык из Replica.Language
 ##
 ## Свойства реплики:
-##   speaker <Имя>          имя из Character.CharacterType; неизвестное имя станет custom_name
+##   speaker <Имя>          ключ из каталога CharacterTypes; неизвестное имя станет custom_name
 ##   name <Имя>             custom_name (имя над репликой), без привязки к персонажу
-##   emotion <Эмоция>       имя из Replica.Emotion (пробел можно писать вместо "_")
+##   emotion <Эмоция>       ключ из каталога CharacterEmotions (пробел можно писать вместо "_")
 ##   background <Имя>       replica.background
 ##   sound <Имя>            replica.sound
 ##   color <цвет>           custom_color (имя цвета или #RRGGBB)
@@ -174,20 +174,24 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 	
 	match key:
 		"speaker":
-			var idx := _find_enum(Character.CharacterType, value)
+			var idx := GVisualNovel.get_character_type_id(value)
 			if idx == -1:
-				_warn(line_no, "персонаж «%s» не найден в Character.CharacterType, использую как custom_name" % value)
+				var warning: String = (
+					"персонаж «%s» не найден в каталоге CharacterTypes, "
+					+ "использую как custom_name"
+				) % value
+				_warn(line_no, warning)
 				replica.custom_name = value
 			else:
-				replica.speaker = idx as Character.CharacterType
+				replica.speaker = idx
 		"name":
 			replica.custom_name = value
 		"emotion":
-			var idx := _find_enum(Replica.Emotion, value)
+			var idx := GVisualNovel.get_emotion_id(value)
 			if idx == -1:
-				_warn(line_no, "эмоция «%s» не найдена в Replica.Emotion" % value)
+				_warn(line_no, "эмоция «%s» не найдена в каталоге CharacterEmotions" % value)
 			else:
-				replica.emotion = idx as Replica.Emotion
+				replica.emotion = idx
 		"background":
 			replica.background = value
 		"sound":

@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="CharacterTypes" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_type_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_types.gd" id="2_catalog"]
+
+[sub_resource type="Resource" id="Entry_0"]
+script = ExtResource("1_entry")
+id = 0
+key = &"Нет"
+name_ru = ""
+name_en = ""
+color = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="Entry_1"]
+script = ExtResource("1_entry")
+id = 1
+key = &"Подросток"
+name_ru = "Подросток"
+name_en = "Teenager"
+color = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="Entry_2"]
+script = ExtResource("1_entry")
+id = 2
+key = &"Асмунд"
+name_ru = "Асмунд"
+name_en = "Asmund"
+color = Color(0.862745, 0.078431, 0.235294, 1)
+
+[sub_resource type="Resource" id="Entry_3"]
+script = ExtResource("1_entry")
+id = 3
+key = &"Сосед"
+name_ru = "Сосед"
+name_en = "Neighbor"
+color = Color(0.827451, 0.827451, 0.827451, 1)
+
+[sub_resource type="Resource" id="Entry_4"]
+script = ExtResource("1_entry")
+id = 4
+key = &"ДругойСосед"
+name_ru = "Другой сосед"
+name_en = "Another neighbor"
+color = Color(0.827451, 0.827451, 0.827451, 1)
+
+[sub_resource type="Resource" id="Entry_5"]
+script = ExtResource("1_entry")
+id = 5
+key = &"Отец"
+name_ru = "Отец"
+name_en = "Father"
+color = Color(0.870588, 0.721569, 0.529412, 1)
+
+[sub_resource type="Resource" id="Entry_6"]
+script = ExtResource("1_entry")
+id = 6
+key = &"Девушка"
+name_ru = "Девушка"
+name_en = "Girl"
+color = Color(1, 0.752941, 0.796078, 1)
+
+[sub_resource type="Resource" id="Entry_7"]
+script = ExtResource("1_entry")
+id = 7
+key = &"Мать"
+name_ru = "Мать"
+name_en = "Mother"
+color = Color(1, 0.854902, 0.72549, 1)
+
+[sub_resource type="Resource" id="Entry_8"]
+script = ExtResource("1_entry")
+id = 8
+key = &"ЖительДеревни"
+name_ru = "Житель деревни"
+name_en = "Villager"
+color = Color(0.827451, 0.827451, 0.827451, 1)
+
+[sub_resource type="Resource" id="Entry_9"]
+script = ExtResource("1_entry")
+id = 9
+key = &"ЖительницаДеревни"
+name_ru = "Жительница деревни"
+name_en = "Villager"
+color = Color(0.827451, 0.827451, 0.827451, 1)
+
+[sub_resource type="Resource" id="Entry_10"]
+script = ExtResource("1_entry")
+id = 10
+key = &"Старейшина"
+name_ru = "Старейшина"
+name_en = "Elder"
+color = Color(0.823529, 0.705882, 0.54902, 1)
+
+[sub_resource type="Resource" id="Entry_11"]
+script = ExtResource("1_entry")
+id = 11
+key = &"КастомныйПерсонаж"
+name_ru = "Кастомный персонаж"
+name_en = "Custom character"
+color = Color(1, 1, 1, 1)
+
+[resource]
+script = ExtResource("2_catalog")
+entries = Array[ExtResource("1_entry")]([SubResource("Entry_0"), SubResource("Entry_1"), SubResource("Entry_2"), SubResource("Entry_3"), SubResource("Entry_4"), SubResource("Entry_5"), SubResource("Entry_6"), SubResource("Entry_7"), SubResource("Entry_8"), SubResource("Entry_9"), SubResource("Entry_10"), SubResource("Entry_11")])

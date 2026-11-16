@@ -5,8 +5,8 @@ enum Emotion {Без_эмоции, В_мыслях, Радостно, Счаст
 enum Language {Ru, En}
 enum Interpolation {parent, instantaneous, linear}
 
-@export var speaker: Character.CharacterType
-@export var emotion: Replica.Emotion
+@export var speaker: int
+@export var emotion: int
 @export var replica: String
 @export var sound: String
 @export var background: String
@@ -52,13 +52,13 @@ func get_behind() -> String:
 		if GVisualNovel.has_character_name(speaker):
 			behind = GVisualNovel.get_character_name(speaker)
 		else:
-			behind = Character.CharacterType.keys()[speaker]
+			behind = GVisualNovel.get_character_type_key(speaker)
 	
 	var emotion_buffer: String = '('
 	if GVisualNovel.has_emotion_name(emotion):
 		emotion_buffer += GVisualNovel.get_emotion_name(emotion)
 	else:
-		emotion_buffer += str(Replica.Emotion.keys()[emotion])
+		emotion_buffer += GVisualNovel.get_emotion_key(emotion)
 	
 	# Если эмоции нет, то очищаем буфер эмоции, иначе закрываем скобку
 	if len(emotion_buffer) < 2:
@@ -69,14 +69,15 @@ func get_behind() -> String:
 	return behind + emotion_buffer
 
 
-func get_speaker() -> Character.CharacterType:
+func get_speaker() -> int:
 	"""Вернёт Enum."""
 	if custom_name:
 		return Character.CharacterType.КастомныйПерсонаж
 	return speaker
 
 
-func get_emotion() -> Replica.Emotion:
+## Возвращает идентификатор эмоции реплики
+func get_emotion() -> int:
 	return emotion
 
 

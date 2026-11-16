@@ -1,0 +1,296 @@
+[gd_resource type="Resource" script_class="CharacterEmotions" load_steps=39 format=3]
+
+[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_emotion_entry.gd" id="1_entry"]
+[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_emotions.gd" id="2_catalog"]
+
+[sub_resource type="Resource" id="Entry_0"]
+script = ExtResource("1_entry")
+id = 0
+key = &"Без_эмоции"
+name_ru = ""
+name_en = ""
+texture_key = &"default"
+
+[sub_resource type="Resource" id="Entry_1"]
+script = ExtResource("1_entry")
+id = 1
+key = &"В_мыслях"
+name_ru = "В мыслях"
+name_en = "Thoughtful"
+texture_key = &"lower_eyes"
+
+[sub_resource type="Resource" id="Entry_2"]
+script = ExtResource("1_entry")
+id = 2
+key = &"Радостно"
+name_ru = "Радостно"
+name_en = "Joyful"
+texture_key = &"happy"
+
+[sub_resource type="Resource" id="Entry_3"]
+script = ExtResource("1_entry")
+id = 3
+key = &"Счастливо"
+name_ru = "Счастливо"
+name_en = "Happy"
+texture_key = &"happy"
+
+[sub_resource type="Resource" id="Entry_4"]
+script = ExtResource("1_entry")
+id = 4
+key = &"Смеясь"
+name_ru = "Смеясь"
+name_en = "Laughing"
+texture_key = &"happy2"
+
+[sub_resource type="Resource" id="Entry_5"]
+script = ExtResource("1_entry")
+id = 5
+key = &"Веселясь"
+name_ru = "Веселясь"
+name_en = "Having fun"
+texture_key = &"happy2"
+
+[sub_resource type="Resource" id="Entry_6"]
+script = ExtResource("1_entry")
+id = 6
+key = &"Хихикая"
+name_ru = "Хихикая"
+name_en = "Giggling"
+texture_key = &"happy2"
+
+[sub_resource type="Resource" id="Entry_7"]
+script = ExtResource("1_entry")
+id = 7
+key = &"Грустно"
+name_ru = "Грустно"
+name_en = "Sad"
+texture_key = &"lower_eyes"
+
+[sub_resource type="Resource" id="Entry_8"]
+script = ExtResource("1_entry")
+id = 8
+key = &"Печально"
+name_ru = "Печально"
+name_en = "Sorrowful"
+texture_key = &"lower_eyes"
+
+[sub_resource type="Resource" id="Entry_9"]
+script = ExtResource("1_entry")
+id = 9
+key = &"Огорчённо"
+name_ru = "Огорчённо"
+name_en = "Disappointed"
+texture_key = &"lower_eyes"
+
+[sub_resource type="Resource" id="Entry_10"]
+script = ExtResource("1_entry")
+id = 10
+key = &"Недовольно"
+name_ru = "Недовольно"
+name_en = "Displeased"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_11"]
+script = ExtResource("1_entry")
+id = 11
+key = &"Шокированно"
+name_ru = "Шокированно"
+name_en = "Shocked"
+texture_key = &"shocked"
+
+[sub_resource type="Resource" id="Entry_12"]
+script = ExtResource("1_entry")
+id = 12
+key = &"Удивлённо"
+name_ru = "Удивлённо"
+name_en = "Surprised"
+texture_key = &"shocked"
+
+[sub_resource type="Resource" id="Entry_13"]
+script = ExtResource("1_entry")
+id = 13
+key = &"Пугливо"
+name_ru = "Пугливо"
+name_en = "Fearfully"
+texture_key = &"screaming"
+
+[sub_resource type="Resource" id="Entry_14"]
+script = ExtResource("1_entry")
+id = 14
+key = &"Испуганно"
+name_ru = "Испуганно"
+name_en = "Frightened"
+texture_key = &"screaming"
+
+[sub_resource type="Resource" id="Entry_15"]
+script = ExtResource("1_entry")
+id = 15
+key = &"Боясь"
+name_ru = "Боясь"
+name_en = "Afraid"
+texture_key = &"screaming"
+
+[sub_resource type="Resource" id="Entry_16"]
+script = ExtResource("1_entry")
+id = 16
+key = &"Истеря"
+name_ru = "В истерике"
+name_en = "Hysterical"
+texture_key = &"crying"
+
+[sub_resource type="Resource" id="Entry_17"]
+script = ExtResource("1_entry")
+id = 17
+key = &"Плача"
+name_ru = "Плача"
+name_en = "Crying"
+texture_key = &"crying"
+
+[sub_resource type="Resource" id="Entry_18"]
+script = ExtResource("1_entry")
+id = 18
+key = &"Злясь"
+name_ru = "Злясь"
+name_en = "Angry"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_19"]
+script = ExtResource("1_entry")
+id = 19
+key = &"Злостно"
+name_ru = "Злобно"
+name_en = "Malicious"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_20"]
+script = ExtResource("1_entry")
+id = 20
+key = &"Яростно"
+name_ru = "Яростно"
+name_en = "Furious"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_21"]
+script = ExtResource("1_entry")
+id = 21
+key = &"Безумно"
+name_ru = "Безумно"
+name_en = "Mad"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_22"]
+script = ExtResource("1_entry")
+id = 22
+key = &"Неистово"
+name_ru = "Неистово"
+name_en = "Frenzied"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_23"]
+script = ExtResource("1_entry")
+id = 23
+key = &"Подозрительно"
+name_ru = "Подозрительно"
+name_en = "Suspicious"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_24"]
+script = ExtResource("1_entry")
+id = 24
+key = &"Раздосадованно"
+name_ru = "Раздосадованно"
+name_en = "Annoyed"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_25"]
+script = ExtResource("1_entry")
+id = 25
+key = &"Задумчиво"
+name_ru = "Задумчиво"
+name_en = "Pensive"
+texture_key = &"lower_eyes"
+
+[sub_resource type="Resource" id="Entry_26"]
+script = ExtResource("1_entry")
+id = 26
+key = &"Насмешливо"
+name_ru = "Насмешливо"
+name_en = "Mocking"
+texture_key = &"happy2"
+
+[sub_resource type="Resource" id="Entry_27"]
+script = ExtResource("1_entry")
+id = 27
+key = &"Издеваясь"
+name_ru = "Издеваясь"
+name_en = "Taunting"
+texture_key = &"evil"
+
+[sub_resource type="Resource" id="Entry_28"]
+script = ExtResource("1_entry")
+id = 28
+key = &"Не_доверчиво"
+name_ru = "Недоверчиво"
+name_en = "Distrustful"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_29"]
+script = ExtResource("1_entry")
+id = 29
+key = &"Прищурившись"
+name_ru = "Прищурившись"
+name_en = "Squinting"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_30"]
+script = ExtResource("1_entry")
+id = 30
+key = &"Присмотревшись"
+name_ru = "Присмотревшись"
+name_en = "Looking closely"
+texture_key = &"avert_eyes"
+
+[sub_resource type="Resource" id="Entry_31"]
+script = ExtResource("1_entry")
+id = 31
+key = &"Страсно"
+name_ru = "Страстно"
+name_en = "Passionately"
+texture_key = &"happy"
+
+[sub_resource type="Resource" id="Entry_32"]
+script = ExtResource("1_entry")
+id = 32
+key = &"Возбуждённо"
+name_ru = "Возбуждённо"
+name_en = "Excited"
+texture_key = &"happy"
+
+[sub_resource type="Resource" id="Entry_33"]
+script = ExtResource("1_entry")
+id = 33
+key = &"Влюблённо"
+name_ru = "Влюблённо"
+name_en = "Lovingly"
+texture_key = &"happy"
+
+[sub_resource type="Resource" id="Entry_34"]
+script = ExtResource("1_entry")
+id = 34
+key = &"Стыдливо"
+name_ru = "Стыдливо"
+name_en = "Shyly"
+texture_key = &"embarrassed"
+
+[sub_resource type="Resource" id="Entry_35"]
+script = ExtResource("1_entry")
+id = 35
+key = &"Смущённо"
+name_ru = "Смущённо"
+name_en = "Embarrassed"
+texture_key = &"embarrassed"
+
+[resource]
+script = ExtResource("2_catalog")
+entries = Array[ExtResource("1_entry")]([SubResource("Entry_0"), SubResource("Entry_1"), SubResource("Entry_2"), SubResource("Entry_3"), SubResource("Entry_4"), SubResource("Entry_5"), SubResource("Entry_6"), SubResource("Entry_7"), SubResource("Entry_8"), SubResource("Entry_9"), SubResource("Entry_10"), SubResource("Entry_11"), SubResource("Entry_12"), SubResource("Entry_13"), SubResource("Entry_14"), SubResource("Entry_15"), SubResource("Entry_16"), SubResource("Entry_17"), SubResource("Entry_18"), SubResource("Entry_19"), SubResource("Entry_20"), SubResource("Entry_21"), SubResource("Entry_22"), SubResource("Entry_23"), SubResource("Entry_24"), SubResource("Entry_25"), SubResource("Entry_26"), SubResource("Entry_27"), SubResource("Entry_28"), SubResource("Entry_29"), SubResource("Entry_30"), SubResource("Entry_31"), SubResource("Entry_32"), SubResource("Entry_33"), SubResource("Entry_34"), SubResource("Entry_35")])

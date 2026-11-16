@@ -21,13 +21,7 @@ func _ready() -> void:
 
 
 func _update_language_protection() -> void:
-	match _data.current_language:
-		Replica.Language.En:
-			_data.emotion_protection = _data.emotion_en_protection
-			_data.name_protection = _data.name_en_protection
-		Replica.Language.Ru:
-			_data.emotion_protection = _data.emotion_ru_protection
-			_data.name_protection = _data.name_ru_protection
+	_data.rebuild_catalogs()
 
 
 func set_language(language: Replica.Language) -> void:
@@ -168,3 +162,35 @@ func has_character_color(character: int) -> bool:
 ## Возвращает внутреннее имя эмоции персонажа.
 func get_character_emotion(emotion: int) -> String:
 	return _data.character_emotion_protection.get(emotion, "default")
+
+
+## Возвращает ключ типа персонажа по его идентификатору
+func get_character_type_key(character: int) -> String:
+	var entry: CharacterTypeEntry = _data.character_types.get_entry(character)
+	return String(entry.key) if entry else str(character)
+
+
+## Возвращает ключ эмоции по её идентификатору
+func get_emotion_key(emotion: int) -> String:
+	var entry: CharacterEmotionEntry = _data.emotions.get_entry(emotion)
+	return String(entry.key) if entry else str(emotion)
+
+
+## Находит идентификатор типа персонажа по ключу или локализованному названию
+func get_character_type_id(value: String) -> int:
+	for entry: CharacterTypeEntry in _data.character_types.entries:
+		if not entry:
+			continue
+		if String(entry.key).to_lower() == value.to_lower() or entry.name_ru.to_lower() == value.to_lower() or entry.name_en.to_lower() == value.to_lower():
+			return entry.id
+	return -1
+
+
+## Находит идентификатор эмоции по ключу или локализованному названию
+func get_emotion_id(value: String) -> int:
+	for entry: CharacterEmotionEntry in _data.emotions.entries:
+		if not entry:
+			continue
+		if String(entry.key).to_lower() == value.to_lower() or entry.name_ru.to_lower() == value.to_lower() or entry.name_en.to_lower() == value.to_lower():
+			return entry.id
+	return -1

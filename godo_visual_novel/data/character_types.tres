@@ -1,15 +1,11 @@
-[gd_resource type="Resource" script_class="CharacterTypes" load_steps=15 format=3]
+[gd_resource type="Resource" script_class="CharacterTypes" format=3 uid="uid://bi2laybn0b7by"]
 
-[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_type_entry.gd" id="1_entry"]
-[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_types.gd" id="2_catalog"]
+[ext_resource type="Script" uid="uid://dvfsnpymqwosr" path="res://godo_visual_novel/core/classes/character_type_entry.gd" id="1_entry"]
+[ext_resource type="Script" uid="uid://6myc4uda0cj5" path="res://godo_visual_novel/core/classes/character_types.gd" id="2_catalog"]
 
 [sub_resource type="Resource" id="Entry_0"]
 script = ExtResource("1_entry")
-id = 0
 key = &"Нет"
-name_ru = ""
-name_en = ""
-color = Color(1, 1, 1, 1)
 
 [sub_resource type="Resource" id="Entry_1"]
 script = ExtResource("1_entry")
@@ -17,7 +13,6 @@ id = 1
 key = &"Подросток"
 name_ru = "Подросток"
 name_en = "Teenager"
-color = Color(1, 1, 1, 1)
 
 [sub_resource type="Resource" id="Entry_2"]
 script = ExtResource("1_entry")
@@ -97,7 +92,6 @@ id = 11
 key = &"КастомныйПерсонаж"
 name_ru = "Кастомный персонаж"
 name_en = "Custom character"
-color = Color(1, 1, 1, 1)
 
 [resource]
 script = ExtResource("2_catalog")

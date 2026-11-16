@@ -1,15 +1,11 @@
-[gd_resource type="Resource" script_class="CharacterEmotions" load_steps=39 format=3]
+[gd_resource type="Resource" script_class="CharacterEmotions" format=3 uid="uid://cqyx63y4aqas2"]
 
-[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_emotion_entry.gd" id="1_entry"]
-[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_emotions.gd" id="2_catalog"]
+[ext_resource type="Script" uid="uid://dd0ofpn5mdvve" path="res://godo_visual_novel/core/classes/character_emotion_entry.gd" id="1_entry"]
+[ext_resource type="Script" uid="uid://5cgd68d73wie" path="res://godo_visual_novel/core/classes/character_emotions.gd" id="2_catalog"]
 
 [sub_resource type="Resource" id="Entry_0"]
 script = ExtResource("1_entry")
-id = 0
 key = &"Без_эмоции"
-name_ru = ""
-name_en = ""
-texture_key = &"default"
 
 [sub_resource type="Resource" id="Entry_1"]
 script = ExtResource("1_entry")

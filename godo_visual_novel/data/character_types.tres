@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CharacterTypes" load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_type_entry.gd" id="1_entry"]
-[ext_resource type="Script" path="res://godo_visual_novel/core/classes/charactertypes.gd" id="2_catalog"]
+[ext_resource type="Script" path="res://godo_visual_novel/core/classes/character_types.gd" id="2_catalog"]
 
 [sub_resource type="Resource" id="Entry_0"]
 script = ExtResource("1_entry")

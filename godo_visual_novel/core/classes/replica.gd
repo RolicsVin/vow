@@ -52,7 +52,7 @@ func get_behind() -> String:
 		if GVisualNovel.has_character_name(speaker):
 			behind = GVisualNovel.get_character_name(speaker)
 		else:
-			behind = Character.CharacterType.keys()[speaker]
+			behind = GVisualNovel.get_character_type_key(speaker)
 	
 	var emotion_buffer: String = '('
 	if GVisualNovel.has_emotion_name(emotion):
@@ -76,7 +76,7 @@ func get_speaker() -> int:
 	return speaker
 
 
-func get_emotion() -> Replica.Emotion:
+func get_emotion() -> int:
 	return emotion
 
 

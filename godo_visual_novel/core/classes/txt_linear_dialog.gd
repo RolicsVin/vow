@@ -13,6 +13,9 @@ class_name TxtLinearDialog extends LinearDialog
 ##   emotion Радостно
 ##   action;start;sound MatveySpeak
 ##
+##   Иван: Привет, Матвей!  Имя и реплика в первой строке
+##   :Привет!                Реплика без персонажа
+##
 ## Текст:
 ##   Блок без текста        можно начать сразу со свойства (например, только смена фона)
 ##   \n в тексте            перенос строки внутри реплики
@@ -121,6 +124,7 @@ func load_from_text(source: String, source_name: String = "") -> void:
 		_error(0, "в диалоге нет ни одной реплики")
 
 
+## Создаёт реплику из блока строк.
 func _build_replica(body: Array) -> Replica:
 	var replica := Replica.new()
 	var first: String = body[0][1]
@@ -130,15 +134,32 @@ func _build_replica(body: Array) -> Replica:
 	)
 	var property_start: int = 0
 
-	# Если первая строка — свойство, это реплика без текста.
-	# Символ "~" для таких блоков больше не требуется.
+	# Если первая строка — свойство, это реплика без текста
+	# Символ "~" для таких блоков больше не требуется
 	if not first_is_property:
-		replica.replica = first.replace("\\n", "\n")
+		_parse_first_replica_line(replica, body[0][0], first)
 		property_start = 1
 
 	for i in range(property_start, body.size()):
 		_apply_replica_line(replica, body[i][0], body[i][1])
 	return replica
+
+
+## Разбирает первую строку: "Имя: текст", ":текст" или обычный текст.
+func _parse_first_replica_line(replica: Replica, line_no: int, line: String) -> void:
+	var separator_index: int = line.find(":")
+	if separator_index == -1:
+		replica.replica = line.replace("\\n", "\n")
+		return
+
+	var speaker_name: String = line.substr(0, separator_index).strip_edges()
+	var replica_text: String = line.substr(separator_index + 1).strip_edges()
+
+	# Пустое имя означает реплику без персонажа
+	if not speaker_name.is_empty():
+		_apply_replica_line(replica, line_no, "speaker " + speaker_name)
+
+	replica.replica = replica_text.replace("\\n", "\n")
 
 
 func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:

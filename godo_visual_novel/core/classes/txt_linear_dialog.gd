@@ -176,7 +176,7 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 		"speaker":
 			var idx := GVisualNovel.get_character_type_id(value)
 			if idx == -1:
-				_warn(line_no, "персонаж «%s» не найден в каталоге CharacterTypes, использую как custom_name" % value)
+				var warning: String = (\n					"персонаж «%s» не найден в каталоге CharacterTypes, "\n					+ "использую как custom_name"\n				) % value\n				_warn(line_no, warning)
 				replica.custom_name = value
 			else:
 				replica.speaker = idx

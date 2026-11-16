@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxpuf3l54n6s4"
-path="res://.godot/imported/mountain.png-2a14e266aa7970ab9e1fe2e03064d7b3.ctex"
+uid="uid://b247ixvs53npa"
+path="res://.godot/imported/bg_chapter1_village_mourners.png-cfc928f21277f1ef1c4981d2f80419d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/chapter_1/mountain.png"
-dest_files=["res://.godot/imported/mountain.png-2a14e266aa7970ab9e1fe2e03064d7b3.ctex"]
+source_file="res://scenes/chapter_1/bg_chapter1_village_mourners.png"
+dest_files=["res://.godot/imported/bg_chapter1_village_mourners.png-cfc928f21277f1ef1c4981d2f80419d4.ctex"]
 
 [params]
 

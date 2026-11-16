@@ -6,6 +6,8 @@ const save_path: String = 'user://'
 
 var _buffer: Dictionary = {}
 
+var audio_server: AudioServerManager = AudioServerManager.new()
+
 # Инструменты
 var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
 var window_tools: WindowTools = ToolFactory.make_tool(self, "res://core/tools/window_tools.gd", "WindowTools")
@@ -41,6 +43,7 @@ func save_data() -> String:
 		'godo_combat': await GCombat.get_save(),
 		'godo_mini_game': await GminiGame.get_save(),
 		'godo_visual_novel': await GVisualNovel.get_save(),
+		'audio_server': audio_server.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),
 		'data': time_tools.get_date(),
@@ -130,6 +133,8 @@ func load_save(_save: Dictionary) -> void:
 	if _save.has('godo_mini_game'):
 		await GminiGame.load_save(_save['godo_mini_game'])
 	await GVisualNovel.load_save(_save['godo_visual_novel'])
+	if _save.has('audio_server') and _save['audio_server'] is Dictionary:
+		audio_server.load_save(_save['audio_server'])
 	Core.scene_tools.change_scene(_save['scene'])
 	print('Сохранение загружено.')
 	

@@ -20,6 +20,8 @@
 [ext_resource type="AudioStream" uid="uid://drfbvtfvs0g8u" path="res://assets/ui/new_quest.ogg" id="18_c7gmr"]
 [ext_resource type="PackedScene" uid="uid://cdmvmkaab0an" path="res://scenes/settings_menu.tscn" id="18_fsfa6"]
 [ext_resource type="Script" uid="uid://xv70bc857g43" path="res://godo_visual_novel/core/classes/chat_click.gd" id="18_r2e7w"]
+[ext_resource type="Shader" uid="uid://k3iktyqek5bv" path="res://assets/vfx/rain/rain.gdshader" id="21_fsfa6"]
+[ext_resource type="Script" uid="uid://ciso5qxxqd11r" path="res://core/classes/gameplay/rain_overlay.gd" id="22_t6gja"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dv0eb"]
 shader = ExtResource("8_1id6j")
@@ -507,6 +509,31 @@ shader_parameter/angle = 0.0
 shader_parameter/samples = 20
 shader_parameter/alpha = 0.0
 shader_parameter/use_alpha_corrector = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ev5b2"]
+shader = ExtResource("21_fsfa6")
+shader_parameter/rain_color = Color(0.75, 0.82, 1, 0.7)
+shader_parameter/intensity = 1.0
+shader_parameter/density = 0.6
+shader_parameter/layers = 4
+shader_parameter/drop_length = 0.4
+shader_parameter/drop_thickness = 1.5
+shader_parameter/tail_falloff = 1.6
+shader_parameter/brightness_variation = 0.5
+shader_parameter/fall_speed = 1400.0
+shader_parameter/speed_variation = 0.25
+shader_parameter/angle_degrees = 12.0
+shader_parameter/column_spacing = 22.0
+shader_parameter/vertical_period = 220.0
+shader_parameter/far_scale = 0.45
+shader_parameter/far_opacity = 0.45
+shader_parameter/random_seed = 0.0
+shader_parameter/overlay_color = Color(0.05, 0.08, 0.14, 0.2)
+shader_parameter/overlay_amount = 1.0
+shader_parameter/fog_color = Color(0.7, 0.78, 0.9, 0.25)
+shader_parameter/fog_amount = 0.3
+shader_parameter/fog_scale = 300.0
+shader_parameter/fog_speed = 15.0
 
 [node name="Scene" type="Control" unique_id=733753458]
 layout_mode = 3
@@ -1108,6 +1135,26 @@ visible = false
 layout_mode = 1
 post_process = NodePath("../PostProcessing")
 
+[node name="Effects" type="Control" parent="." unique_id=1951616049]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Rain" type="ColorRect" parent="Effects" unique_id=936819688]
+visible = false
+material = SubResource("ShaderMaterial_ev5b2")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("22_t6gja")
+metadata/_custom_type_script = "uid://ciso5qxxqd11r"
+
 [node name="VisibleScene" parent="." unique_id=134337691 instance=ExtResource("8_7182s")]
 visible = false
 layout_mode = 1
@@ -1116,14 +1163,6 @@ layout_mode = 1
 visible = false
 layout_mode = 1
 script = null
-
-[node name="Effects" type="Control" parent="." unique_id=1951616049]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Node" type="Node" parent="." unique_id=2102971820]
 

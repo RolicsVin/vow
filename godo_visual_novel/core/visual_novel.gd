@@ -181,9 +181,11 @@ func get_character_type_id(value: String) -> int:
 	for entry: CharacterTypeEntry in _data.character_types.entries:
 		if not entry:
 			continue
-		if String(entry.key).to_lower() == value.to_lower() \
-			or entry.name_ru.to_lower() == value.to_lower() \
-			or entry.name_en.to_lower() == value.to_lower():
+		if (
+			String(entry.key).to_lower() == value.to_lower()
+			or entry.name_ru.to_lower() == value.to_lower()
+			or entry.name_en.to_lower() == value.to_lower()
+		):
 			return entry.id
 	return -1
 

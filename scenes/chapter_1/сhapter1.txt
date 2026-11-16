@@ -6,17 +6,17 @@ dialog;end linear
 dialog;interpolation linear
 
 // Утро. Дровяной навес у дома.
+Было прохладная погода, переодически моросил дождик.
+
+Поддувал лёгкий ветерок. Несмотря на холод было свежо - приятно.
+
 Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 background BG_Chapter1_Woodcutter_Shed
 action;start;music Music/Chapter1_ColdMorning
 sound SFX_Axe_Wood_Impact
-speaker Подросток
-emotion Задумчиво
 
 Вот и последнее.
 sound SFX_Axe_Wood_Split
-speaker Подросток
-emotion Радостно
 
 Ещё немного — и сарай будет полон.
 background BG_Chapter1_Shed_Logs
@@ -36,8 +36,7 @@ emotion Без_эмоции
 speaker Подросток
 background BG_Chapter1_cutting_chicken
 
-Не хочу на это смотреть.
-speaker Подросток
+:Не хочу на это смотреть.
 
 Я зашёл в дом.
 background BG_Chapter1_Fireplace

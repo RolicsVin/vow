@@ -1117,6 +1117,14 @@ visible = false
 layout_mode = 1
 script = null
 
+[node name="Effects" type="Control" parent="." unique_id=1951616049]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Node" type="Node" parent="." unique_id=2102971820]
 
 [connection signal="pressed" from="ChatRoot/Control/HBoxContainer/History" to="History" method="on"]

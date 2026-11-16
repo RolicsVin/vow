@@ -3,9 +3,9 @@
 extends Node
 
 ## Редактируемый каталог типов персонажей
-@export var character_types: CharacterTypes = preload('res://godo_visual_novel/data/character_types.tres')
+@export var character_types: CharacterTypes = preload(\n\t'res://godo_visual_novel/data/character_types.tres'\n)
 ## Редактируемый каталог эмоций
-@export var emotions: CharacterEmotions = preload('res://godo_visual_novel/data/character_emotions.tres')
+@export var emotions: CharacterEmotions = preload(\n\t'res://godo_visual_novel/data/character_emotions.tres'\n)
 
 ## Цвета имён персонажей в диалоговом окне
 var characters_color: Dictionary = {}

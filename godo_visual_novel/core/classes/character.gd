@@ -17,7 +17,7 @@ enum CharacterType {
 	КастомныйПерсонаж
 }
 
-@export var character: Character.CharacterType = Character.CharacterType.Нет
+@export var character: int = Character.CharacterType.Нет
 @export var emotion_player: AnimationPlayer
 
 @export_group('emotions')
@@ -67,5 +67,5 @@ func set_texture_emotion(_emotion: Texture2D) -> void:
 
 
 ## Возвращает тип персонажа, назначенный этому узлу
-func get_character() -> Character.CharacterType:
+func get_character() -> int:
 	return character

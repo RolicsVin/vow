@@ -193,6 +193,6 @@ func get_emotion_id(value: String) -> int:
 	for entry: CharacterEmotionEntry in _data.emotions.entries:
 		if not entry:
 			continue
-		if String(entry.key).to_lower() == value.to_lower() or entry.name_ru.to_lower() == value.to_lower() or entry.name_en.to_lower() == value.to_lower():
+		if (\n		\tString(entry.key).to_lower() == value.to_lower()\n		\tor entry.name_ru.to_lower() == value.to_lower()\n		\tor entry.name_en.to_lower() == value.to_lower()\n	\t):
 			return entry.id
 	return -1

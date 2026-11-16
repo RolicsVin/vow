@@ -23,9 +23,9 @@ class_name TxtLinearDialog extends LinearDialog
 ##   lang;En Hello!         перевод реплики на язык из Replica.Language
 ##
 ## Свойства реплики:
-##   speaker <Имя>          имя из Character.CharacterType; неизвестное имя станет custom_name
+##   speaker <Имя>          ключ из каталога CharacterTypes; неизвестное имя станет custom_name
 ##   name <Имя>             custom_name (имя над репликой), без привязки к персонажу
-##   emotion <Эмоция>       имя из Replica.Emotion (пробел можно писать вместо "_")
+##   emotion <Эмоция>       ключ из каталога CharacterEmotions (пробел можно писать вместо "_")
 ##   background <Имя>       replica.background
 ##   sound <Имя>            replica.sound
 ##   color <цвет>           custom_color (имя цвета или #RRGGBB)

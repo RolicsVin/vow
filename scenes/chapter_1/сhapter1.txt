@@ -36,30 +36,20 @@ emotion Без_эмоции
 speaker Подросток
 background BG_Chapter1_cutting_chicken
 
-:Не хочу на это смотреть.
+Не хочу на это смотреть.
 
 Я зашёл в дом.
 background BG_Chapter1_Fireplace
 sound SFX_Fireplace_Crackling
-speaker Подросток
 
 Хоть немного согреюсь.
-speaker Подросток
-
-Хоть немного согреюсь.
-background BG_Chapter1_Fireplace
-sound SFX_Fireplace_Crackling
-speaker Подросток
-emotion Задумчиво
 
 Руки совсем окоченели. Погода в последнее время будто нарочно испытывает нас.
-speaker Подросток
 
 Баустхен... Самая высокая гора во всех пяти мирах.
 background BG_Chapter1_Window_View
 sound SFX_Rain_Light
 action;start;music Music/Chapter1_Mountain_Storm
-speaker Подросток
 
 Говорят там обитель богов...
 speaker Подросток
@@ -69,27 +59,22 @@ speaker Подросток
 
 // Асмунд прибывает.
 Над вершиной опять собираются тучи. Молнии... И ветер поднялся.
-speaker Подросток
 
 Наверное Асмунд гневается...
-speaker Подросток
 
 Вдруг на дорожку выбежал оленёнок
 background BG_Chapter1_Road_Deer
 sound SFX_Deer_Steps
-speaker Подросток
 
 Где же твоя мать?
-speaker Подросток
+
+...
 
 Странно. Даже ветер будто стал тяжелее...
-speaker Подросток
-emotion Задумчиво
 
 Вдалеке мне привиелось. что-то летящее в воздухе.
 background BG_Chapter1_Distant_Mountain
 sound SFX_Wind_Rising
-speaker Подросток
 
 Что это там? Птица?
 speaker Подросток
@@ -105,60 +90,43 @@ action;start;music Music/Chapter1_Asmund_Theme
 speaker Подросток
 
 На дорогу приземлился мужчина... Я сразу узнал его...
-speaker Подросток
 reset_text_buffer false
 
-Бог первого поколения... Асмунд.
-speaker Подросток
-emotion Испуганно
+Бог первого поколения... Асмунд...
 
 Опять он. Снова пришёл в нашу деревню.
-speaker Подросток
-emotion Злостно
 
 Оленёнок убежал... Из леса выбежала запоздавшая мать и ринулась за ним.
-speaker Подросток
-emotion Испуганно
+background BG_Chapter1_Road_Deer
 
 Это было не впервой для меня. Я вспомнил наказ отца:
-speaker Подросток
-emotion Задумчиво
 
 Спрятать ценности под тайник
-speaker Подросток
 
-Топор оставлю при себе. Остальное — сюда. Надеюсь, он не войдёт в дом.
-background BG_Chapter1_House_Hiding_Valuables
+Топор оставлю при себе. Остальное — под печь. Надеюсь, он не войдёт в дом.
 sound SFX_Hiding_Objects
-speaker Подросток
-emotion Задумчиво
 
 // Асмунд буянит.
 Богу стало скучно и он стал ломать соседский забор.
-speaker Подросток
+background BG_Chapter1_Village_Fence
 
-Тот ращлетался в щепки.
-speaker Подросток
+Тот разлетался в щепки.
 
 Эй! Выходите! Где хозяин?! - крикнул пьяный бог.
-background BG_Chapter1_Village_Fence
 sound SFX_Fence_Breaking
 action;start;music Music/Chapter1_Village_Attack
 speaker Асмунд
 emotion Злясь
 
 Из дома вышел сосед, он стал стремительно приближатся к Асмунду.
-speaker Подросток
 
 Кто ты такой?! Убирайся отсюда, пока не получил!
 speaker Сосед
 emotion Злясь
 
 Сосед резко збавил темп шага, а его лицо исказилось от страха.
-speaker Подросток
 
 Видимо он, всё же, признал бога.
-speaker Подросток
 
 Постой... что... но мы ведь уже приносили тебе подношения... Зачем ты снова пришёл?
 speaker Сосед
@@ -167,10 +135,11 @@ emotion Шокированно
 Дело не в подношениях.
 speaker Асмунд
 
-Он ударил его... Просто так.
+Тут он ударил его... Просто так.
 sound SFX_Punch_Heavy
-speaker Подросток
-emotion Испуганно
+background BG_Chapter1_Village_Fight
+
+Тут поблизости показался ещё один сосед.
 
 Хватит! Оставь его в покое!
 speaker ДругойСосед
@@ -199,11 +168,11 @@ sound SFX_Footsteps_Mud
 speaker Подросток
 emotion Удивлённо
 
-Девушка. Возвращается с базара... Мешок, должно быть, полон картошки.
+Вдруг вдалеке показалась девушка.
 background BG_Chapter1_Girl_Returning
 sound SFX_Bag_Shifting
-speaker Подросток
-emotion Задумчиво
+
+Она, кажется, шла с базара и тащила мешок картошки.
 
 А ну-ка, красавица! Куда спешишь? Подойди поближе!
 speaker Асмунд
@@ -214,22 +183,19 @@ speaker Девушка
 emotion Испуганно
 
 Ну что же ты творишь, окаянный?!
+background BG_Chapter1_Girl_And_Father
 speaker Отец
 emotion Злостно
 
 Отец?..
 background BG_Chapter1_Father_Grabs_Shovel
 sound SFX_Shovel_Grab
-speaker Подросток
-emotion Шокированно
 
 Отойди от неё!
 speaker Отец
-emotion Яростно
 
-Мой отец замахнулся и ударил ублюдка лопатой по спине.
+Он замахнулся и ударил ублюдка лопатой по спине.
 sound SFX_Shovel_Strike
-speaker Подросток
 
 Что?!
 speaker Асмунд

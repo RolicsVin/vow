@@ -47,9 +47,11 @@ enabled=PackedStringArray("res://addons/path_notes/plugin.cfg", "res://addons/py
 
 folder_colors={
 "res://assets/atmosphere/": "green",
+"res://assets/backgrounds/": "yellow",
 "res://assets/music/": "purple",
 "res://assets/sounds/": "orange",
-"res://core/": "red"
+"res://core/": "red",
+"res://scenes/chapter_1/": "blue"
 }
 
 [input]

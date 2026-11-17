@@ -4,9 +4,11 @@ extends Node
 
 const save_path: String = 'user://'
 
-var _buffer: Dictionary = {}
+var _buffer: Dictionary = {} ## Общий буффер дял всей игры
 
 var audio_server: AudioServerManager = AudioServerManager.new()
+
+var protector: RuntimeProtector ## Защита
 
 # Инструменты
 var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
@@ -24,10 +26,48 @@ func _end_log() -> void:
 	print("------------------------------------------------------------------------------------------")
 	print()
 
-
 func _ready() -> void:
-	# Защита от реверс-инженеринга
-	pass
+	protector = RuntimeProtector.new()
+	add_child(protector)
+	
+	protector.debugger_detected.connect(_on_debugger_detected)
+	protector.hook_detected.connect(_on_hook_detected)
+	protector.tampering_detected.connect(_on_tampering_detected)
+	
+	if not protector.self_test_sha256():
+		push_error("RuntimeProtector: SHA-256 self-test failed — do not trust hash checks!")
+	
+	protector.check_interval_ms = 2000
+	protector.enable_anti_debug = true
+	protector.enable_anti_hook = true
+	
+	# Anti-tamper is opt-in: you need the real hash of your shipped .pck.
+	# Compute it once at build time (e.g. with sha256sum) and bake it in —
+	# ideally not as one obvious plain string literal; split/obfuscate it
+	# at the very least, since this is just a string an attacker can read
+	# out of the binary otherwise.
+	protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
+	protector.expected_pck_hash = "PUT_THE_REAL_SHA256_HASH_HERE"
+	protector.enable_anti_tamper = true
+	
+	# 0 = signal only (recommended to start with), 1 = quit, 2 = crash
+	protector.reaction_mode = RuntimeProtector.REACTION_SIGNAL_ONLY
+	protector.start_protection()
+
+
+func _on_debugger_detected(reason: String) -> void:
+	print("Debugger detected: ", reason)
+	# Your call: degrade silently, corrupt save state, flag the session
+	# server-side, etc. An instant, obvious crash is the easiest pattern
+	# to find and patch out.
+
+
+func _on_hook_detected(reason: String) -> void:
+	print("Hook detected: ", reason)
+
+
+func _on_tampering_detected(reason: String) -> void:
+	print("Tampering detected: ", reason)
 
 
 func save_data() -> String:

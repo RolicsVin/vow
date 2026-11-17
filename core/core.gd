@@ -2,7 +2,10 @@
 ## Объединяет игровые модули. 
 extends Node
 
-const save_path: String = 'user://'
+## Прямая ссылка на файл с хэшем .pck на Google Диске.
+## Доступ: "Все, у кого есть ссылка" -> Читатель (никто, кроме вас, не может перезаписать).
+const PCK_HASH_SOURCE_URL: String = "https://drive.google.com/uc?export=download&id=ЭТОТ_ID"
+const SAVE_PATH: String = 'user://'
 
 var _buffer: Dictionary = {} ## Общий буффер дял всей игры
 
@@ -51,13 +54,47 @@ func _ready() -> void:
 	# ideally not as one obvious plain string literal; split/obfuscate it
 	# at the very least, since this is just a string an attacker can read
 	# out of the binary otherwise.
-	protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
-	protector.expected_pck_hash = "PUT_THE_REAL_SHA256_HASH_HERE"
-	protector.enable_anti_tamper = true
+	if OS.has_feature("standalone"):
+		protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
+		_fetch_expected_pck_hash()
+	else:
+		protector.enable_anti_tamper = false  # играем из редактора — проверять нечего
 	
 	# 0 = signal only (recommended to start with), 1 = quit, 2 = crash
 	protector.reaction_mode = RuntimeProtector.REACTION_SIGNAL_ONLY
 	protector.start_protection()
+
+
+func _fetch_expected_pck_hash() -> void:
+	var http := HTTPRequest.new()
+	add_child(http)
+	http.request_completed.connect(_on_pck_hash_request_completed.bind(http))
+	var err := http.request(PCK_HASH_SOURCE_URL)
+	if err != OK:
+		push_warning("[Core] Не удалось запросить эталонный хэш .pck (код %d). Анти-тампер отключён на эту сессию." % err)
+		http.queue_free()
+
+
+func _on_pck_hash_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest) -> void:
+	http.queue_free()
+	
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		push_warning("[Core] Сервер хэшей недоступен (result=%d, code=%d). Анти-тампер отключён на эту сессию." % [result, response_code])
+		return
+	
+	var text := body.get_string_from_utf8().strip_edges()
+	
+	# Защита от мусора: если Google Диск вдруг вернул HTML-страницу
+	# (например, из-за смены политики ссылок), а не чистый хэш —
+	# не включаем проверку с заведомо неверным значением.
+	var regex := RegEx.new()
+	regex.compile("^[0-9a-f]{64}$")
+	if not regex.search(text):
+		push_warning("[Core] Полученный ответ не похож на валидный SHA-256 (%d симв.). Анти-тампер отключён." % text.length())
+		return
+	
+	protector.expected_pck_hash = text
+	protector.enable_anti_tamper = true
 
 
 func _on_debugger_detected(reason: String) -> void:
@@ -106,7 +143,7 @@ func save_data() -> String:
 	print()
 	print('Запись сохранения...')
 	
-	var file = FileAccess.open((save_path + save_name).replace('"', ''), FileAccess.WRITE)
+	var file = FileAccess.open((SAVE_PATH + save_name).replace('"', ''), FileAccess.WRITE)
 	if file == null:
 		push_error("[Core] Не удалось создать файл сохранения: %s" % save_name)
 		_end_log()
@@ -122,7 +159,7 @@ func save_data() -> String:
 
 
 func get_saves(): ##Возращает список файлов(Array[String]), если такая папка существует
-	var dir = DirAccess.open(save_path)
+	var dir = DirAccess.open(SAVE_PATH)
 	
 	if dir == null:
 		_print_log()
@@ -136,7 +173,7 @@ func get_saves(): ##Возращает список файлов(Array[String]),
 func get_save(save_name: String) -> Dictionary:
 	_print_log()
 	print('Чтение сохранения...')
-	var file = FileAccess.open(save_path + save_name, FileAccess.READ)
+	var file = FileAccess.open(SAVE_PATH + save_name, FileAccess.READ)
 	if file == null:
 		push_error("[Core] Не удалось открыть сохранение для чтения: %s" % save_name)
 		_end_log()

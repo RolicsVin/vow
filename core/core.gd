@@ -31,8 +31,13 @@ func _ready() -> void:
 	add_child(protector)
 	
 	protector.debugger_detected.connect(_on_debugger_detected)
+	protector.debugger_detected.connect(push_fatal_error)
+	
 	protector.hook_detected.connect(_on_hook_detected)
+	protector.hook_detected.connect(push_fatal_error)
+	
 	protector.tampering_detected.connect(_on_tampering_detected)
+	protector.tampering_detected.connect(push_fatal_error)
 	
 	if not protector.self_test_sha256():
 		push_error("RuntimeProtector: SHA-256 self-test failed — do not trust hash checks!")
@@ -199,7 +204,7 @@ func clear_buffer() -> void:
 	_buffer.clear()
 
 
-func push_fatal_error(message: String) -> void:
+func push_fatal_error(message: String = 'Фатальная ошибка') -> void:
 	print(message)
 	push_error(message)
 	Engine.get_main_loop().quit()

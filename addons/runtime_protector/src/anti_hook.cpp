@@ -17,6 +17,53 @@ namespace godot_rp {
 namespace {
 std::vector<std::string> g_module_snapshot;
 std::mutex g_snapshot_mutex;
+
+#if defined(_WIN32)
+struct ModuleRange {
+    uintptr_t start;
+    uintptr_t end;
+};
+
+// Snapshot of [base, base+size) for every currently loaded module. Used
+// to check whether a resolved import address lands inside *some*
+// legitimately loaded module - not necessarily the one literally named
+// in the import descriptor.
+//
+// This matters because modern Windows routinely resolves an import to a
+// *different* module than the one named: many kernel32.dll functions
+// are thin forwarders actually implemented in kernelbase.dll, ole32.dll
+// often forwards into combase.dll, and api-ms-win-core-*.dll names are
+// virtual "API set" names that never correspond to a real file on disk
+// at all - they're redirected by the OS loader. None of that is
+// hooking; checking against the single named module's range alone
+// flags all of it as a false positive.
+std::vector<ModuleRange> get_loaded_module_ranges() {
+    std::vector<ModuleRange> ranges;
+    HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, GetCurrentProcessId());
+    if (snap == INVALID_HANDLE_VALUE) {
+        return ranges;
+    }
+    MODULEENTRY32W me;
+    me.dwSize = sizeof(MODULEENTRY32W);
+    if (Module32FirstW(snap, &me)) {
+        do {
+            uintptr_t start = reinterpret_cast<uintptr_t>(me.modBaseAddr);
+            ranges.push_back({ start, start + me.modBaseSize });
+        } while (Module32NextW(snap, &me));
+    }
+    CloseHandle(snap);
+    return ranges;
+}
+
+bool address_in_any_module(uintptr_t addr, const std::vector<ModuleRange> &ranges) {
+    for (const ModuleRange &r : ranges) {
+        if (addr >= r.start && addr < r.end) {
+            return true;
+        }
+    }
+    return false;
+}
+#endif
 } // namespace
 
 std::vector<std::string> AntiHook::list_loaded_modules() {
@@ -122,6 +169,16 @@ std::vector<HookCheckResult> AntiHook::check_iat() {
         return results;
     }
 
+    // Compare against every loaded module, not just the one literally
+    // named in the import descriptor - see get_loaded_module_ranges()
+    // for why (API forwarding, API sets). If this comes back empty we
+    // have nothing trustworthy to compare against, so skip rather than
+    // risk false positives.
+    std::vector<ModuleRange> module_ranges = get_loaded_module_ranges();
+    if (module_ranges.empty()) {
+        return results;
+    }
+
     auto dos_header = reinterpret_cast<PIMAGE_DOS_HEADER>(main_module);
     auto nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS>(
             reinterpret_cast<BYTE *>(main_module) + dos_header->e_lfanew);
@@ -137,29 +194,21 @@ std::vector<HookCheckResult> AntiHook::check_iat() {
     while (import_desc->Name != 0) {
         const char *dll_name = reinterpret_cast<const char *>(
                 reinterpret_cast<BYTE *>(main_module) + import_desc->Name);
-        HMODULE target_module = GetModuleHandleA(dll_name);
 
-        if (target_module) {
-            MODULEINFO mod_info;
-            if (GetModuleInformation(GetCurrentProcess(), target_module, &mod_info, sizeof(mod_info))) {
-                uintptr_t mod_start = reinterpret_cast<uintptr_t>(mod_info.lpBaseOfDll);
-                uintptr_t mod_end = mod_start + mod_info.SizeOfImage;
+        auto thunk = reinterpret_cast<PIMAGE_THUNK_DATA>(
+                reinterpret_cast<BYTE *>(main_module) + import_desc->FirstThunk);
 
-                auto thunk = reinterpret_cast<PIMAGE_THUNK_DATA>(
-                        reinterpret_cast<BYTE *>(main_module) + import_desc->FirstThunk);
-
-                while (thunk->u1.Function != 0) {
-                    uintptr_t func_addr = static_cast<uintptr_t>(thunk->u1.Function);
-                    if (func_addr < mod_start || func_addr >= mod_end) {
-                        HookCheckResult r;
-                        r.detected = true;
-                        r.reason = std::string("IAT entry imported from ") + dll_name +
-                                " resolves outside that module's memory range (possible IAT hook)";
-                        results.push_back(r);
-                    }
-                    ++thunk;
-                }
+        while (thunk->u1.Function != 0) {
+            uintptr_t func_addr = static_cast<uintptr_t>(thunk->u1.Function);
+            if (!address_in_any_module(func_addr, module_ranges)) {
+                HookCheckResult r;
+                r.detected = true;
+                r.reason = std::string("IAT entry imported from ") + dll_name +
+                        " resolves to an address outside every loaded module "
+                        "(likely IAT hook or injected trampoline, not legitimate API forwarding)";
+                results.push_back(r);
             }
+            ++thunk;
         }
         ++import_desc;
     }

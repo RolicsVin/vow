@@ -2,8 +2,14 @@
 .godot/
 /android/
 
-# avtor specific ignores
+# Avtor specific ignores
 bin/
+!addons/runtime_protector/bin/
+venv/
 obsidian/
 __pycache__/
 /__pycache__/
+
+# VS specific ignores
+.vs/
+.vscode/

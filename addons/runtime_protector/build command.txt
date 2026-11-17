@@ -1,0 +1,4 @@
+x86 Native Tools Command Promt:
+D:\Godot\vow\venv\Scripts\activate
+cd /d D:\Godot\vow\addons\runtime_protector
+scons platform=windows target=template_debug arch=x86_64 api_version=4.7

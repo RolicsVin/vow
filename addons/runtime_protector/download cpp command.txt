@@ -1,0 +1,4 @@
+git clone --branch 4.5 https://github.com/godotengine/godot-cpp.git
+cd godot-cpp
+git submodule update --init
+cd ..

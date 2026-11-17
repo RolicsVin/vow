@@ -26,6 +26,7 @@ func _end_log() -> void:
 
 
 func _ready() -> void:
+	# Защита от реверс-инженеринга
 	pass
 
 

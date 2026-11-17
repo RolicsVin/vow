@@ -13,3 +13,6 @@ __pycache__/
 # VS specific ignores
 .vs/
 .vscode/
+
+# Other
+addons/runtime_protector/godot-cpp/

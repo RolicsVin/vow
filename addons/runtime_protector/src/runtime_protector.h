@@ -31,6 +31,7 @@ private:
     bool autostart_ = false;
     String expected_pck_hash_;
     String pck_path_;
+    String expected_exe_hash_;
     int reaction_mode_ = REACTION_SIGNAL_ONLY;
 
     void _worker_loop();

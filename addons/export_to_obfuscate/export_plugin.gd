@@ -15,7 +15,7 @@ func _export_file(path: String, type: String, features: PackedStringArray) -> vo
 
 
 func _obfuscate(code: String) -> String:
-	var response: Dictionary = await PythonBridge.call_function('obfuscate', 'впиши сюда имя функции', [])
+	var response: Dictionary = await PythonBridge.call_function('obfuscate', 'впиши сюда имя функции', []) # файл obfuscate.py лежит в "res://core/py/obfuscate.py"
 	if not response.get("ok", false):
 		push_warning("[obfuscate] python-скрипт не смог обфусцировать код '%s': %s" % [code, response.get("error", "unknown error")])
 		return ""

@@ -28,7 +28,8 @@ func _export_begin(
 		ProjectSettings.globalize_path(TEMP_DIRECTORY)
 	)
 
-	# Проверяем интерпретатор один раз, чтобы не запускать несуществующий Python для каждого файла
+	# Проверяем интерпретатор один раз, чтобы не запускать несуществующий Python
+	# для каждого файла
 	if not _python_executable.is_empty():
 		var version_output: Array = []
 		_python_available = OS.execute(

@@ -3,6 +3,7 @@
 #include "anti_debug.h"
 #include "anti_hook.h"
 #include "anti_tamper.h"
+#include "anti_signature.h"
 #include "sha256.h"
 
 #include <godot_cpp/classes/engine.hpp>
@@ -23,6 +24,7 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("check_hooks_now"), &RuntimeProtector::check_hooks_now);
     ClassDB::bind_method(D_METHOD("verify_pck_now"), &RuntimeProtector::verify_pck_now);
     ClassDB::bind_method(D_METHOD("verify_exe_now"), &RuntimeProtector::verify_exe_now);
+    ClassDB::bind_method(D_METHOD("verify_release_now"), &RuntimeProtector::verify_release_now);
 
     ClassDB::bind_method(D_METHOD("compute_sha256", "path"), &RuntimeProtector::compute_sha256);
     ClassDB::bind_method(D_METHOD("self_test_sha256"), &RuntimeProtector::self_test_sha256);
@@ -42,6 +44,10 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_enable_anti_tamper", "enabled"), &RuntimeProtector::set_enable_anti_tamper);
     ClassDB::bind_method(D_METHOD("get_enable_anti_tamper"), &RuntimeProtector::get_enable_anti_tamper);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_anti_tamper"), "set_enable_anti_tamper", "get_enable_anti_tamper");
+
+    ClassDB::bind_method(D_METHOD("set_enable_signature_verification", "enabled"), &RuntimeProtector::set_enable_signature_verification);
+    ClassDB::bind_method(D_METHOD("get_enable_signature_verification"), &RuntimeProtector::get_enable_signature_verification);
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_signature_verification"), "set_enable_signature_verification", "get_enable_signature_verification");
 
     ClassDB::bind_method(D_METHOD("set_expected_pck_hash", "hash"), &RuntimeProtector::set_expected_pck_hash);
     ClassDB::bind_method(D_METHOD("get_expected_pck_hash"), &RuntimeProtector::get_expected_pck_hash);
@@ -95,6 +101,11 @@ void RuntimeProtector::start_protection() {
     if (running_.load()) {
         return;
     }
+    if (enable_signature_verification_ && !verify_release_now()) {
+        call_deferred("_deferred_quit");
+        return;
+    }
+
     running_.store(true);
     godot_rp::AntiHook::snapshot_loaded_modules();
     worker_thread_ = std::thread(&RuntimeProtector::_worker_loop, this);
@@ -226,6 +237,21 @@ bool RuntimeProtector::verify_exe_now() {
     return !actual.empty() && actual == std::string(expected_exe_hash_.utf8().get_data());
 }
 
+bool RuntimeProtector::verify_release_now() {
+    const CharString pck_path_utf8 = pck_path_.utf8();
+    const std::string pck_path(
+        pck_path_utf8.get_data(),
+        static_cast<size_t>(pck_path_utf8.length())
+    );
+    std::string reason;
+    const bool verified = godot_rp::AntiSignature::verify_release_files(pck_path, reason);
+
+    if (!verified) {
+        call_deferred("emit_signal", "tampering_detected", String(reason.c_str()));
+    }
+    return verified;
+}
+
 String RuntimeProtector::compute_sha256(const String &p_path) {
     std::string result = godot_rp::SHA256::hash_file(std::string(p_path.utf8().get_data()));
     return String(result.c_str());
@@ -246,6 +272,13 @@ bool RuntimeProtector::get_enable_anti_hook() const { return enable_anti_hook_; 
 
 void RuntimeProtector::set_enable_anti_tamper(bool p_enabled) { enable_anti_tamper_ = p_enabled; }
 bool RuntimeProtector::get_enable_anti_tamper() const { return enable_anti_tamper_; }
+
+void RuntimeProtector::set_enable_signature_verification(bool p_enabled) {
+    enable_signature_verification_ = p_enabled;
+}
+bool RuntimeProtector::get_enable_signature_verification() const {
+    return enable_signature_verification_;
+}
 
 void RuntimeProtector::set_expected_pck_hash(const String &p_hash) { expected_pck_hash_ = p_hash; }
 String RuntimeProtector::get_expected_pck_hash() const { return expected_pck_hash_; }

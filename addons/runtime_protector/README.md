@@ -202,3 +202,95 @@ if not protector.verify_pck_now():
   verification into a forked/recompiled Godot engine binary instead of
   (or in addition to) this extension — see the "What this doesn't do"
   section above.
+
+
+## Windows x64 release signature verification
+
+Release startup verification is enabled by default when a `RuntimeProtector`
+node is present in the running project. The node must remain in the exported
+scene tree and its `autostart` property must be enabled. Editor sessions skip
+the check.
+
+The verifier requires all of the following:
+
+- The running EXE has a valid, trusted Authenticode signature.
+- The loaded RuntimeProtector DLL has a valid, trusted Authenticode signature.
+- The adjacent PCK matches the SHA-256 value in the signed manifest.
+- The EXE, PCK, and loaded DLL hashes all match a valid Ed25519-signed
+  manifest.
+
+The manifest and signature are placed next to the EXE as
+`integrity.manifest` and `integrity.sig`. By default, the PCK is expected next
+to the EXE with the same base filename. Set `pck_path` to an absolute path
+before calling `start_protection()` if the PCK is stored elsewhere.
+
+### 1. Generate a signing key pair (once)
+
+Install the Python dependency:
+
+```powershell
+py -m pip install cryptography
+```
+
+From `addons/runtime_protector`:
+
+```powershell
+py tools/sign_release.py keygen
+```
+
+This creates `keys/integrity_private.key` and writes the public key to
+`src/integrity_public_key.h`. Keep the private key offline and never commit it.
+Rebuild the Windows x64 GDExtension after generating the public key.
+
+### 2. Build and Authenticode-sign the binaries
+
+Build the release DLL, export the game, and sign both PE files with your
+code-signing certificate:
+
+```powershell
+signtool sign /fd SHA256 /tr <timestamp-server-url> /td SHA256 /a path\to\game.exe
+signtool sign /fd SHA256 /tr <timestamp-server-url> /td SHA256 /a path\to\libruntimeprotector.windows.template_release.x86_64.dll
+```
+
+The DLL must be the exact library loaded by the exported game. Sign it before
+generating the Ed25519 manifest. The executable must also be signed before
+generating the manifest. Do not modify either binary after the manifest is
+generated.
+
+### 3. Generate the Ed25519 manifest
+
+Run the signing command after Authenticode signing. Use the actual exported
+PCK and the exact DLL shipped with the game:
+
+```powershell
+py tools/sign_release.py sign `
+  --private-key keys/integrity_private.key `
+  --exe path\to\game.exe `
+  --pck path\to\game.pck `
+  --dll path\to\libruntimeprotector.windows.template_release.x86_64.dll `
+  --output path\to\export
+```
+
+The output directory must be the same directory as the EXE. Ship
+`integrity.manifest` and `integrity.sig` alongside the EXE and PCK.
+
+### Runtime behaviour
+
+If any required file is missing, unreadable, unsigned, untrusted, changed, or
+has an invalid Ed25519 signature, `RuntimeProtector` emits
+`tampering_detected` and requests immediate game shutdown. This check runs
+synchronously before the background protection thread starts.
+
+For local development builds, disable `enable_signature_verification` on the
+node. Do not disable it in a release build.
+
+The Ed25519 public key is embedded in the extension; the private key is never
+needed by the game. The detached manifest signature prevents replacement of
+the manifest with new hashes without the private key. Authenticode verification
+uses the Windows trust policy and cached certificate data; the signing tool
+runs `signtool verify /pa` before creating a manifest.
+
+**Important limitation:** because the verifier runs inside the client process,
+a determined attacker can patch or bypass it. For stronger protection, verify
+critical game state on a trusted server or move an independent check into a
+custom Godot engine build.

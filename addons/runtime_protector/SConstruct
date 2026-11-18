@@ -1,33 +1,20 @@
 #!/usr/bin/env python
-# Build script for the RuntimeProtector GDExtension.
+# Build script for the RuntimeProtector Windows x64 GDExtension.
 #
-# Prerequisite: godot-cpp must be present as a subfolder (or submodule)
-# named "godot-cpp" next to this file, built against the same Godot
-# major.minor version you intend to run the extension on. See README.md.
+# Requires godot-cpp matching the target Godot version.
 
 env = SConscript("godot-cpp/SConstruct")
 
-env.Append(CPPPATH=["src/"])
-sources = Glob("src/*.cpp")
+if env["platform"] != "windows" or env["arch"] != "x86_64":
+    raise RuntimeError("RuntimeProtector signature verification currently supports Windows x64 only")
 
-if env["platform"] == "windows":
-    env.Append(LIBS=["psapi"])
+env.Append(CPPPATH=["src/", "src/third_party/"])
+env.Append(LIBS=["psapi", "wintrust", "crypt32"])
 
-if env["platform"] == "linux":
-    env.Append(CXXFLAGS=["-pthread"])
-    env.Append(LINKFLAGS=["-pthread"])
-
-if env["platform"] == "macos":
-    library = env.SharedLibrary(
-        "bin/libruntimeprotector.{}.{}.framework/libruntimeprotector.{}.{}".format(
-            env["platform"], env["target"], env["platform"], env["target"]
-        ),
-        source=sources,
-    )
-else:
-    library = env.SharedLibrary(
-        "bin/libruntimeprotector{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
-        source=sources,
-    )
+sources = Glob("src/*.cpp") + Glob("src/third_party/*.c")
+library = env.SharedLibrary(
+    "bin/libruntimeprotector{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+    source=sources,
+)
 
 Default(library)

@@ -28,7 +28,8 @@ private:
     bool enable_anti_debug_ = true;
     bool enable_anti_hook_ = true;
     bool enable_anti_tamper_ = false;
-    bool autostart_ = false;
+    bool enable_signature_verification_ = true;
+    bool autostart_ = true;
     String expected_pck_hash_;
     String pck_path_;
     String expected_exe_hash_;
@@ -60,6 +61,7 @@ public:
     bool check_hooks_now();
     bool verify_pck_now();
     bool verify_exe_now();
+    bool verify_release_now();
 
     String compute_sha256(const String &p_path);
     bool self_test_sha256();
@@ -75,6 +77,9 @@ public:
 
     void set_enable_anti_tamper(bool p_enabled);
     bool get_enable_anti_tamper() const;
+
+    void set_enable_signature_verification(bool p_enabled);
+    bool get_enable_signature_verification() const;
 
     void set_expected_pck_hash(const String &p_hash);
     String get_expected_pck_hash() const;

@@ -50,10 +50,11 @@ folder_colors={
 "res://addons/export_to_obfuscate/": "orange",
 "res://addons/python_bridge/": "blue",
 "res://addons/runtime_protector/": "orange",
-"res://assets/atmosphere/": "green",
+"res://assets/atmosphere/": "purple",
 "res://assets/backgrounds/": "yellow",
 "res://assets/music/": "purple",
-"res://assets/sounds/": "orange",
+"res://assets/sounds/": "purple",
+"res://assets/ui/": "green",
 "res://core/": "red",
 "res://scenes/chapter_1/": "blue"
 }

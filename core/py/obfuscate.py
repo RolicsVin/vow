@@ -163,7 +163,6 @@ def _new_identifier(used_names: set[str]) -> str:
 def _obfuscate_function(function_code: str) -> str:
     """Переименовывает только локальные идентификаторы одной функции."""
     local_names: set[str] = _parameter_names(function_code)
-    local_names: set[str] = _parameter_names(header)
     local_names.update(_declared_local_names(function_code))
 
     if not local_names:

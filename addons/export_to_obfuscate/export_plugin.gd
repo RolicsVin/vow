@@ -6,6 +6,7 @@ const OBFUSCATOR_PATH: String = "res://core/py/obfuscate.py"
 const TEMP_DIRECTORY: String = "user://export_to_obfuscate"
 
 var _python_executable: String = ""
+var _python_available: bool = false
 
 
 func _get_name() -> String:
@@ -27,9 +28,21 @@ func _export_begin(
 		ProjectSettings.globalize_path(TEMP_DIRECTORY)
 	)
 
-	if _python_executable.is_empty():
+	# Проверяем интерпретатор один раз, чтобы не запускать несуществующий Python для каждого файла
+	if not _python_executable.is_empty():
+		var version_output: Array = []
+		_python_available = OS.execute(
+			_python_executable,
+			PackedStringArray(["--version"]),
+			version_output,
+			true
+		) == 0
+
+	if not _python_available or not FileAccess.file_exists(OBFUSCATOR_PATH):
+		_python_available = false
 		push_warning(
-			"[ExportToObfuscate] Python не найден. GDScript останется без обфускации."
+			"[ExportToObfuscate] Python или core/py/obfuscate.py не найдены. "
+			+ "GDScript останется без обфускации."
 		)
 
 
@@ -37,7 +50,7 @@ func _export_file(path: String, type: String, _features: PackedStringArray) -> v
 	if type != "GDScript" or not path.ends_with(".gd"):
 		return
 
-	if _python_executable.is_empty():
+	if not _python_available:
 		return
 
 	var original_code: String = FileAccess.get_file_as_string(path)
@@ -55,6 +68,7 @@ func _export_file(path: String, type: String, _features: PackedStringArray) -> v
 
 func _export_end() -> void:
 	_python_executable = ""
+	_python_available = false
 
 
 func _find_python_executable() -> String:

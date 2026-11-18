@@ -204,15 +204,12 @@ def _obfuscate_function(function_code: str) -> str:
                 break
 
         is_member: bool = previous_significant == "."
-        is_dictionary_key: bool = (
-            next_significant == ":"
-            and previous_significant == ":"
-        )
+        is_type_annotation: bool = previous_significant == ":"
         is_named_argument: bool = (
             next_significant == "=" and previous_significant in ("(", ",")
         )
 
-        if is_member or is_dictionary_key or is_named_argument:
+        if is_member or is_type_annotation or is_named_argument:
             output.append(value)
         else:
             output.append(replacements[value])

@@ -41,11 +41,12 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/path_notes/plugin.cfg", "res://addons/python_bridge/plugin.cfg", "res://addons/txt_dialog_highlighter/plugin.cfg")
+enabled=PackedStringArray("res://addons/export_to_obfuscate/plugin.cfg", "res://addons/path_notes/plugin.cfg", "res://addons/python_bridge/plugin.cfg", "res://addons/txt_dialog_highlighter/plugin.cfg")
 
 [file_customization]
 
 folder_colors={
+"res://addons/export_to_obfuscate/": "orange",
 "res://addons/python_bridge/": "blue",
 "res://addons/runtime_protector/": "orange",
 "res://assets/atmosphere/": "green",

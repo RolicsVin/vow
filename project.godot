@@ -46,6 +46,8 @@ enabled=PackedStringArray("res://addons/path_notes/plugin.cfg", "res://addons/py
 [file_customization]
 
 folder_colors={
+"res://addons/python_bridge/": "blue",
+"res://addons/runtime_protector/": "orange",
 "res://assets/atmosphere/": "green",
 "res://assets/backgrounds/": "yellow",
 "res://assets/music/": "purple",

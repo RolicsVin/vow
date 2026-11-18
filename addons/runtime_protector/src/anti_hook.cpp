@@ -1,5 +1,6 @@
 #include "anti_hook.h"
 
+#include <cctype>
 #include <cstring>
 #include <mutex>
 
@@ -62,6 +63,40 @@ bool address_in_any_module(uintptr_t addr, const std::vector<ModuleRange> &range
         }
     }
     return false;
+}
+
+bool starts_with_ci(const std::string &s, const std::string &prefix) {
+    if (s.size() < prefix.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < prefix.size(); ++i) {
+        if (std::tolower(static_cast<unsigned char>(s[i])) != std::tolower(static_cast<unsigned char>(prefix[i]))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// The Windows directory itself (C:\Windows). Windows routinely lazy-loads
+// its own DLLs (networking, DNS, audio codecs, common controls, etc.) the
+// first time a feature is used - e.g. the first HTTPRequest triggers
+// mswsock.dll, DNSAPI.dll, NSI.dll, fwpuclnt.dll and similar to load, long
+// after our startup snapshot was taken. None of that is injection: placing
+// a malicious DLL under C:\Windows\... requires admin rights, which real
+// cheat trainers/injectors essentially never bother with when the game's
+// own folder, %TEMP%, or the tool's own install directory work just as
+// well. So modules loaded from under the Windows directory are treated as
+// trusted and excluded from the "new module" check, rather than chasing an
+// ever-growing list of specific DLL names.
+std::string get_windows_dir() {
+    wchar_t buf[MAX_PATH];
+    UINT len = GetWindowsDirectoryW(buf, MAX_PATH);
+    if (len == 0 || len >= MAX_PATH) {
+        return std::string();
+    }
+    char narrow[MAX_PATH * 2] = { 0 };
+    WideCharToMultiByte(CP_UTF8, 0, buf, -1, narrow, sizeof(narrow), nullptr, nullptr);
+    return std::string(narrow);
 }
 #endif
 } // namespace
@@ -127,6 +162,10 @@ std::vector<HookCheckResult> AntiHook::check_new_modules() {
         return results;
     }
 
+#if defined(_WIN32)
+    static const std::string windows_dir = get_windows_dir();
+#endif
+
     std::vector<std::string> current = list_loaded_modules();
     for (const std::string &mod : current) {
         bool found = false;
@@ -136,12 +175,20 @@ std::vector<HookCheckResult> AntiHook::check_new_modules() {
                 break;
             }
         }
-        if (!found) {
-            HookCheckResult r;
-            r.detected = true;
-            r.reason = "Module loaded after startup snapshot: " + mod;
-            results.push_back(r);
+        if (found) {
+            continue;
         }
+
+#if defined(_WIN32)
+        if (!windows_dir.empty() && starts_with_ci(mod, windows_dir)) {
+            continue; // legitimate OS-owned module lazily loaded from C:\Windows\...
+        }
+#endif
+
+        HookCheckResult r;
+        r.detected = true;
+        r.reason = "Module loaded after startup snapshot: " + mod;
+        results.push_back(r);
     }
 
     return results;

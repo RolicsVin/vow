@@ -22,6 +22,7 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("check_debugger_now"), &RuntimeProtector::check_debugger_now);
     ClassDB::bind_method(D_METHOD("check_hooks_now"), &RuntimeProtector::check_hooks_now);
     ClassDB::bind_method(D_METHOD("verify_pck_now"), &RuntimeProtector::verify_pck_now);
+    ClassDB::bind_method(D_METHOD("verify_exe_now"), &RuntimeProtector::verify_exe_now);
 
     ClassDB::bind_method(D_METHOD("compute_sha256", "path"), &RuntimeProtector::compute_sha256);
     ClassDB::bind_method(D_METHOD("self_test_sha256"), &RuntimeProtector::self_test_sha256);
@@ -49,6 +50,10 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_pck_path", "path"), &RuntimeProtector::set_pck_path);
     ClassDB::bind_method(D_METHOD("get_pck_path"), &RuntimeProtector::get_pck_path);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "pck_path"), "set_pck_path", "get_pck_path");
+
+    ClassDB::bind_method(D_METHOD("set_expected_exe_hash", "hash"), &RuntimeProtector::set_expected_exe_hash);
+    ClassDB::bind_method(D_METHOD("get_expected_exe_hash"), &RuntimeProtector::get_expected_exe_hash);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "expected_exe_hash"), "set_expected_exe_hash", "get_expected_exe_hash");
 
     ClassDB::bind_method(D_METHOD("set_reaction_mode", "mode"), &RuntimeProtector::set_reaction_mode);
     ClassDB::bind_method(D_METHOD("get_reaction_mode"), &RuntimeProtector::get_reaction_mode);
@@ -139,6 +144,14 @@ void RuntimeProtector::_worker_loop() {
             }
         }
 
+        if (enable_anti_tamper_ && !expected_exe_hash_.is_empty()) {
+            std::string actual = AntiTamper::hash_self_executable();
+            std::string expected = expected_exe_hash_.utf8().get_data();
+            if (actual.empty() || actual != expected) {
+                _report("tampering_detected", "EXE hash mismatch (or file unreadable) for the running executable");
+            }
+        }
+
         // Sleep in small slices so stop_protection() doesn't have to
         // wait out the full interval before the thread can exit.
         for (int waited = 0; waited < check_interval_ms_ && running_.load(); waited += 50) {
@@ -205,6 +218,14 @@ bool RuntimeProtector::verify_pck_now() {
     return !actual.empty() && actual == std::string(expected_pck_hash_.utf8().get_data());
 }
 
+bool RuntimeProtector::verify_exe_now() {
+    if (expected_exe_hash_.is_empty()) {
+        return false;
+    }
+    std::string actual = godot_rp::AntiTamper::hash_self_executable();
+    return !actual.empty() && actual == std::string(expected_exe_hash_.utf8().get_data());
+}
+
 String RuntimeProtector::compute_sha256(const String &p_path) {
     std::string result = godot_rp::SHA256::hash_file(std::string(p_path.utf8().get_data()));
     return String(result.c_str());
@@ -231,6 +252,9 @@ String RuntimeProtector::get_expected_pck_hash() const { return expected_pck_has
 
 void RuntimeProtector::set_pck_path(const String &p_path) { pck_path_ = p_path; }
 String RuntimeProtector::get_pck_path() const { return pck_path_; }
+
+void RuntimeProtector::set_expected_exe_hash(const String &p_hash) { expected_exe_hash_ = p_hash; }
+String RuntimeProtector::get_expected_exe_hash() const { return expected_exe_hash_; }
 
 void RuntimeProtector::set_reaction_mode(int p_mode) { reaction_mode_ = p_mode; }
 int RuntimeProtector::get_reaction_mode() const { return reaction_mode_; }

@@ -59,6 +59,7 @@ public:
     bool check_debugger_now();
     bool check_hooks_now();
     bool verify_pck_now();
+    bool verify_exe_now();
 
     String compute_sha256(const String &p_path);
     bool self_test_sha256();
@@ -80,6 +81,9 @@ public:
 
     void set_pck_path(const String &p_path);
     String get_pck_path() const;
+
+    void set_expected_exe_hash(const String &p_hash);
+    String get_expected_exe_hash() const;
 
     void set_reaction_mode(int p_mode);
     int get_reaction_mode() const;

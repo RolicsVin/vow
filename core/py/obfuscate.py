@@ -206,7 +206,7 @@ def _obfuscate_function(function_code: str) -> str:
         is_member: bool = previous_significant == "."
         is_dictionary_key: bool = (
             next_significant == ":"
-            and previous_significant not in ("var", "const", "for", "(", ",")
+            and previous_significant == ":"
         )
         is_named_argument: bool = (
             next_significant == "=" and previous_significant in ("(", ",")

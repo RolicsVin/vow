@@ -114,7 +114,7 @@ func _obfuscate(code: String, source_path: String) -> String:
 	if exit_code == 0 and FileAccess.file_exists(output_path):
 		result = FileAccess.get_file_as_string(output_path)
 	else:
-		var details: String = "\n".join(process_output)
+		var details: String = str(process_output)
 		push_warning(
 			"[ExportToObfuscate] Не удалось обработать '%s' (код %d): %s"
 			% [source_path, exit_code, details]

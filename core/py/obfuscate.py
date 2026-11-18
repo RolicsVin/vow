@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 _IDENTIFIER_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
-_FUNCTION_RE = re.compile(r"^([ \t]*)func[ \t]+[A-Za-z_][A-Za-z0-9_]*[ \t]*\(")
+_FUNCTION_RE = re.compile(r"^([ \t]*)(?:static[ \t]+)?func[ \t]+[A-Za-z_][A-Za-z0-9_]*[ \t]*\(")
 _TOKEN_RE = re.compile(
     r"(?P<string>&?[rR]?(?:\"\"\"[\s\S]*?\"\"\"|'''[\s\S]*?'''|"
     r"\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'))"
@@ -162,8 +162,7 @@ def _new_identifier(used_names: set[str]) -> str:
 
 def _obfuscate_function(function_code: str) -> str:
     """Переименовывает только локальные идентификаторы одной функции."""
-    header_end: int = function_code.find("\n")
-    header: str = function_code if header_end < 0 else function_code[:header_end]
+    local_names: set[str] = _parameter_names(function_code)
     local_names: set[str] = _parameter_names(header)
     local_names.update(_declared_local_names(function_code))
 

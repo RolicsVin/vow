@@ -193,6 +193,8 @@ def _obfuscate_function(function_code: str) -> str:
             output.append(value)
             if token.lastgroup not in ("string", "comment") and not value.isspace():
                 previous_significant = value
+            elif "\n" in value:
+                previous_significant = ""
             continue
 
         next_significant: str = ""

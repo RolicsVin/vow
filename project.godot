@@ -12,6 +12,7 @@ config_version=5
 
 config/name="vow"
 config/description="Визуальная новелла, про человека решившего подняться на самую высокую гору и сразить богов."
+config/version="alpha1.7"
 run/main_scene="uid://cfrunyyn51m1w"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
@@ -83,4 +84,5 @@ scripts_dir="res://core/py"
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -238,11 +238,14 @@ bool RuntimeProtector::verify_exe_now() {
 }
 
 bool RuntimeProtector::verify_release_now() {
-    const CharString pck_path_utf8 = pck_path_.utf8();
-    const std::string pck_path(
-        pck_path_utf8.get_data(),
-        static_cast<size_t>(pck_path_utf8.length())
-    );
+    std::string pck_path;
+    if (!pck_path_.is_empty()) {
+        const CharString pck_path_utf8 = pck_path_.utf8();
+        pck_path.assign(
+            pck_path_utf8.get_data(),
+            static_cast<size_t>(pck_path_utf8.length())
+        );
+    }
     std::string reason;
     const bool verified = godot_rp::AntiSignature::verify_release_files(pck_path, reason);
 

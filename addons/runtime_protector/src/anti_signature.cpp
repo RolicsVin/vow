@@ -274,7 +274,7 @@ bool download_hash_manifest(const std::string &url_utf8, std::string &content) {
                     break;
                 }
                 if (content.size() + available > MAX_REMOTE_FILE_SIZE) {
-                    downloaded = false;
+                    content = "REMOTE_MANIFEST_TOO_LARGE";
                     break;
                 }
 
@@ -288,9 +288,6 @@ bool download_hash_manifest(const std::string &url_utf8, std::string &content) {
                     break;
                 }
                 content.resize(offset + bytes_read);
-            }
-            if (content.empty()) {
-                downloaded = false;
             }
         }
     }

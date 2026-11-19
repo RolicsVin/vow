@@ -5,7 +5,6 @@
 #include "monocypher-ed25519.h"
 
 #include <windows.h>
-#include <winhttp.h>
 #include <wintrust.h>
 #include <softpub.h>
 
@@ -23,7 +22,7 @@ namespace {
 
 constexpr wchar_t MANIFEST_FILE[] = L"integrity.manifest";
 constexpr wchar_t SIGNATURE_FILE[] = L"integrity.sig";
-constexpr size_t MAX_REMOTE_FILE_SIZE = 1024 * 1024;
+constexpr size_t MAX_MANIFEST_SIZE = 1024 * 1024;
 
 struct ManifestHashes {
     std::string executable;
@@ -50,7 +49,7 @@ std::string read_text_file(const std::filesystem::path &path) {
         (std::istreambuf_iterator<char>(file)),
         std::istreambuf_iterator<char>()
     );
-    return content.size() <= MAX_REMOTE_FILE_SIZE ? content : std::string();
+    return content.size() <= MAX_MANIFEST_SIZE ? content : std::string();
 }
 
 int hex_value(char value) {
@@ -166,137 +165,6 @@ bool decode_signature(const std::string &text, std::array<uint8_t, 64> &signatur
     return true;
 }
 
-bool utf8_to_wide(const std::string &value, std::wstring &result) {
-    if (value.empty()) {
-        result.clear();
-        return true;
-    }
-
-    const int required = MultiByteToWideChar(
-        CP_UTF8, MB_ERR_INVALID_CHARS, value.data(),
-        static_cast<int>(value.size()), nullptr, 0
-    );
-    if (required <= 0) {
-        return false;
-    }
-
-    result.resize(static_cast<size_t>(required));
-    return MultiByteToWideChar(
-        CP_UTF8, MB_ERR_INVALID_CHARS, value.data(),
-        static_cast<int>(value.size()), result.data(), required
-    ) == required;
-}
-
-bool download_hash_manifest(const std::string &url_utf8, std::string &content) {
-    std::wstring url;
-    if (!utf8_to_wide(url_utf8, url) || url.empty()) {
-        return false;
-    }
-
-    URL_COMPONENTS components{};
-    components.dwStructSize = sizeof(components);
-    components.dwSchemeLength = static_cast<DWORD>(-1);
-    components.dwHostNameLength = static_cast<DWORD>(-1);
-    components.dwUrlPathLength = static_cast<DWORD>(-1);
-    components.dwExtraInfoLength = static_cast<DWORD>(-1);
-
-    if (!WinHttpCrackUrl(url.c_str(), 0, 0, &components) ||
-        components.nScheme != INTERNET_SCHEME_HTTPS ||
-        components.dwHostNameLength == 0) {
-        return false;
-    }
-
-    const std::wstring host(components.lpszHostName, components.dwHostNameLength);
-    std::wstring request_path;
-    if (components.dwUrlPathLength > 0) {
-        request_path.assign(components.lpszUrlPath, components.dwUrlPathLength);
-    }
-    if (components.dwExtraInfoLength > 0) {
-        request_path.append(components.lpszExtraInfo, components.dwExtraInfoLength);
-    }
-    if (request_path.empty()) {
-        request_path = L"/";
-    }
-
-    HINTERNET session = WinHttpOpen(
-        L"VOW-RuntimeProtector/1.0",
-        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-        WINHTTP_NO_PROXY_NAME,
-        WINHTTP_NO_PROXY_BYPASS,
-        0
-    );
-    if (!session) {
-        return false;
-    }
-
-    WinHttpSetTimeouts(session, 3000, 3000, 3000, 3000);
-    HINTERNET connection = WinHttpConnect(session, host.c_str(), components.nPort, 0);
-    if (!connection) {
-        WinHttpCloseHandle(session);
-        return false;
-    }
-
-    HINTERNET request = WinHttpOpenRequest(
-        connection, L"GET", request_path.c_str(), nullptr,
-        WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE
-    );
-    if (!request) {
-        WinHttpCloseHandle(connection);
-        WinHttpCloseHandle(session);
-        return false;
-    }
-
-    bool downloaded = false;
-    if (WinHttpSendRequest(
-            request, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
-            WINHTTP_NO_REQUEST_DATA, 0, 0, 0
-        ) && WinHttpReceiveResponse(request, nullptr)) {
-        DWORD status_code = 0;
-        DWORD status_size = sizeof(status_code);
-        if (WinHttpQueryHeaders(
-                request,
-                WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
-                WINHTTP_HEADER_NAME_BY_INDEX,
-                &status_code,
-                &status_size,
-                WINHTTP_NO_HEADER_INDEX
-            ) && status_code == 200) {
-            downloaded = true;
-            content.clear();
-
-            for (;;) {
-                DWORD available = 0;
-                if (!WinHttpQueryDataAvailable(request, &available)) {
-                    downloaded = false;
-                    break;
-                }
-                if (available == 0) {
-                    break;
-                }
-                if (content.size() + available > MAX_REMOTE_FILE_SIZE) {
-                    content = "REMOTE_MANIFEST_TOO_LARGE";
-                    break;
-                }
-
-                const size_t offset = content.size();
-                content.resize(offset + available);
-                DWORD bytes_read = 0;
-                if (!WinHttpReadData(
-                        request, content.data() + offset, available, &bytes_read
-                    ) || bytes_read == 0) {
-                    downloaded = false;
-                    break;
-                }
-                content.resize(offset + bytes_read);
-            }
-        }
-    }
-
-    WinHttpCloseHandle(request);
-    WinHttpCloseHandle(connection);
-    WinHttpCloseHandle(session);
-    return downloaded;
-}
 
 } // namespace
 
@@ -348,7 +216,6 @@ bool AntiSignature::verify_authenticode(const std::wstring &path) {
 
 bool AntiSignature::verify_release_files(
     const std::string &pck_path_utf8,
-    const std::string &hashes_url_utf8,
     std::string &reason
 ) {
     const std::wstring executable_path = get_executable_path();
@@ -407,24 +274,7 @@ bool AntiSignature::verify_release_files(
         return false;
     }
 
-    // A missing URL or failed download skips only the remote SHA-256 comparison.
-    if (hashes_url_utf8.empty()) {
-        reason.clear();
-        return true;
-    }
-
-    std::string remote_manifest;
-    if (!download_hash_manifest(hashes_url_utf8, remote_manifest)) {
-        reason.clear();
-        return true;
-    }
-
-    ManifestHashes remote_hashes;
-    if (!parse_manifest(remote_manifest, remote_hashes)) {
-        reason = "Downloaded hash manifest is malformed";
-        return false;
-    }
-
+    // Сверяем файлы с хешами из локального подписанного манифеста.
     const std::string actual_executable_hash = SHA256::hash_file(executable_path);
     const std::string actual_pck_hash = SHA256::hash_file(pck);
     const std::string actual_library_hash = SHA256::hash_file(library_path);
@@ -436,10 +286,10 @@ bool AntiSignature::verify_release_files(
         return false;
     }
 
-    if (actual_executable_hash != remote_hashes.executable ||
-        actual_pck_hash != remote_hashes.pck ||
-        actual_library_hash != remote_hashes.library) {
-        reason = "One or more downloaded SHA-256 hashes do not match the local release files";
+    if (actual_executable_hash != local_hashes.executable ||
+        actual_pck_hash != local_hashes.pck ||
+        actual_library_hash != local_hashes.library) {
+        reason = "One or more local release files do not match the signed integrity manifest";
         return false;
     }
 

@@ -133,35 +133,51 @@ Since this wasn't compiled in the environment that wrote it, at minimum:
 
 ## Release verification
 
-Every exported Release build verifies the local Authenticode signatures of the EXE and
-RuntimeProtector DLL, then verifies the local Ed25519 signature of `integrity.manifest`.
-These checks run before gameplay starts and do not require an internet connection.
-They are independent from the `autostart` setting.
+Каждая Release-сборка проверяет локальные Authenticode-подписи EXE и RuntimeProtector DLL,
+а также Ed25519-подпись локального файла `integrity.manifest` через `integrity.sig`.
+Проверки выполняются до начала игры и не зависят от наличия интернета.
 
-An optional remote SHA-256 check can be configured through `hashes_url`. The URL must use
-HTTPS and return a manifest in the same format as `integrity.manifest`:
+После проверки Ed25519 подписью RuntimeProtector сверяет SHA-256 локальных EXE, PCK и DLL
+со значениями из подписанного локального манифеста. Поэтому целостность релизных файлов
+проверяется и при отсутствии сети.
 
-```text
-VOW-INTEGRITY-V1
-exe=<64-character SHA-256>
-pck=<64-character SHA-256>
-dll=<64-character SHA-256>
+Дополнительно Core загружает существующую двухуровневую систему JSON-манифестов:
+
+1. Общий манифест содержит ссылку для ключа `vow_manifest`.
+2. Манифест игры содержит поля `pck_cache`, `exe_cache`, `lib_cache` и
+   необязательное `runtime_cache`.
+3. Core проверяет формат каждого SHA-256, передаёт значения в RuntimeProtector и
+   выполняет первичную сверку до запуска фоновой защиты.
+
+Пример общего манифеста:
+
+```json
+{
+  "vow_manifest": "https://drive.google.com/file/d/GAME_MANIFEST_ID/view"
+}
 ```
 
-The `integrity.manifest` created by `tools/sign_release.py sign` can be hosted directly
-at this URL. If the request cannot be completed (no connection, timeout, or unavailable
-server), only the remote hash comparison is skipped. If the file is downloaded but is
-malformed or any hash differs, startup is blocked. A valid local Authenticode/Ed25519
-signature is still required in all cases.
+Пример манифеста игры:
 
-Set the URL on the RuntimeProtector node:
-
-```gdscript
-protector.hashes_url = "https://example.com/game/integrity.manifest"
+```json
+{
+  "pck_cache": "<64-character SHA-256>",
+  "exe_cache": "<64-character SHA-256>",
+  "lib_cache": "<64-character SHA-256>",
+  "runtime_cache": "<64-character SHA-256 or empty string>"
+}
 ```
 
-Leave `hashes_url` empty to disable the remote check. The local signature checks remain
-enabled in Release builds.
+Если загрузить манифест не удалось из-за сетевой ошибки, удалённая сверка пропускается,
+но локальные Authenticode, Ed25519 и SHA-256 проверки остаются обязательными.
+Если HTTP-запрос завершился успешно, но содержимое манифеста повреждено, превышает
+допустимый размер или содержит некорректные хеши, запуск блокируется. Несовпадение
+любого проверяемого хеша также блокирует запуск.
+
+Локальные `integrity.manifest` и `integrity.sig` создаются командой
+`tools/sign_release.py sign`. Этот локальный подписанный манифест не заменяет
+общий JSON-манифест и манифест игры — он используется отдельно для проверки
+Authenticode/Ed25519 и локальной целостности релизных файлов.
 
 ## Usage from GDScript
 
@@ -173,8 +189,7 @@ var protector: RuntimeProtector
 func _ready() -> void:
     protector = RuntimeProtector.new()
     # Configure startup verification before adding the node to the tree.
-    protector.hashes_url = "https://example.com/game/integrity.manifest"
-    protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
+        protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
     add_child(protector)
 
     protector.debugger_detected.connect(_on_debugger_detected)

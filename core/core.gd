@@ -7,14 +7,12 @@ extends Node
 const GENERAL_MANIFEST_URL: String = "https://drive.google.com/file/d/19GdjIRYv0pmPzWMF26nqgsgplxF79k3T/view?usp=drive_link"
 
 const GAME_MANIFEST_KEY: String = "vow_manifest" ## Ключ этой игры в общем манифесте.
+const MAX_MANIFEST_SIZE: int = 1024 * 1024 ## Максимальный размер одного JSON-манифеста
 
 const SAVE_PATH: String = 'user://'
 
-
 var _buffer: Dictionary = {} ## Общий буффер дял всей игры
-
 var audio_server: AudioServerManager = AudioServerManager.new()
-
 var protector: RuntimeProtector ## Защита
 
 # Инструменты
@@ -25,201 +23,229 @@ var scene_tools: SceneTools = ToolFactory.make_tool(self, "res://core/tools/scen
 var platform_tools: PlatformTools = ToolFactory.make_tool(self, "res://core/tools/platform_tools.gd", "PlatformTools")
 
 
+## Выводит заголовок лога ядра
 func _print_log() -> void:
 	print("Печатает центральное ядро игры. (core.gd)-------------------------------------------------")
 
 
+## Завершает блок лога ядра
 func _end_log() -> void:
 	print("------------------------------------------------------------------------------------------")
 	print('')
 
+
+## Настраивает защиту и запускает проверку релизной сборки
 func _ready() -> void:
 	_print_log()
 	print('Стартовало ядро игры')
 	
 	print('Создание протектора...')
 	protector = RuntimeProtector.new()
-	add_child(protector)
-	print('Протектор создан.')
 	
-	print('Настройка протектора.')
+	# Настраиваем узел до add_child(), поскольку _ready() C++-расширения
+	# вызывается непосредственно при добавлении узла в дерево
 	protector.debugger_detected.connect(_on_debugger_detected)
-	#protector.debugger_detected.connect(push_fatal_error)
-	
 	protector.hook_detected.connect(_on_hook_detected)
-	#protector.hook_detected.connect(push_fatal_error)
-	
 	protector.tampering_detected.connect(_on_tampering_detected)
-	#protector.tampering_detected.connect(push_fatal_error)
-	
-	if not protector.self_test_sha256():
-		push_error("RuntimeProtector: SHA-256 self-test failed — do not trust hash checks!")
-	
 	protector.check_interval_ms = 2000
 	protector.enable_anti_debug = true
 	protector.enable_anti_hook = true
+	protector.enable_anti_tamper = false
+	protector.reaction_mode = RuntimeProtector.REACTION_CRASH
 	
-	# Anti-tamper is opt-in: you need the real hash of your shipped .pck.
-	# Compute it once at build time (e.g. with sha256sum) and bake it in —
-	# ideally not as one obvious plain string literal; split/obfuscate it
-	# at the very least, since this is just a string an attacker can read
-	# out of the binary otherwise.
 	if OS.has_feature("template"):
 		protector.pck_path = OS.get_executable_path().get_base_dir().path_join("vow.pck")
-		_fetch_expected_hashes()
-	else:
-		print('Обнаружена работа в редакторе: enable_anti_tamper = false')
-		protector.enable_anti_tamper = false  # играем из редактора — проверять нечего
 	
-	# 0 = signal only (recommended to start with), 1 = quit, 2 = crash
-	protector.reaction_mode = RuntimeProtector.REACTION_CRASH
-	protector.start_protection()
+	if not protector.self_test_sha256():
+		await push_fatal_error("RuntimeProtector: SHA-256 self-test failed — hash checks cannot be trusted")
+		return
+	
+	add_child(protector)
+	print('Протектор создан.')
+	
+	# Локальная C++-проверка выполняется синхронно внутри add_child()
+	if not protector.is_release_verified():
+		return
+	
+	if OS.has_feature("template"):
+		await _fetch_expected_hashes()
+	else:
+		print('Обнаружена работа в редакторе: удалённая проверка отключена')
+		protector.enable_anti_tamper = false
+		protector.start_protection()
 	
 	print('Протектор настроен.')
 	_end_log()
 
 
+## Загружает общий и игровой манифесты, затем включает сверку хешей
 func _fetch_expected_hashes() -> void:
-	var path: String = await _resolve_manifest_url(GENERAL_MANIFEST_URL)
-	if path.is_empty():
-		push_warning("[Core] Не удалось разрешить ссылку на общий манифест. Анти-тампер отключён.")
+	var general_manifest_url: String = await _resolve_manifest_url(GENERAL_MANIFEST_URL)
+	if general_manifest_url.is_empty():
+		push_warning("[Core] Не удалось разрешить URL общего манифеста. Удалённая сверка пропущена.")
+		_start_protection_without_remote()
 		return
-
-	var http := HTTPRequest.new()
-	add_child(http)
-	http.request_completed.connect(_on_general_manifest_completed.bind(http))
-	var err := http.request(path)
-	if err != OK:
-		push_warning("[Core] Не удалось запросить общий манифест (код %d). Анти-тампер отключён." % err)
-		http.queue_free()
-
-
-func _on_general_manifest_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest) -> void:
-	http.queue_free()
-
-	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		push_warning("[Core] Общий манифест недоступен (result=%d, code=%d). Анти-тампер отключён." % [result, response_code])
+	
+	var general_response: Dictionary = await _download_manifest(general_manifest_url)
+	if not general_response.get("transport_ok", false):
+		push_warning("[Core] Общий манифест недоступен. Удалённая сверка пропущена.")
+		_start_protection_without_remote()
 		return
-
-	var parsed = JSON.parse_string(body.get_string_from_utf8())
-	if not parsed is Dictionary or not parsed.has(GAME_MANIFEST_KEY):
-		push_warning("[Core] В общем манифесте нет ключа '%s'. Анти-тампер отключён." % GAME_MANIFEST_KEY)
+	if general_response.get("malformed", false):
+		_reject_remote_manifest("[Core] Общий манифест превышает допустимый размер.")
 		return
-
-	var game_manifest_url: String = await _resolve_manifest_url(parsed[GAME_MANIFEST_KEY])
+	
+	var general_body: PackedByteArray = general_response.get("body", PackedByteArray())
+	var general_manifest: Variant = JSON.parse_string(general_body.get_string_from_utf8())
+	if not general_manifest is Dictionary:
+		_reject_remote_manifest("[Core] Загруженный общий манифест повреждён или не является JSON-объектом.")
+		return
+	
+	var game_manifest_reference: Variant = general_manifest.get(GAME_MANIFEST_KEY)
+	if not game_manifest_reference is String or game_manifest_reference.is_empty():
+		_reject_remote_manifest("[Core] В общем манифесте отсутствует корректная ссылка '%s'." % GAME_MANIFEST_KEY)
+		return
+	
+	var game_manifest_url: String = await _resolve_manifest_url(game_manifest_reference)
 	if game_manifest_url.is_empty():
-		push_warning("[Core] Значение ключа '%s' в общем манифесте пустое или некорректное. Анти-тампер отключён." % GAME_MANIFEST_KEY)
+		_reject_remote_manifest("[Core] Ссылка на манифест игры в общем манифесте некорректна.")
 		return
+	
+	var game_response: Dictionary = await _download_manifest(game_manifest_url)
+	if not game_response.get("transport_ok", false):
+		push_warning("[Core] Манифест игры недоступен. Удалённая сверка пропущена.")
+		_start_protection_without_remote()
+		return
+	if game_response.get("malformed", false):
+		_reject_remote_manifest("[Core] Манифест игры превышает допустимый размер.")
+		return
+	
+	var game_body: PackedByteArray = game_response.get("body", PackedByteArray())
+	var game_manifest: Variant = JSON.parse_string(game_body.get_string_from_utf8())
+	if not game_manifest is Dictionary:
+		_reject_remote_manifest("[Core] Загруженный манифест игры повреждён или не является JSON-объектом.")
+		return
+	
+	# Обязательные хеши релизных файлов
+	var pck_hash: Variant = game_manifest.get("pck_cache")
+	var exe_hash: Variant = game_manifest.get("exe_cache")
+	var library_hash: Variant = game_manifest.get("lib_cache")
+	var runtime_hash: Variant = game_manifest.get("runtime_cache", "")
+	
+	if not _is_valid_sha256(pck_hash):
+		_reject_remote_manifest("[Core] pck_cache отсутствует или содержит некорректный SHA-256.")
+		return
+	if not _is_valid_sha256(exe_hash):
+		_reject_remote_manifest("[Core] exe_cache отсутствует или содержит некорректный SHA-256.")
+		return
+	if not _is_valid_sha256(library_hash):
+		_reject_remote_manifest("[Core] lib_cache отсутствует или содержит некорректный SHA-256.")
+		return
+	if not runtime_hash is String:
+		_reject_remote_manifest("[Core] runtime_cache должен быть строкой.")
+		return
+	if not runtime_hash.is_empty() and not _is_valid_sha256(runtime_hash):
+		_reject_remote_manifest("[Core] runtime_cache содержит некорректный SHA-256.")
+		return
+	
+	# Передаём ожидаемые значения в AntiTamper только после полной валидации JSON
+	protector.expected_pck_hash = pck_hash
+	protector.expected_exe_hash = exe_hash
+	protector.expected_library_hash = library_hash
+	if not runtime_hash.is_empty():
+		protector.runtime_dir_path = OS.get_executable_path().get_base_dir().path_join("python_runtime")
+		protector.expected_runtime_dir_hash = runtime_hash
+	protector.enable_anti_tamper = true
+	
+	# Проверяем файлы до запуска фонового потока, чтобы не допустить старта игры
+	if not protector.verify_pck_now():
+		_reject_remote_manifest("[Core] SHA-256 PCK не совпадает с удалённым манифестом.")
+		return
+	if not protector.verify_exe_now():
+		_reject_remote_manifest("[Core] SHA-256 EXE не совпадает с удалённым манифестом.")
+		return
+	if not protector.verify_library_now():
+		_reject_remote_manifest("[Core] SHA-256 RuntimeProtector DLL не совпадает с удалённым манифестом.")
+		return
+	if not runtime_hash.is_empty() and not protector.verify_runtime_dir_now():
+		_reject_remote_manifest("[Core] SHA-256 каталога python_runtime не совпадает с удалённым манифестом.")
+		return
+	
+	protector.start_protection()
 
-	var game_http := HTTPRequest.new()
-	add_child(game_http)
-	game_http.request_completed.connect(_on_game_manifest_completed.bind(game_http))
-	var err := game_http.request(game_manifest_url)
-	if err != OK:
-		push_warning("[Core] Не удалось запросить манифест игры (код %d). Анти-тампер отключён." % err)
-		game_http.queue_free()
+
+## Загружает один манифест; транспортная ошибка отделена от некорректного содержимого
+func _download_manifest(url: String) -> Dictionary:
+	var http: HTTPRequest = HTTPRequest.new()
+	http.timeout = 10.0
+	http.body_size_limit = MAX_MANIFEST_SIZE
+	add_child(http)
+	
+	var request_error: Error = http.request(url)
+	if request_error != OK:
+		http.queue_free()
+		return {"transport_ok": false}
+	
+	var response: Array = await http.request_completed
+	http.queue_free()
+	
+	var result: int = response[0]
+	var response_code: int = response[1]
+	var body: PackedByteArray = response[3]
+	
+	if result == HTTPRequest.RESULT_BODY_SIZE_LIMIT_EXCEEDED:
+		return {"transport_ok": true, "malformed": true}
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		return {"transport_ok": false}
+	
+	return {"transport_ok": true, "body": body}
 
 
-## Прогоняет значение (ссылку на Google Диск) через Python-хелпер
-## drive_direct_url, который сам разбирает и /file/d/<ID>/view, и ?id=<ID>.
-func _resolve_manifest_url(value) -> String:
-	if not (value is String) or value.is_empty():
+## Разрешает ссылку на Google Drive в прямой URL загрузки
+func _resolve_manifest_url(value: Variant) -> String:
+	if not value is String or value.is_empty():
 		return ""
-
+	
 	var response: Dictionary = await PythonBridge.call_function('tools', 'drive_direct_url', [value])
 	if not response.get("ok", false):
-		push_warning("[Core] drive_direct_url не смог разобрать ссылку '%s': %s" % [value, response.get("error", "unknown error")])
+		push_warning("[Core] drive_direct_url не смог разобрать ссылку: %s" % response.get("error", "unknown error"))
 		return ""
-
+	
 	return str(response.get("result", ""))
 
 
-func _on_game_manifest_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest) -> void:
-	http.queue_free()
-
-	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		push_warning("[Core] Манифест игры недоступен (result=%d, code=%d). Анти-тампер отключён." % [result, response_code])
-		return
-
-	var parsed = JSON.parse_string(body.get_string_from_utf8())
-	if not parsed is Dictionary:
-		push_warning("[Core] Манифест игры повреждён или не является объектом. Анти-тампер отключён.")
-		return
-	
-	var pck_hash: String = str(parsed.get("pck_cache", ""))
-	var exe_hash: String = str(parsed.get("exe_cache", ""))
-	var lib_hash: String = str(parsed.get("lib_cache", ""))
-	var runtime_hash: String = str(parsed.get("runtime_cache", ""))
-	
-	var any_enabled := false
-	
-	if _is_valid_sha256(lib_hash):
-		protector.expected_library_hash = lib_hash
-		any_enabled = true
-	else:
-		push_warning("[Core] lib_cache отсутствует или некорректен — проверка .dll пропущена.")
-		
-	if _is_valid_sha256(runtime_hash):
-		protector.runtime_dir_path = OS.get_executable_path().get_base_dir().path_join("python_runtime")
-		protector.expected_runtime_dir_hash = runtime_hash
-		any_enabled = true
-	else:
-		push_warning("[Core] runtime_cache отсутствует или некорректен — проверка python_runtime пропущена.")
-	
-	if _is_valid_sha256(pck_hash):
-		protector.expected_pck_hash = pck_hash
-		any_enabled = true
-	else:
-		push_warning("[Core] pck_cache в манифесте отсутствует или некорректен — проверка .pck пропущена.")
-	
-	if _is_valid_sha256(exe_hash):
-		protector.expected_exe_hash = exe_hash
-		any_enabled = true
-	else:
-		push_warning("[Core] exe_cache в манифесте отсутствует или некорректен — проверка .exe пропущена.")
-	
-	protector.enable_anti_tamper = any_enabled
-
-
-func _is_valid_sha256(text: String) -> bool:
-	var regex := RegEx.new()
+## Проверяет формат SHA-256 в нижнем регистре
+func _is_valid_sha256(value: Variant) -> bool:
+	if not value is String:
+		return false
+	var regex: RegEx = RegEx.new()
 	regex.compile("^[0-9a-f]{64}$")
-	return regex.search(text) != null
+	return regex.search(value) != null
 
 
-func _on_pck_hash_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray, http: HTTPRequest) -> void:
-	http.queue_free()
-	
-	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		push_warning("[Core] Сервер хэшей недоступен (result=%d, code=%d). Анти-тампер отключён на эту сессию." % [result, response_code])
-		return
-	
-	var text := body.get_string_from_utf8().strip_edges()
-	
-	# Защита от мусора: если Google Диск вдруг вернул HTML-страницу
-	# (например, из-за смены политики ссылок), а не чистый хэш —
-	# не включаем проверку с заведомо неверным значением.
-	var regex := RegEx.new()
-	regex.compile("^[0-9a-f]{64}$")
-	if not regex.search(text):
-		push_warning("[Core] Полученный ответ не похож на валидный SHA-256 (%d симв.). Анти-тампер отключён." % text.length())
-		return
-	
-	protector.expected_pck_hash = text
-	protector.enable_anti_tamper = true
+## Запускает защиту без удалённой проверки, сохраняя локальные проверки
+func _start_protection_without_remote() -> void:
+	protector.enable_anti_tamper = false
+	protector.start_protection()
 
 
+## Блокирует запуск при успешно загруженном, но некорректном манифесте
+func _reject_remote_manifest(message: String) -> void:
+	push_error(message)
+	get_tree().quit(1)
+
+
+## Обработчик обнаружения отладчика
 func _on_debugger_detected(reason: String) -> void:
 	print("Debugger detected: ", reason)
-	# Your call: degrade silently, corrupt save state, flag the session
-	# server-side, etc. An instant, obvious crash is the easiest pattern
-	# to find and patch out.
 
 
+## Обработчик обнаружения перехватчика
 func _on_hook_detected(reason: String) -> void:
 	print("Hook detected: ", reason)
 
 
+## Обработчик обнаружения изменения файлов
 func _on_tampering_detected(reason: String) -> void:
 	print("Tampering detected: ", reason)
 

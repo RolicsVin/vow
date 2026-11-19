@@ -20,6 +20,7 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("start_protection"), &RuntimeProtector::start_protection);
     ClassDB::bind_method(D_METHOD("stop_protection"), &RuntimeProtector::stop_protection);
     ClassDB::bind_method(D_METHOD("is_running"), &RuntimeProtector::is_running);
+    ClassDB::bind_method(D_METHOD("is_release_verified"), &RuntimeProtector::is_release_verified);
 
     ClassDB::bind_method(D_METHOD("check_debugger_now"), &RuntimeProtector::check_debugger_now);
     ClassDB::bind_method(D_METHOD("check_hooks_now"), &RuntimeProtector::check_hooks_now);
@@ -55,10 +56,6 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_pck_path", "path"), &RuntimeProtector::set_pck_path);
     ClassDB::bind_method(D_METHOD("get_pck_path"), &RuntimeProtector::get_pck_path);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "pck_path"), "set_pck_path", "get_pck_path");
-
-    ClassDB::bind_method(D_METHOD("set_hashes_url", "url"), &RuntimeProtector::set_hashes_url);
-    ClassDB::bind_method(D_METHOD("get_hashes_url"), &RuntimeProtector::get_hashes_url);
-    ADD_PROPERTY(PropertyInfo(Variant::STRING, "hashes_url"), "set_hashes_url", "get_hashes_url");
 
     ClassDB::bind_method(D_METHOD("set_expected_exe_hash", "hash"), &RuntimeProtector::set_expected_exe_hash);
     ClassDB::bind_method(D_METHOD("get_expected_exe_hash"), &RuntimeProtector::get_expected_exe_hash);
@@ -114,8 +111,8 @@ void RuntimeProtector::_ready() {
 #ifndef DEBUG_ENABLED
     std::string reason;
     const std::string pck_path = pck_path_.utf8().get_data();
-    const std::string hashes_url = hashes_url_.utf8().get_data();
-    if (!godot_rp::AntiSignature::verify_release_files(pck_path, hashes_url, reason)) {
+    if (!godot_rp::AntiSignature::verify_release_files(pck_path, reason)) {
+        release_verified_ = false;
         UtilityFunctions::push_error(
             String("RuntimeProtector: release verification failed: ") + String(reason.c_str())
         );
@@ -159,6 +156,10 @@ void RuntimeProtector::stop_protection() {
 
 bool RuntimeProtector::is_running() const {
     return running_.load();
+}
+
+bool RuntimeProtector::is_release_verified() const {
+    return release_verified_;
 }
 
 void RuntimeProtector::_worker_loop() {
@@ -344,9 +345,6 @@ String RuntimeProtector::get_expected_pck_hash() const { return expected_pck_has
 
 void RuntimeProtector::set_pck_path(const String &p_path) { pck_path_ = p_path; }
 String RuntimeProtector::get_pck_path() const { return pck_path_; }
-
-void RuntimeProtector::set_hashes_url(const String &p_url) { hashes_url_ = p_url; }
-String RuntimeProtector::get_hashes_url() const { return hashes_url_; }
 
 void RuntimeProtector::set_expected_exe_hash(const String &p_hash) { expected_exe_hash_ = p_hash; }
 String RuntimeProtector::get_expected_exe_hash() const { return expected_exe_hash_; }

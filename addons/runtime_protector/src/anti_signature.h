@@ -8,7 +8,6 @@ class AntiSignature {
 public:
     static bool verify_release_files(
         const std::string &pck_path_utf8,
-        const std::string &hashes_url_utf8,
         std::string &reason
     );
     static std::wstring get_executable_path();

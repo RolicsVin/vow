@@ -43,17 +43,17 @@ GDScript:
 func _ready() -> void:
     PythonBridge.python_log.connect(
         func(level: String, text: String) -> void:
-            print("[py/%s] %s" % [level, text])
+            print('[py/%s] %s' % [level, text])
     )
 
-    var response: Dictionary = PythonBridge.call_function("mymath", "add", [1, 2])
+    var response: Dictionary = PythonBridge.call_function('mymath', 'add', [1, 2])
     if response.ok:
         print(int(response.result))
     else:
         push_error(response.error)
         print(response.traceback)
 
-    response = PythonBridge.call_function("mymath", "add", [1], {"b": 5})
+    response = PythonBridge.call_function('mymath', 'add', [1], {'b': 5})
 ```
 
 All public calls are synchronous: `call_function()`, `reload_module()`, `ping()`,

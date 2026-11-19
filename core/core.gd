@@ -253,7 +253,10 @@ func _resolve_manifest_url(value: Variant) -> String:
 	## Ответ HTTP-клиента
 	var response: Dictionary = await PythonBridge.call_function('tools', 'drive_direct_url', [value])
 	if not response.get('ok', false):
-		push_warning('[Core] drive_direct_url не смог разобрать ссылку: %s' % response.get('error', 'unknown error'))
+		push_warning(
+			'[Core] drive_direct_url не смог разобрать ссылку: %s'
+			% response.get('error', 'unknown error')
+		)
 		return ''
 	
 	return str(response.get('result', ''))

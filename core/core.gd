@@ -309,9 +309,9 @@ func save_data() -> String:
 	icon.resize(round(screen_size.x / 3), round(screen_size.y / 3), Image.INTERPOLATE_CUBIC)
 	
 	var data = {
-		'godo_combat': await GCombat.get_save(),
-		'godo_mini_game': await GminiGame.get_save(),
-		'godo_visual_novel': await GVisualNovel.get_save(),
+		'godo_combat': GCombat.get_save(),
+		'godo_mini_game': GminiGame.get_save(),
+		'godo_visual_novel': GVisualNovel.get_save(),
 		'audio_server': audio_server.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),
@@ -321,7 +321,7 @@ func save_data() -> String:
 	}
 	
 	print('Сохранение создано: ')
-	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	var response: Dictionary = PythonBridge.call_function('stdout', 'pretty_print', [data])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:

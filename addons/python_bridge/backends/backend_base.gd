@@ -14,7 +14,7 @@ func send(_msg: Dictionary) -> void:
 	pass
 
 
-## Called every frame from the main thread.
+## Вызывается из основного потока каждый кадр и во время синхронного ожидания ответа.
 func process() -> void:
 	pass
 

@@ -29,8 +29,8 @@ import java.util.function.Consumer;
  *   poll()                          -> String    (JSON lines separated by '\n', may be empty)
  *   shutdown()
  *
- * All Python work happens on one background thread, so requests run in order and
- * the Godot thread is never blocked.
+ * All Python work happens on one background thread, so requests run in order.
+ * Synchronous GDScript calls wait for responses while polling the output queue.
  */
 public class PythonBridgePlugin extends GodotPlugin {
     private static final String TAG = "PythonBridge";

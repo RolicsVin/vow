@@ -1,7 +1,6 @@
 extends "res://addons/python_bridge/backends/backend_base.gd"
-## Android backend: talks to the "PythonBridgeAndroid" Godot Android plugin
-## (android/PythonBridgePlugin.java), which runs Python in-process via Chaquopy.
-## Output is polled once per frame, so no threads / signals cross the JNI border.
+## Android backend использует плагин Godot и запускает Python через Chaquopy
+## Очередь ответов опрашивается при обработке кадра или синхронном ожидании
 
 const SINGLETON := "PythonBridgeAndroid"
 

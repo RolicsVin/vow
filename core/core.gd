@@ -4,33 +4,46 @@
 extends Node
 
 ## Прямая ссылка на общий манифест (список манифестов всех ваших игр).
-const GENERAL_MANIFEST_URL: String = "https://drive.google.com/file/d/19GdjIRYv0pmPzWMF26nqgsgplxF79k3T/view?usp=drive_link"
+const GENERAL_MANIFEST_URL: String = (
+	'https://drive.google.com/file/d/19GdjIRYv0pmPzWMF26nqgsgplxF79k3T/'
+	+ 'view?usp=drive_link'
+)
 
-const GAME_MANIFEST_KEY: String = "vow_manifest" ## Ключ этой игры в общем манифесте.
+const GAME_MANIFEST_KEY: String = 'vow_manifest' ## Ключ этой игры в общем манифесте.
 const MAX_MANIFEST_SIZE: int = 1024 * 1024 ## Максимальный размер одного JSON-манифеста
 
 const SAVE_PATH: String = 'user://'
 
 var _buffer: Dictionary = {} ## Общий буффер дял всей игры
+## Менеджер аудиосистемы
 var audio_server: AudioServerManager = AudioServerManager.new()
 var protector: RuntimeProtector ## Защита
 
 # Инструменты
-var tools: GTTools = ToolFactory.make_tool(self, "res://core/tools/tools.gd", "Tools")
-var window_tools: WindowTools = ToolFactory.make_tool(self, "res://core/tools/window_tools.gd", "WindowTools")
-var time_tools: TimeTools = ToolFactory.make_tool(self, "res://core/tools/time_tools.gd", "TimeTools")
-var scene_tools: SceneTools = ToolFactory.make_tool(self, "res://core/tools/scene_tools.gd", "SceneTools")
-var platform_tools: PlatformTools = ToolFactory.make_tool(self, "res://core/tools/platform_tools.gd", "PlatformTools")
+## Общие инструменты ядра
+var tools: GTTools = ToolFactory.make_tool(self, 'res://core/tools/tools.gd', 'Tools')
+var window_tools: WindowTools = ToolFactory.make_tool(
+	self, 'res://core/tools/window_tools.gd', 'WindowTools'
+) ## Инструменты управления окном
+var time_tools: TimeTools = ToolFactory.make_tool(
+	self, 'res://core/tools/time_tools.gd', 'TimeTools'
+) ## Инструменты работы со временем
+var scene_tools: SceneTools = ToolFactory.make_tool(
+	self, 'res://core/tools/scene_tools.gd', 'SceneTools'
+) ## Инструменты управления сценами
+var platform_tools: PlatformTools = ToolFactory.make_tool(
+	self, 'res://core/tools/platform_tools.gd', 'PlatformTools'
+) ## Инструменты определения платформы
 
 
 ## Выводит заголовок лога ядра
 func _print_log() -> void:
-	print("Печатает центральное ядро игры. (core.gd)-------------------------------------------------")
+	print('Печатает центральное ядро игры. (core.gd)-------------------------------------------------')
 
 
 ## Завершает блок лога ядра
 func _end_log() -> void:
-	print("------------------------------------------------------------------------------------------")
+	print('------------------------------------------------------------------------------------------')
 	print('')
 
 
@@ -53,11 +66,13 @@ func _ready() -> void:
 	protector.enable_anti_tamper = false
 	protector.reaction_mode = RuntimeProtector.REACTION_CRASH
 	
-	if OS.has_feature("template"):
-		protector.pck_path = OS.get_executable_path().get_base_dir().path_join("vow.pck")
+	if OS.has_feature('template'):
+		protector.pck_path = OS.get_executable_path().get_base_dir().path_join('vow.pck')
 	
 	if not protector.self_test_sha256():
-		await push_fatal_error("RuntimeProtector: SHA-256 self-test failed — hash checks cannot be trusted")
+		await push_fatal_error(
+			'RuntimeProtector: SHA-256 self-test failed — hash checks cannot be trusted'
+		)
 		return
 	
 	add_child(protector)
@@ -67,7 +82,7 @@ func _ready() -> void:
 	if not protector.is_release_verified():
 		return
 	
-	if OS.has_feature("template"):
+	if OS.has_feature('template'):
 		await _fetch_expected_hashes()
 	else:
 		print('Обнаружена работа в редакторе: удалённая проверка отключена')
@@ -80,72 +95,91 @@ func _ready() -> void:
 
 ## Загружает общий и игровой манифесты, затем включает сверку хешей
 func _fetch_expected_hashes() -> void:
+	## Прямой URL общего манифеста
 	var general_manifest_url: String = await _resolve_manifest_url(GENERAL_MANIFEST_URL)
 	if general_manifest_url.is_empty():
-		push_warning("[Core] Не удалось разрешить URL общего манифеста. Удалённая сверка пропущена.")
+		push_warning('[Core] Не удалось разрешить URL общего манифеста. Удалённая сверка пропущена.')
 		_start_protection_without_remote()
 		return
 	
+	## Результат загрузки общего манифеста
 	var general_response: Dictionary = await _download_manifest(general_manifest_url)
-	if not general_response.get("transport_ok", false):
-		push_warning("[Core] Общий манифест недоступен. Удалённая сверка пропущена.")
+	if not general_response.get('transport_ok', false):
+		push_warning('[Core] Общий манифест недоступен. Удалённая сверка пропущена.')
 		_start_protection_without_remote()
 		return
-	if general_response.get("malformed", false):
-		_reject_remote_manifest("[Core] Общий манифест превышает допустимый размер.")
+	if general_response.get('malformed', false):
+		_reject_remote_manifest('[Core] Общий манифест превышает допустимый размер.')
 		return
 	
-	var general_body: PackedByteArray = general_response.get("body", PackedByteArray())
+	## Тело общего манифеста
+	var general_body: PackedByteArray = general_response.get('body', PackedByteArray())
+	## Распарсенный общий манифест
 	var general_manifest: Variant = JSON.parse_string(general_body.get_string_from_utf8())
 	if not general_manifest is Dictionary:
-		_reject_remote_manifest("[Core] Загруженный общий манифест повреждён или не является JSON-объектом.")
+		_reject_remote_manifest(
+			'[Core] Загруженный общий манифест повреждён или не является JSON-объектом.'
+		)
 		return
 	
+	## Ссылка на манифест текущей игры
 	var game_manifest_reference: Variant = general_manifest.get(GAME_MANIFEST_KEY)
 	if not game_manifest_reference is String or game_manifest_reference.is_empty():
-		_reject_remote_manifest("[Core] В общем манифесте отсутствует корректная ссылка '%s'." % GAME_MANIFEST_KEY)
+		_reject_remote_manifest(
+			'[Core] В общем манифесте отсутствует корректная ссылка «%s».' % GAME_MANIFEST_KEY
+		)
 		return
 	
+	## Прямой URL манифеста игры
 	var game_manifest_url: String = await _resolve_manifest_url(game_manifest_reference)
 	if game_manifest_url.is_empty():
-		_reject_remote_manifest("[Core] Ссылка на манифест игры в общем манифесте некорректна.")
+		_reject_remote_manifest('[Core] Ссылка на манифест игры в общем манифесте некорректна.')
 		return
 	
+	## Результат загрузки манифеста игры
 	var game_response: Dictionary = await _download_manifest(game_manifest_url)
-	if not game_response.get("transport_ok", false):
-		push_warning("[Core] Манифест игры недоступен. Удалённая сверка пропущена.")
+	if not game_response.get('transport_ok', false):
+		push_warning('[Core] Манифест игры недоступен. Удалённая сверка пропущена.')
 		_start_protection_without_remote()
 		return
-	if game_response.get("malformed", false):
-		_reject_remote_manifest("[Core] Манифест игры превышает допустимый размер.")
+	if game_response.get('malformed', false):
+		_reject_remote_manifest('[Core] Манифест игры превышает допустимый размер.')
 		return
 	
-	var game_body: PackedByteArray = game_response.get("body", PackedByteArray())
+	## Тело манифеста игры
+	var game_body: PackedByteArray = game_response.get('body', PackedByteArray())
+	## Распарсенный манифест игры
 	var game_manifest: Variant = JSON.parse_string(game_body.get_string_from_utf8())
 	if not game_manifest is Dictionary:
-		_reject_remote_manifest("[Core] Загруженный манифест игры повреждён или не является JSON-объектом.")
+		_reject_remote_manifest(
+			'[Core] Загруженный манифест игры повреждён или не является JSON-объектом.'
+		)
 		return
 	
 	# Обязательные хеши релизных файлов
-	var pck_hash: Variant = game_manifest.get("pck_cache")
-	var exe_hash: Variant = game_manifest.get("exe_cache")
-	var library_hash: Variant = game_manifest.get("lib_cache")
-	var runtime_hash: Variant = game_manifest.get("runtime_cache", "")
+	## Ожидаемый хеш PCK
+	var pck_hash: Variant = game_manifest.get('pck_cache')
+	## Ожидаемый хеш EXE
+	var exe_hash: Variant = game_manifest.get('exe_cache')
+	## Ожидаемый хеш библиотеки
+	var library_hash: Variant = game_manifest.get('lib_cache')
+	## Ожидаемый хеш каталога Python
+	var runtime_hash: Variant = game_manifest.get('runtime_cache', '')
 	
 	if not _is_valid_sha256(pck_hash):
-		_reject_remote_manifest("[Core] pck_cache отсутствует или содержит некорректный SHA-256.")
+		_reject_remote_manifest('[Core] pck_cache отсутствует или содержит некорректный SHA-256.')
 		return
 	if not _is_valid_sha256(exe_hash):
-		_reject_remote_manifest("[Core] exe_cache отсутствует или содержит некорректный SHA-256.")
+		_reject_remote_manifest('[Core] exe_cache отсутствует или содержит некорректный SHA-256.')
 		return
 	if not _is_valid_sha256(library_hash):
-		_reject_remote_manifest("[Core] lib_cache отсутствует или содержит некорректный SHA-256.")
+		_reject_remote_manifest('[Core] lib_cache отсутствует или содержит некорректный SHA-256.')
 		return
 	if not runtime_hash is String:
-		_reject_remote_manifest("[Core] runtime_cache должен быть строкой.")
+		_reject_remote_manifest('[Core] runtime_cache должен быть строкой.')
 		return
 	if not runtime_hash.is_empty() and not _is_valid_sha256(runtime_hash):
-		_reject_remote_manifest("[Core] runtime_cache содержит некорректный SHA-256.")
+		_reject_remote_manifest('[Core] runtime_cache содержит некорректный SHA-256.')
 		return
 	
 	# Передаём ожидаемые значения в AntiTamper только после полной валидации JSON
@@ -153,22 +187,26 @@ func _fetch_expected_hashes() -> void:
 	protector.expected_exe_hash = exe_hash
 	protector.expected_library_hash = library_hash
 	if not runtime_hash.is_empty():
-		protector.runtime_dir_path = OS.get_executable_path().get_base_dir().path_join("python_runtime")
+		protector.runtime_dir_path = OS.get_executable_path().get_base_dir().path_join('python_runtime')
 		protector.expected_runtime_dir_hash = runtime_hash
 	protector.enable_anti_tamper = true
 	
 	# Проверяем файлы до запуска фонового потока, чтобы не допустить старта игры
 	if not protector.verify_pck_now():
-		_reject_remote_manifest("[Core] SHA-256 PCK не совпадает с удалённым манифестом.")
+		_reject_remote_manifest('[Core] SHA-256 PCK не совпадает с удалённым манифестом.')
 		return
 	if not protector.verify_exe_now():
-		_reject_remote_manifest("[Core] SHA-256 EXE не совпадает с удалённым манифестом.")
+		_reject_remote_manifest('[Core] SHA-256 EXE не совпадает с удалённым манифестом.')
 		return
 	if not protector.verify_library_now():
-		_reject_remote_manifest("[Core] SHA-256 RuntimeProtector DLL не совпадает с удалённым манифестом.")
+		_reject_remote_manifest(
+			'[Core] SHA-256 RuntimeProtector DLL не совпадает с удалённым манифестом.'
+		)
 		return
 	if not runtime_hash.is_empty() and not protector.verify_runtime_dir_now():
-		_reject_remote_manifest("[Core] SHA-256 каталога python_runtime не совпадает с удалённым манифестом.")
+		_reject_remote_manifest(
+			'[Core] SHA-256 каталога python_runtime не совпадает с удалённым манифестом.'
+		)
 		return
 	
 	protector.start_protection()
@@ -176,50 +214,58 @@ func _fetch_expected_hashes() -> void:
 
 ## Загружает один манифест; транспортная ошибка отделена от некорректного содержимого
 func _download_manifest(url: String) -> Dictionary:
+	## HTTP-клиент для загрузки манифеста
 	var http: HTTPRequest = HTTPRequest.new()
 	http.timeout = 10.0
 	http.body_size_limit = MAX_MANIFEST_SIZE
 	add_child(http)
 	
+	## Код ошибки запуска HTTP-запроса
 	var request_error: Error = http.request(url)
 	if request_error != OK:
 		http.queue_free()
-		return {"transport_ok": false}
+		return {'transport_ok': false}
 	
+	## Ответ HTTP-клиента
 	var response: Array = await http.request_completed
 	http.queue_free()
 	
+	## Результат выполнения HTTP-запроса
 	var result: int = response[0]
+	## HTTP-код ответа сервера
 	var response_code: int = response[1]
+	## Загруженное тело ответа
 	var body: PackedByteArray = response[3]
 	
 	if result == HTTPRequest.RESULT_BODY_SIZE_LIMIT_EXCEEDED:
-		return {"transport_ok": true, "malformed": true}
+		return {'transport_ok': true, 'malformed': true}
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
-		return {"transport_ok": false}
+		return {'transport_ok': false}
 	
-	return {"transport_ok": true, "body": body}
+	return {'transport_ok': true, 'body': body}
 
 
 ## Разрешает ссылку на Google Drive в прямой URL загрузки
 func _resolve_manifest_url(value: Variant) -> String:
 	if not value is String or value.is_empty():
-		return ""
+		return ''
 	
+	## Ответ HTTP-клиента
 	var response: Dictionary = await PythonBridge.call_function('tools', 'drive_direct_url', [value])
-	if not response.get("ok", false):
-		push_warning("[Core] drive_direct_url не смог разобрать ссылку: %s" % response.get("error", "unknown error"))
-		return ""
+	if not response.get('ok', false):
+		push_warning('[Core] drive_direct_url не смог разобрать ссылку: %s' % response.get('error', 'unknown error'))
+		return ''
 	
-	return str(response.get("result", ""))
+	return str(response.get('result', ''))
 
 
 ## Проверяет формат SHA-256 в нижнем регистре
 func _is_valid_sha256(value: Variant) -> bool:
 	if not value is String:
 		return false
+	## Регулярное выражение формата SHA-256
 	var regex: RegEx = RegEx.new()
-	regex.compile("^[0-9a-f]{64}$")
+	regex.compile('^[0-9a-f]{64}$')
 	return regex.search(value) != null
 
 
@@ -237,17 +283,17 @@ func _reject_remote_manifest(message: String) -> void:
 
 ## Обработчик обнаружения отладчика
 func _on_debugger_detected(reason: String) -> void:
-	print("Debugger detected: ", reason)
+	print('Debugger detected: ', reason)
 
 
 ## Обработчик обнаружения перехватчика
 func _on_hook_detected(reason: String) -> void:
-	print("Hook detected: ", reason)
+	print('Hook detected: ', reason)
 
 
 ## Обработчик обнаружения изменения файлов
 func _on_tampering_detected(reason: String) -> void:
-	print("Tampering detected: ", reason)
+	print('Tampering detected: ', reason)
 
 
 func save_data() -> String:

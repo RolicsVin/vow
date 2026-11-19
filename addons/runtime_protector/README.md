@@ -131,6 +131,38 @@ Since this wasn't compiled in the environment that wrote it, at minimum:
 5. Load the compiled library with something like Cheat Engine or a
    trainer DLL and confirm `hook_detected` fires.
 
+## Release verification
+
+Every exported Release build verifies the local Authenticode signatures of the EXE and
+RuntimeProtector DLL, then verifies the local Ed25519 signature of `integrity.manifest`.
+These checks run before gameplay starts and do not require an internet connection.
+They are independent from the `autostart` setting.
+
+An optional remote SHA-256 check can be configured through `hashes_url`. The URL must use
+HTTPS and return a manifest in the same format as `integrity.manifest`:
+
+```text
+VOW-INTEGRITY-V1
+exe=<64-character SHA-256>
+pck=<64-character SHA-256>
+dll=<64-character SHA-256>
+```
+
+The `integrity.manifest` created by `tools/sign_release.py sign` can be hosted directly
+at this URL. If the request cannot be completed (no connection, timeout, or unavailable
+server), only the remote hash comparison is skipped. If the file is downloaded but is
+malformed or any hash differs, startup is blocked. A valid local Authenticode/Ed25519
+signature is still required in all cases.
+
+Set the URL on the RuntimeProtector node:
+
+```gdscript
+protector.hashes_url = "https://example.com/game/integrity.manifest"
+```
+
+Leave `hashes_url` empty to disable the remote check. The local signature checks remain
+enabled in Release builds.
+
 ## Usage from GDScript
 
 ```gdscript

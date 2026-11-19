@@ -1,6 +1,7 @@
 #include "sha256.h"
 
 #include <cstring>
+#include <filesystem>
 #include <fstream>
 #include <vector>
 
@@ -155,6 +156,14 @@ std::string SHA256::hash_bytes(const uint8_t *data, size_t len) {
 }
 
 std::string SHA256::hash_file(const std::string &path) {
+    return hash_file(std::filesystem::u8path(path));
+}
+
+std::string SHA256::hash_file(const std::wstring &path) {
+    return hash_file(std::filesystem::path(path));
+}
+
+std::string SHA256::hash_file(const std::filesystem::path &path) {
     std::ifstream file(path, std::ios::binary);
     if (!file) {
         return std::string();

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <string>
+#include <filesystem>
 
 namespace godot_rp {
 
@@ -33,6 +34,7 @@ public:
     // files). Returns an empty string if the file cannot be opened.
     static std::string hash_file(const std::string &path);
     static std::string hash_file(const std::wstring &path);
+    static std::string hash_file(const std::filesystem::path &path);
 
     static std::string hash_bytes(const uint8_t *data, size_t len);
 

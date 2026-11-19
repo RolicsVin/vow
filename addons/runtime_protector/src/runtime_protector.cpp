@@ -2,7 +2,6 @@
 
 #include "anti_debug.h"
 #include "anti_hook.h"
-#include "anti_signature.h"
 #include "anti_tamper.h"
 #include "sha256.h"
 
@@ -20,7 +19,6 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("start_protection"), &RuntimeProtector::start_protection);
     ClassDB::bind_method(D_METHOD("stop_protection"), &RuntimeProtector::stop_protection);
     ClassDB::bind_method(D_METHOD("is_running"), &RuntimeProtector::is_running);
-    ClassDB::bind_method(D_METHOD("is_release_verified"), &RuntimeProtector::is_release_verified);
 
     ClassDB::bind_method(D_METHOD("check_debugger_now"), &RuntimeProtector::check_debugger_now);
     ClassDB::bind_method(D_METHOD("check_hooks_now"), &RuntimeProtector::check_hooks_now);
@@ -102,34 +100,6 @@ RuntimeProtector::~RuntimeProtector() {
     stop_protection();
 }
 
-void RuntimeProtector::_ready() {
-    // Release signature verification is mandatory and independent from autostart.
-    if (!Engine::get_singleton() || Engine::get_singleton()->is_editor_hint()) {
-        return;
-    }
-
-std::string reason;
-    const std::string pck_path = pck_path_.utf8().get_data();
-    if (!godot_rp::AntiSignature::verify_release_files(pck_path, reason)) {
-        release_verified_ = false;
-        UtilityFunctions::push_error(
-            String("RuntimeProtector: release verification failed: ") + String(reason.c_str())
-        );
-        SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-        if (tree) {
-            tree->quit(1);
-        } else {
-            std::exit(1);
-        }
-        return;
-    }
-    release_verified_ = true;
-
-    if (autostart_) {
-        start_protection();
-    }
-}
-
 void RuntimeProtector::_exit_tree() {
     stop_protection();
 }
@@ -157,9 +127,6 @@ bool RuntimeProtector::is_running() const {
     return running_.load();
 }
 
-bool RuntimeProtector::is_release_verified() const {
-    return release_verified_;
-}
 
 void RuntimeProtector::_worker_loop() {
     using namespace godot_rp;

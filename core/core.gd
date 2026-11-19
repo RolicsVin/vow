@@ -139,7 +139,7 @@ func load_save(_save: Dictionary) -> void:
 	_print_log()
 
 	print('Загрузка сохранения...')
-	# Загрузка модулей выполняется последовательно без await
+	# Модули загружаются последовательно в рамках одного вызова
 	GCombat.load_save(_save['godo_combat'])
 	if _save.has('godo_mini_game'):
 		GminiGame.load_save(_save['godo_mini_game'])

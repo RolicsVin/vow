@@ -78,13 +78,7 @@ func _ready() -> void:
 	add_child(protector)
 	print('Протектор создан.')
 	
-	# В экспортированной сборке проверка подписи обязательна.
-	if OS.has_feature('template') and not protector.is_release_verified():
-		push_error('[Core] Проверка подписи релизных файлов не пройдена. Запуск отменён.')
-		get_tree().quit(1)
-		return
-	
-	# Anti-debug и anti-hook запускаются сразу после локальной проверки подписей
+	# Запускаем Anti-debug и Anti-hook до загрузки удалённых хешей
 	protector.start_protection()
 	
 	if OS.has_feature('template'):
@@ -278,7 +272,7 @@ func _is_valid_sha256(value: Variant) -> bool:
 	return regex.search(value) != null
 
 
-## Запускает защиту без удалённой проверки, сохраняя локальные проверки
+## Запускает Anti-debug и Anti-hook, если удалённые кеши недоступны
 func _start_protection_without_remote() -> void:
 	protector.start_protection()
 

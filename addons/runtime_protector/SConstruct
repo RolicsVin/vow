@@ -7,27 +7,17 @@
 
 env = SConscript("godot-cpp/SConstruct")
 
-env.Append(CPPPATH=["src/"])
-sources = Glob("src/*.cpp")
+if env["platform"] != "windows" or env["arch"] != "x86_64":
+    raise RuntimeError("RuntimeProtector currently supports Windows x86_64 only.")
 
-if env["platform"] == "windows":
-    env.Append(LIBS=["psapi"])
+env.Append(CPPPATH=["src/", "src/third_party/"])
+sources = Glob("src/*.cpp") + Glob("src/third_party/*.c")
 
-if env["platform"] == "linux":
-    env.Append(CXXFLAGS=["-pthread"])
-    env.Append(LINKFLAGS=["-pthread"])
+env.Append(LIBS=["psapi", "wintrust", "crypt32"])
 
-if env["platform"] == "macos":
-    library = env.SharedLibrary(
-        "bin/libruntimeprotector.{}.{}.framework/libruntimeprotector.{}.{}".format(
-            env["platform"], env["target"], env["platform"], env["target"]
-        ),
-        source=sources,
-    )
-else:
-    library = env.SharedLibrary(
-        "bin/libruntimeprotector{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
-        source=sources,
-    )
+library = env.SharedLibrary(
+    "bin/libruntimeprotector{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+    source=sources,
+)
 
 Default(library)

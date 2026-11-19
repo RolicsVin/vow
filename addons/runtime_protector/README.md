@@ -172,6 +172,9 @@ var protector: RuntimeProtector
 
 func _ready() -> void:
     protector = RuntimeProtector.new()
+    # Configure startup verification before adding the node to the tree.
+    protector.hashes_url = "https://example.com/game/integrity.manifest"
+    protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
     add_child(protector)
 
     protector.debugger_detected.connect(_on_debugger_detected)
@@ -190,7 +193,6 @@ func _ready() -> void:
     # ideally not as one obvious plain string literal; split/obfuscate it
     # at the very least, since this is just a string an attacker can read
     # out of the binary otherwise.
-    protector.pck_path = OS.get_executable_path().get_base_dir().path_join("game.pck")
     protector.expected_pck_hash = "PUT_THE_REAL_SHA256_HASH_HERE"
     protector.enable_anti_tamper = true
 

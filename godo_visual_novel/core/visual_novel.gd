@@ -60,7 +60,7 @@ func get_save() -> Dictionary:
 	}
 	
 	print('the preservation has been issued:')
-	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	var response: Dictionary = PythonBridge.call_function('stdout', 'pretty_print', [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:
@@ -83,7 +83,7 @@ func load_save(save: Dictionary) -> void:
 	set_language(save['language'])
 	_data.name_protection[Character.CharacterType.ГлавныйГерой] = save['name']
 	print('loaded:')
-	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	var response: Dictionary = PythonBridge.call_function('stdout', 'pretty_print', [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:

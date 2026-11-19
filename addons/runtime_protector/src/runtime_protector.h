@@ -42,7 +42,7 @@ private:
     int slow_check_interval_ms_ = 15000;
     int ms_since_slow_check_ = 0;
     int reaction_mode_ = REACTION_SIGNAL_ONLY;
-    bool release_verified_ = true;
+    bool release_verified_ = false;
 
     void _worker_loop();
     void _report(const String &p_signal, const String &p_reason);

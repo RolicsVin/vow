@@ -1,61 +1,61 @@
 extends Node
 ## Autoload singleton "PythonBridge".
 ##
-##   var r = await PythonBridge.call_function("my_module", "add", [1, 2])
-##   if r.ok: print(r.result) else: push_error(r.error)
+## Синхронное использование:
+##   var response: Dictionary = PythonBridge.call_function("my_module", "add", [1, 2])
+##   if response.ok: print(response.result) else: push_error(response.error)
 ##
-## Response dictionary: { ok: bool, result: Variant, error: String, traceback: String }
-## NOTE: Godot's JSON parser returns every number as float - use int(r.result) where needed.
+## Response: { ok: bool, result: Variant, error: String, traceback: String }
+## JSON parser Godot возвращает числа как float — при необходимости используйте int().
 
 signal python_ready(info: Dictionary)
-signal python_log(level: String, text: String)  # level: "stdout" | "stderr"
+signal python_log(level: String, text: String)
 signal python_exited()
 
-const SETTING_SCRIPTS_DIR := "python_bridge/scripts_dir"
-const SETTING_AUTO_START := "python_bridge/auto_start"
+const SETTING_SCRIPTS_DIR: String = "python_bridge/scripts_dir"
+const SETTING_AUTO_START: String = "python_bridge/auto_start"
+const ADDON_DIR: String = "res://addons/python_bridge"
+const WORKER_RES: String = ADDON_DIR + "/py/bridge_worker.py"
+const SYNC_ROOT: String = "user://python_bridge"
+const START_TIMEOUT_MS: int = 30000
+const REQUEST_TIMEOUT_MS: int = 300000
+const POLL_DELAY_MS: int = 1
 
-const ADDON_DIR := "res://addons/python_bridge"
-const WORKER_RES := ADDON_DIR + "/py/bridge_worker.py"
-const SYNC_ROOT := "user://python_bridge"
+const BackendBase = preload("res://addons/python_bridge/backends/backend_base.gd")
+const BackendDesktop = preload("res://addons/python_bridge/backends/backend_desktop.gd")
+const BackendAndroid = preload("res://addons/python_bridge/backends/backend_android.gd")
 
-const BackendBase := preload("res://addons/python_bridge/backends/backend_base.gd")
-const BackendDesktop := preload("res://addons/python_bridge/backends/backend_desktop.gd")
-const BackendAndroid := preload("res://addons/python_bridge/backends/backend_android.gd")
-
-
-class _Pending extends RefCounted:
-	signal done(response: Dictionary)
-
-
-var is_running := false
-var is_python_ready := false
+var is_running: bool = false
+var is_python_ready: bool = false
 
 var _backend: BackendBase
 var _pending: Dictionary = {}
-var _next_id := 1
+var _next_id: int = 1
 
 
+## Инициализирует аддон и при необходимости запускает Python
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if ProjectSettings.get_setting(SETTING_AUTO_START, true):
 		start()
 
 
+## Обрабатывает сообщения, когда синхронный вызов не выполняется
 func _process(_delta: float) -> void:
 	if _backend != null:
 		_backend.process()
 
 
+## Завершает работу Python при удалении синглтона
 func _exit_tree() -> void:
 	stop()
 
 
-# --- public API ------------------------------------------------------------
-
+## Запускает Python-процесс
 func start() -> bool:
 	if is_running:
 		return true
-	var dirs := _prepare_scripts()
+	var dirs: Dictionary = _prepare_scripts()
 	_backend = BackendAndroid.new() if OS.get_name() == "Android" else BackendDesktop.new()
 	_backend.message_received.connect(_on_message)
 	_backend.exited.connect(_on_backend_exited)
@@ -66,6 +66,7 @@ func start() -> bool:
 	return true
 
 
+## Останавливает Python-процесс и завершает ожидающие запросы
 func stop() -> void:
 	if _backend == null:
 		return
@@ -78,68 +79,106 @@ func stop() -> void:
 	_fail_pending("Python bridge stopped")
 
 
+## Синхронно ожидает готовности Python, обрабатывая входящие сообщения
 func wait_until_ready() -> bool:
+	if not is_running and not start():
+		return false
+	var started: int = Time.get_ticks_msec()
 	while is_running and not is_python_ready:
-		await get_tree().process_frame
+		_backend.process()
+		if Time.get_ticks_msec() - started >= START_TIMEOUT_MS:
+			push_error("[PythonBridge] Python startup timed out")
+			return false
+		OS.delay_msec(POLL_DELAY_MS)
 	return is_python_ready
 
 
-## Calls `function` (may be dotted, e.g. "MyClass.method") of `module`.
-func call_function(module: String, function: String, args: Array = [], kwargs: Dictionary = {}) -> Dictionary:
-	return await _request({"op": "call", "module": module, "function": function, "args": args, "kwargs": kwargs})
+## Вызывает функцию Python и возвращает результат без await
+func call_function(
+	module: String,
+	function: String,
+	args: Array = [],
+	kwargs: Dictionary = {}
+) -> Dictionary:
+	return _request({
+		"op": "call",
+		"module": module,
+		"function": function,
+		"args": args,
+		"kwargs": kwargs,
+	})
 
 
-## Re-imports a module (handy while developing).
+## Перезагружает Python-модуль без await
 func reload_module(module: String) -> Dictionary:
-	return await _request({"op": "reload", "module": module})
+	return _request({"op": "reload", "module": module})
 
 
+## Проверяет соединение с Python без await
 func ping() -> Dictionary:
-	return await _request({"op": "ping"})
+	return _request({"op": "ping"})
 
 
-# --- internals -------------------------------------------------------------
-
-func _request(msg: Dictionary) -> Dictionary:
+## Отправляет запрос и синхронно ожидает ответ
+func _request(message: Dictionary) -> Dictionary:
 	if not is_running and not start():
 		return _error("Failed to start Python bridge")
-	
-	if not await wait_until_ready():
+	if not wait_until_ready():
 		return _error("Python bridge did not become ready")
-	
-	var id := _next_id
+
+	var request_id: int = _next_id
 	_next_id += 1
-	msg["id"] = id
-	var pending := _Pending.new()
-	_pending[id] = pending
-	_backend.send(msg)
-	return await pending.done
+	message["id"] = request_id
+	_pending[request_id] = {"completed": false, "response": {}}
+	_backend.send(message)
+
+	var started: int = Time.get_ticks_msec()
+	while _pending.has(request_id):
+		_backend.process()
+		if not _pending.has(request_id):
+			break
+		var pending: Dictionary = _pending[request_id]
+		if pending["completed"]:
+			_pending.erase(request_id)
+			return pending["response"]
+		if Time.get_ticks_msec() - started >= REQUEST_TIMEOUT_MS:
+			_pending.erase(request_id)
+			return _error("Python request timed out")
+		OS.delay_msec(POLL_DELAY_MS)
+
+	return _error("Python process exited before responding")
 
 
-func _on_message(msg: Dictionary) -> void:
-	match str(msg.get("type", "")):
+## Принимает сообщения от backend и сопоставляет ответы с запросами
+func _on_message(message: Dictionary) -> void:
+	match str(message.get("type", "")):
 		"response":
-			var id := int(msg.get("id", -1))
-			var pending: _Pending = _pending.get(id)
-			if pending == null:
+			var request_id: int = int(message.get("id", -1))
+			if not _pending.has(request_id):
 				return
-			_pending.erase(id)
-			pending.done.emit({
-				"ok": bool(msg.get("ok", false)),
-				"result": msg.get("result"),
-				"error": str(msg.get("error", "")),
-				"traceback": str(msg.get("traceback", "")),
-			})
+			var response: Dictionary = {
+				"ok": bool(message.get("ok", false)),
+				"result": message.get("result"),
+				"error": str(message.get("error", "")),
+				"traceback": str(message.get("traceback", "")),
+			}
+			var pending: Dictionary = _pending[request_id]
+			pending["response"] = response
+			pending["completed"] = true
 		"log":
-			python_log.emit(str(msg.get("level", "stdout")), str(msg.get("text", "")))
+			python_log.emit(
+				str(message.get("level", "stdout")),
+				str(message.get("text", ""))
+			)
 		"ready":
 			is_python_ready = true
-			python_ready.emit(msg)
+			python_ready.emit(message)
 		"fatal":
-			push_error("[PythonBridge] %s" % str(msg.get("error", "unknown error")))
-			python_log.emit("stderr", str(msg.get("error", "")))
+			push_error("[PythonBridge] %s" % str(message.get("error", "unknown error")))
+			python_log.emit("stderr", str(message.get("error", "")))
 
 
+## Обрабатывает завершение Python-процесса
 func _on_backend_exited() -> void:
 	is_running = false
 	is_python_ready = false
@@ -147,20 +186,20 @@ func _on_backend_exited() -> void:
 	python_exited.emit()
 
 
+## Завершает все запросы с ошибкой
 func _fail_pending(reason: String) -> void:
-	var pending := _pending
-	_pending = {}
-	for id in pending:
-		pending[id].done.emit(_error(reason))
+	for request_id: int in _pending:
+		var pending: Dictionary = _pending[request_id]
+		pending["response"] = _error(reason)
+		pending["completed"] = true
 
 
-func _error(text: String) -> Dictionary:
-	return {"ok": false, "result": null, "error": text, "traceback": ""}
+## Формирует стандартный ответ с ошибкой
+func _error(message: String) -> Dictionary:
+	return {"ok": false, "result": null, "error": message, "traceback": ""}
 
 
-## Returns {worker_dir, script_dirs} as absolute filesystem paths.
-## Editor: use the project files directly. Exported: Python cannot read the .pck,
-## so the files are copied to user:// first.
+## Возвращает абсолютные пути к worker и каталогам скриптов
 func _prepare_scripts() -> Dictionary:
 	var scripts_res: String = ProjectSettings.get_setting(SETTING_SCRIPTS_DIR, "res://py")
 	if OS.has_feature("editor"):
@@ -168,32 +207,37 @@ func _prepare_scripts() -> Dictionary:
 			"worker_dir": ProjectSettings.globalize_path(WORKER_RES.get_base_dir()),
 			"script_dirs": PackedStringArray([ProjectSettings.globalize_path(scripts_res)]),
 		}
-	var worker_dst := SYNC_ROOT.path_join("worker")
-	var scripts_dst := SYNC_ROOT.path_join("scripts")
+
+	var worker_dst: String = SYNC_ROOT.path_join("worker")
+	var scripts_dst: String = SYNC_ROOT.path_join("scripts")
 	DirAccess.make_dir_recursive_absolute(worker_dst)
 	_sync_file(WORKER_RES, worker_dst.path_join("bridge_worker.py"))
-	_sync_dir(scripts_res, scripts_dst)  # stale files of removed scripts are not deleted
+	_sync_dir(scripts_res, scripts_dst)
 	return {
 		"worker_dir": ProjectSettings.globalize_path(worker_dst),
 		"script_dirs": PackedStringArray([ProjectSettings.globalize_path(scripts_dst)]),
 	}
 
 
-func _sync_dir(src: String, dst: String) -> void:
-	DirAccess.make_dir_recursive_absolute(dst)
-	for file in DirAccess.get_files_at(src):
-		_sync_file(src.path_join(file), dst.path_join(file))
-	for dir in DirAccess.get_directories_at(src):
-		if dir != "__pycache__":
-			_sync_dir(src.path_join(dir), dst.path_join(dir))
+## Копирует Python-файлы из каталога проекта в пользовательский каталог
+func _sync_dir(source: String, destination: String) -> void:
+	DirAccess.make_dir_recursive_absolute(destination)
+	for file_name: String in DirAccess.get_files_at(source):
+		_sync_file(source.path_join(file_name), destination.path_join(file_name))
+	for directory_name: String in DirAccess.get_directories_at(source):
+		if directory_name != "__pycache__":
+			_sync_dir(source.path_join(directory_name), destination.path_join(directory_name))
 
 
-func _sync_file(src: String, dst: String) -> void:
-	var data := FileAccess.get_file_as_bytes(src)
-	if FileAccess.file_exists(dst) and FileAccess.get_file_as_bytes(dst) == data:
+## Копирует файл, только если его содержимое изменилось
+func _sync_file(source: String, destination: String) -> void:
+	var data: PackedByteArray = FileAccess.get_file_as_bytes(source)
+	if FileAccess.file_exists(destination) and FileAccess.get_file_as_bytes(destination) == data:
 		return
-	var f := FileAccess.open(dst, FileAccess.WRITE)
-	if f == null:
-		push_error("[PythonBridge] Cannot write %s (error %d)" % [dst, FileAccess.get_open_error()])
+	var file: FileAccess = FileAccess.open(destination, FileAccess.WRITE)
+	if file == null:
+		push_error(
+			"[PythonBridge] Cannot write %s (error %d)" % [destination, FileAccess.get_open_error()]
+		)
 		return
-	f.store_buffer(data)
+	file.store_buffer(data)

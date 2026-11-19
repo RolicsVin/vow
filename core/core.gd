@@ -214,6 +214,7 @@ func _fetch_expected_hashes() -> void:
 		)
 		return
 	
+	protector.start_protection()
 
 
 ## Загружает один манифест; транспортная ошибка отделена от некорректного содержимого

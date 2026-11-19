@@ -89,7 +89,6 @@ func _ready() -> void:
 		await _fetch_expected_hashes()
 	else:
 		print('Обнаружена работа в редакторе: удалённая проверка отключена')
-		protector.enable_anti_tamper = false
 	
 	print('Протектор настроен.')
 	_end_log()
@@ -279,7 +278,6 @@ func _is_valid_sha256(value: Variant) -> bool:
 
 ## Запускает защиту без удалённой проверки, сохраняя локальные проверки
 func _start_protection_without_remote() -> void:
-	protector.enable_anti_tamper = false
 	protector.start_protection()
 
 

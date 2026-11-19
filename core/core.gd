@@ -79,8 +79,8 @@ func _ready() -> void:
 	print('Протектор создан.')
 	
 	# Локальная C++-проверка выполняется синхронно внутри add_child()
-	if not protector.is_release_verified():
-		return
+	#if not protector.is_release_verified():
+		#return
 	
 	# Anti-debug и anti-hook запускаются сразу после локальной проверки подписей
 	protector.start_protection()

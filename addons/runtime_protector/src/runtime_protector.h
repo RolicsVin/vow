@@ -42,7 +42,6 @@ private:
     int slow_check_interval_ms_ = 15000;
     int ms_since_slow_check_ = 0;
     int reaction_mode_ = REACTION_SIGNAL_ONLY;
-    bool release_verified_ = false;
 
     void _worker_loop();
     void _report(const String &p_signal, const String &p_reason);
@@ -56,13 +55,11 @@ public:
     RuntimeProtector();
     ~RuntimeProtector() override;
 
-    void _ready() override;
     void _exit_tree() override;
 
     void start_protection();
     void stop_protection();
     bool is_running() const;
-    bool is_release_verified() const;
 
     // One-shot checks you can call directly from GDScript, e.g. right
     // before decrypting save data or validating a purchase, instead of

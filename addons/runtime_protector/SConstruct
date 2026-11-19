@@ -13,7 +13,7 @@ if env["platform"] != "windows" or env["arch"] != "x86_64":
 env.Append(CPPPATH=["src/", "src/third_party/"])
 sources = Glob("src/*.cpp") + Glob("src/third_party/*.c")
 
-env.Append(LIBS=["psapi", "wintrust", "crypt32"])
+env.Append(LIBS=["psapi"])
 
 library = env.SharedLibrary(
     "bin/libruntimeprotector{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),

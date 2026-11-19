@@ -2,12 +2,14 @@
 
 #include "anti_debug.h"
 #include "anti_hook.h"
+#include "anti_signature.h"
 #include "anti_tamper.h"
 #include "sha256.h"
 
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 #include <chrono>
 #include <cstdlib>
@@ -53,6 +55,10 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_pck_path", "path"), &RuntimeProtector::set_pck_path);
     ClassDB::bind_method(D_METHOD("get_pck_path"), &RuntimeProtector::get_pck_path);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "pck_path"), "set_pck_path", "get_pck_path");
+
+    ClassDB::bind_method(D_METHOD("set_hashes_url", "url"), &RuntimeProtector::set_hashes_url);
+    ClassDB::bind_method(D_METHOD("get_hashes_url"), &RuntimeProtector::get_hashes_url);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "hashes_url"), "set_hashes_url", "get_hashes_url");
 
     ClassDB::bind_method(D_METHOD("set_expected_exe_hash", "hash"), &RuntimeProtector::set_expected_exe_hash);
     ClassDB::bind_method(D_METHOD("get_expected_exe_hash"), &RuntimeProtector::get_expected_exe_hash);
@@ -100,8 +106,30 @@ RuntimeProtector::~RuntimeProtector() {
 }
 
 void RuntimeProtector::_ready() {
-    // Never run protection logic inside the editor itself.
-    if (autostart_ && Engine::get_singleton() && !Engine::get_singleton()->is_editor_hint()) {
+    // Release signature verification is mandatory and independent from autostart.
+    if (!Engine::get_singleton() || Engine::get_singleton()->is_editor_hint()) {
+        return;
+    }
+
+#ifndef DEBUG_ENABLED
+    std::string reason;
+    const std::string pck_path = pck_path_.utf8().get_data();
+    const std::string hashes_url = hashes_url_.utf8().get_data();
+    if (!godot_rp::AntiSignature::verify_release_files(pck_path, hashes_url, reason)) {
+        UtilityFunctions::push_error(
+            String("RuntimeProtector: release verification failed: ") + String(reason.c_str())
+        );
+        SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+        if (tree) {
+            tree->quit(1);
+        } else {
+            std::exit(1);
+        }
+        return;
+    }
+#endif
+
+    if (autostart_) {
         start_protection();
     }
 }
@@ -316,6 +344,9 @@ String RuntimeProtector::get_expected_pck_hash() const { return expected_pck_has
 
 void RuntimeProtector::set_pck_path(const String &p_path) { pck_path_ = p_path; }
 String RuntimeProtector::get_pck_path() const { return pck_path_; }
+
+void RuntimeProtector::set_hashes_url(const String &p_url) { hashes_url_ = p_url; }
+String RuntimeProtector::get_hashes_url() const { return hashes_url_; }
 
 void RuntimeProtector::set_expected_exe_hash(const String &p_hash) { expected_exe_hash_ = p_hash; }
 String RuntimeProtector::get_expected_exe_hash() const { return expected_exe_hash_; }

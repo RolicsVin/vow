@@ -82,12 +82,14 @@ func _ready() -> void:
 	if not protector.is_release_verified():
 		return
 	
+	# Anti-debug и anti-hook запускаются сразу после локальной проверки подписей
+	protector.start_protection()
+	
 	if OS.has_feature('template'):
 		await _fetch_expected_hashes()
 	else:
 		print('Обнаружена работа в редакторе: удалённая проверка отключена')
 		protector.enable_anti_tamper = false
-		protector.start_protection()
 	
 	print('Протектор настроен.')
 	_end_log()
@@ -182,6 +184,9 @@ func _fetch_expected_hashes() -> void:
 		_reject_remote_manifest('[Core] runtime_cache содержит некорректный SHA-256.')
 		return
 	
+	# Останавливаем поток на время безопасной настройки новых хешей
+	protector.stop_protection()
+	
 	# Передаём ожидаемые значения в AntiTamper только после полной валидации JSON
 	protector.expected_pck_hash = pck_hash
 	protector.expected_exe_hash = exe_hash
@@ -209,7 +214,6 @@ func _fetch_expected_hashes() -> void:
 		)
 		return
 	
-	protector.start_protection()
 
 
 ## Загружает один манифест; транспортная ошибка отделена от некорректного содержимого
@@ -221,7 +225,7 @@ func _download_manifest(url: String) -> Dictionary:
 	add_child(http)
 	
 	## Код ошибки запуска HTTP-запроса
-	var request_error: Error = http.request(url)
+	var request_error: int = http.request(url)
 	if request_error != OK:
 		http.queue_free()
 		return {'transport_ok': false}
@@ -250,7 +254,7 @@ func _resolve_manifest_url(value: Variant) -> String:
 	if not value is String or value.is_empty():
 		return ''
 	
-	## Ответ HTTP-клиента
+	## Ответ PythonBridge с прямой ссылкой
 	var response: Dictionary = await PythonBridge.call_function('tools', 'drive_direct_url', [value])
 	if not response.get('ok', false):
 		push_warning(

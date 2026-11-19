@@ -108,8 +108,7 @@ void RuntimeProtector::_ready() {
         return;
     }
 
-#ifndef DEBUG_ENABLED
-    std::string reason;
+std::string reason;
     const std::string pck_path = pck_path_.utf8().get_data();
     if (!godot_rp::AntiSignature::verify_release_files(pck_path, reason)) {
         release_verified_ = false;
@@ -124,7 +123,7 @@ void RuntimeProtector::_ready() {
         }
         return;
     }
-#endif
+    release_verified_ = true;
 
     if (autostart_) {
         start_protection();

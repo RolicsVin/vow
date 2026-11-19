@@ -1,12 +1,12 @@
 extends Node
-## Autoload singleton "PythonBridge".
+## Синглтон PythonBridge для взаимодействия с Python
 ##
 ## Синхронное использование:
 ##   var response: Dictionary = PythonBridge.call_function("my_module", "add", [1, 2])
 ##   if response.ok: print(response.result) else: push_error(response.error)
 ##
-## Response: { ok: bool, result: Variant, error: String, traceback: String }
-## JSON parser Godot возвращает числа как float — при необходимости используйте int().
+## Формат ответа: { ok: bool, result: Variant, error: String, traceback: String }
+## Парсер JSON в Godot возвращает числа как float — при необходимости используйте int()
 
 signal python_ready(info: Dictionary)
 signal python_log(level: String, text: String)

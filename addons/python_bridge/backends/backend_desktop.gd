@@ -10,7 +10,7 @@ var _pid: int = -1 ## Идентификатор Python-процесса
 var _stdout_thread: Thread ## Поток чтения stdout
 var _stderr_thread: Thread ## Поток чтения stderr
 var _stopping: bool = false ## Флаг остановки потоков чтения
-var _messages: Array[Dictionary] = [] ## Очередь сообщений для основного потока # Очередь сообщений от потоков чтения
+var _messages: Array[Dictionary] = [] ## Очередь сообщений от потоков чтения
 var _messages_mutex: Mutex = Mutex.new() ## Блокировка доступа к очереди сообщений
 var _exit_received: bool = false ## Получен ли сигнал завершения процесса
 

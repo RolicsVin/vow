@@ -32,6 +32,7 @@ public:
     // Hashes a whole file in fixed-size chunks (safe for large .pck
     // files). Returns an empty string if the file cannot be opened.
     static std::string hash_file(const std::string &path);
+    static std::string hash_file(const std::wstring &path);
 
     static std::string hash_bytes(const uint8_t *data, size_t len);
 

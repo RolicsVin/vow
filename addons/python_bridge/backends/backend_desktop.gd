@@ -1,6 +1,6 @@
 extends "res://addons/python_bridge/backends/backend_base.gd"
-## Desktop backend: runs bridge_worker.py as a child process and talks to it
-## through JSON lines over stdin/stdout. Requires Godot 4.4+ (OS.execute_with_pipe).
+## Настольный backend запускает bridge_worker.py отдельным процессом
+## и обменивается с ним JSON-сообщениями через stdin/stdout
 
 const RUNTIME_DIR_NAME := "python_runtime" # Папка встроенного Python рядом с exe
 

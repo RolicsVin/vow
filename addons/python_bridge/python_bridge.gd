@@ -12,25 +12,25 @@ signal python_ready(info: Dictionary)
 signal python_log(level: String, text: String)
 signal python_exited()
 
-const SETTING_SCRIPTS_DIR: String = "python_bridge/scripts_dir"
-const SETTING_AUTO_START: String = "python_bridge/auto_start"
-const ADDON_DIR: String = "res://addons/python_bridge"
-const WORKER_RES: String = ADDON_DIR + "/py/bridge_worker.py"
-const SYNC_ROOT: String = "user://python_bridge"
-const START_TIMEOUT_MS: int = 30000
-const REQUEST_TIMEOUT_MS: int = 300000
-const POLL_DELAY_MS: int = 1
+const SETTING_SCRIPTS_DIR: String = "python_bridge/scripts_dir" ## Настройка каталога Python-скриптов
+const SETTING_AUTO_START: String = "python_bridge/auto_start" ## Настройка автоматического запуска
+const ADDON_DIR: String = "res://addons/python_bridge" ## Каталог аддона
+const WORKER_RES: String = ADDON_DIR + "/py/bridge_worker.py" ## Путь к Python-обработчику
+const SYNC_ROOT: String = "user://python_bridge" ## Каталог копирования файлов при экспорте
+const START_TIMEOUT_MS: int = 30000 ## Тайм-аут запуска Python в миллисекундах
+const REQUEST_TIMEOUT_MS: int = 300000 ## Тайм-аут выполнения запроса в миллисекундах
+const POLL_DELAY_MS: int = 1 ## Задержка между проверками ответа
 
 const BackendBase = preload("res://addons/python_bridge/backends/backend_base.gd")
 const BackendDesktop = preload("res://addons/python_bridge/backends/backend_desktop.gd")
 const BackendAndroid = preload("res://addons/python_bridge/backends/backend_android.gd")
 
-var is_running: bool = false
-var is_python_ready: bool = false
+var is_running: bool = false ## Запущен ли Python-процесс
+var is_python_ready: bool = false ## Завершилась ли инициализация Python
 
-var _backend: BackendBase
-var _pending: Dictionary = {}
-var _next_id: int = 1
+var _backend: BackendBase ## Активный платформенный backend
+var _pending: Dictionary = {} ## Запросы, ожидающие ответа Python
+var _next_id: int = 1 ## Идентификатор следующего запроса
 
 
 ## Инициализирует аддон и при необходимости запускает Python

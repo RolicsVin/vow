@@ -19,7 +19,7 @@ func get_save() -> Dictionary:
 	var save := _buffer.duplicate(true)
 	
 	print('Сохранение собрано:')
-	var response: Dictionary = await PythonBridge.call_function("stdout", "pretty_print", [save])
+	var response: Dictionary = PythonBridge.call_function("stdout", "pretty_print", [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:
@@ -36,7 +36,7 @@ func load_save(save: Dictionary) -> void:
 	print('loading...')
 	_buffer = save.duplicate(true)
 	print('loaded:')
-	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [save])
+	var response: Dictionary = PythonBridge.call_function('stdout', 'pretty_print', [save])
 	if response.get("ok", false):
 		print(response.get("result", ""))
 	else:

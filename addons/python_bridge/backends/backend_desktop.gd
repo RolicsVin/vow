@@ -4,15 +4,15 @@ extends "res://addons/python_bridge/backends/backend_base.gd"
 
 const RUNTIME_DIR_NAME := "python_runtime" # Папка встроенного Python рядом с exe
 
-var _pipe: FileAccess
-var _err_pipe: FileAccess
-var _pid: int = -1
-var _stdout_thread: Thread
-var _stderr_thread: Thread
-var _stopping: bool = false
-var _messages: Array[Dictionary] = [] # Очередь сообщений от потоков чтения
-var _messages_mutex: Mutex = Mutex.new()
-var _exit_received: bool = false
+var _pipe: FileAccess ## Канал stdin/stdout Python-процесса
+var _err_pipe: FileAccess ## Канал stderr Python-процесса
+var _pid: int = -1 ## Идентификатор Python-процесса
+var _stdout_thread: Thread ## Поток чтения stdout
+var _stderr_thread: Thread ## Поток чтения stderr
+var _stopping: bool = false ## Флаг остановки потоков чтения
+var _messages: Array[Dictionary] = [] ## Очередь сообщений для основного потока # Очередь сообщений от потоков чтения
+var _messages_mutex: Mutex = Mutex.new() ## Блокировка доступа к очереди сообщений
+var _exit_received: bool = false ## Получен ли сигнал завершения процесса
 
 
 ## Запускает отдельный процесс Python и потоки чтения его вывода

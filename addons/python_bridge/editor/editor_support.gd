@@ -358,4 +358,4 @@ func _template(path: String) -> String:
 	var module := path.get_file().get_basename()
 	if path.begins_with(root + "/"):
 		module = path.trim_prefix(root + "/").get_basename().replace("/", ".")
-	return '"""%s\n\nCall from GDScript:\n    var r = await PythonBridge.call_function("%s", "hello", ["Godot"])\n"""\n\n\ndef hello(name="world"):\n    return f"Hello, {name}!"\n' % [path.get_file(), module]
+	return '"""%s\n\nCall from GDScript:\n    var r = PythonBridge.call_function("%s", "hello", ["Godot"])\n"""\n\n\ndef hello(name="world"):\n    return f"Hello, {name}!"\n' % [path.get_file(), module]

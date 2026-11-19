@@ -31,6 +31,7 @@ private:
     bool autostart_ = false;
     String expected_pck_hash_;
     String pck_path_;
+    String hashes_url_;
     String expected_exe_hash_;
     String expected_library_hash_;
     String expected_runtime_dir_hash_;
@@ -93,6 +94,9 @@ public:
 
     void set_pck_path(const String &p_path);
     String get_pck_path() const;
+
+    void set_hashes_url(const String &p_url);
+    String get_hashes_url() const;
 
     void set_expected_exe_hash(const String &p_hash);
     String get_expected_exe_hash() const;

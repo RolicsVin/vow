@@ -27,39 +27,58 @@ After that:
 * Not included: autocompletion, linting, running/debugging - use VS Code / PyCharm when you need those.
 
 ## Usage
+
+Python module `res://py/mymath.py`:
 ```python
-# res://py/mymath.py
 def add(a, b=0):
     return a + b
 
 def slow_square(x):
-    print("working...")          # arrives in GDScript via python_log
+    print("working...")
     return x * x
 ```
+
+GDScript:
 ```gdscript
-func _ready():
-    PythonBridge.python_log.connect(func(level, text): print("[py/%s] %s" % [level, text]))
-    await PythonBridge.wait_until_ready()
+func _ready() -> void:
+    PythonBridge.python_log.connect(
+        func(level: String, text: String) -> void:
+            print("[py/%s] %s" % [level, text])
+    )
 
-    var r = await PythonBridge.call_function("mymath", "add", [1, 2])
-    if r.ok:
-		print(int(r.result))      # 3  (Godot's JSON gives floats, so cast)
-	else:
-		push_error(r.error)
-		print(r.traceback)
+    var response: Dictionary = PythonBridge.call_function("mymath", "add", [1, 2])
+    if response.ok:
+        print(int(response.result))
+    else:
+        push_error(response.error)
+        print(response.traceback)
 
-	r = await PythonBridge.call_function("mymath", "add", [1], {"b": 5})   # kwargs
+    response = PythonBridge.call_function("mymath", "add", [1], {"b": 5})
 ```
+
+All public calls are synchronous: `call_function()`, `reload_module()`, `ping()`,
+and `wait_until_ready()` return their results directly. **Do not use `await`** with them.
+
 API: `start()`, `stop()`, `wait_until_ready()`, `call_function(module, function, args, kwargs)`,
 `reload_module(name)`, `ping()`; signals `python_ready`, `python_log`, `python_exited`.
-`function` may be dotted (`"MyClass.static_method"`); coroutines are awaited automatically.
+`function` may be dotted (`"MyClass.static_method"`); Python coroutines are awaited automatically
+inside the worker before the result is returned.
+
+### Important: synchronous execution
+
+A synchronous call blocks the calling Godot thread until Python responds. The rendering and input
+processing will pause for the duration of the call. Keep Python functions short; use a separate
+thread or an asynchronous application-level workflow for long-running operations.
+
+Startup timeout: 30 seconds. Request timeout: 5 minutes. While waiting, the bridge actively polls
+the backend, so responses and log signals are still processed even though the main thread is blocked.
 
 ### Data rules
 * JSON types only: `null, bool, int/float, String, Array, Dictionary`. Convert Vector2 etc. yourself.
 * `bytes` ⇄ `PackedByteArray`: Python side uses real `bytes`; in GDScript it appears as
   `{"__bytes__": "<base64>"}` (use `Marshalls.base64_to_raw`).
 * NaN/Infinity are rejected (Godot's JSON can't parse them) – you get an error response.
-* Requests run **one at a time**, in order. A long call delays the next ones; there is no timeout/cancel.
+* Requests run **one at a time**, in order.
 * `print()`/stderr output and uncaught tracebacks come through `python_log`.
 
 ## Windows

@@ -28,11 +28,19 @@ private:
     bool enable_anti_debug_ = true;
     bool enable_anti_hook_ = true;
     bool enable_anti_tamper_ = false;
-    bool enable_signature_verification_ = true;
-    bool autostart_ = true;
+    bool autostart_ = false;
     String expected_pck_hash_;
     String pck_path_;
     String expected_exe_hash_;
+    String expected_library_hash_;
+    String expected_runtime_dir_hash_;
+    String runtime_dir_path_;
+    // Hashing the extension's own library and especially a whole
+    // runtime directory is much heavier I/O than hashing a single file
+    // once - these run on their own, slower cadence rather than every
+    // check_interval_ms_ tick.
+    int slow_check_interval_ms_ = 15000;
+    int ms_since_slow_check_ = 0;
     int reaction_mode_ = REACTION_SIGNAL_ONLY;
 
     void _worker_loop();
@@ -61,9 +69,11 @@ public:
     bool check_hooks_now();
     bool verify_pck_now();
     bool verify_exe_now();
-    bool verify_release_now();
+    bool verify_library_now();
+    bool verify_runtime_dir_now();
 
     String compute_sha256(const String &p_path);
+    String compute_directory_sha256(const String &p_path);
     bool self_test_sha256();
 
     void set_check_interval_ms(int p_ms);
@@ -78,9 +88,6 @@ public:
     void set_enable_anti_tamper(bool p_enabled);
     bool get_enable_anti_tamper() const;
 
-    void set_enable_signature_verification(bool p_enabled);
-    bool get_enable_signature_verification() const;
-
     void set_expected_pck_hash(const String &p_hash);
     String get_expected_pck_hash() const;
 
@@ -89,6 +96,18 @@ public:
 
     void set_expected_exe_hash(const String &p_hash);
     String get_expected_exe_hash() const;
+
+    void set_expected_library_hash(const String &p_hash);
+    String get_expected_library_hash() const;
+
+    void set_expected_runtime_dir_hash(const String &p_hash);
+    String get_expected_runtime_dir_hash() const;
+
+    void set_runtime_dir_path(const String &p_path);
+    String get_runtime_dir_path() const;
+
+    void set_slow_check_interval_ms(int p_ms);
+    int get_slow_check_interval_ms() const;
 
     void set_reaction_mode(int p_mode);
     int get_reaction_mode() const;

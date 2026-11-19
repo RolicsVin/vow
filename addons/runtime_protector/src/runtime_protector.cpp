@@ -3,7 +3,6 @@
 #include "anti_debug.h"
 #include "anti_hook.h"
 #include "anti_tamper.h"
-#include "anti_signature.h"
 #include "sha256.h"
 
 #include <godot_cpp/classes/engine.hpp>
@@ -24,9 +23,11 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("check_hooks_now"), &RuntimeProtector::check_hooks_now);
     ClassDB::bind_method(D_METHOD("verify_pck_now"), &RuntimeProtector::verify_pck_now);
     ClassDB::bind_method(D_METHOD("verify_exe_now"), &RuntimeProtector::verify_exe_now);
-    ClassDB::bind_method(D_METHOD("verify_release_now"), &RuntimeProtector::verify_release_now);
+    ClassDB::bind_method(D_METHOD("verify_library_now"), &RuntimeProtector::verify_library_now);
+    ClassDB::bind_method(D_METHOD("verify_runtime_dir_now"), &RuntimeProtector::verify_runtime_dir_now);
 
     ClassDB::bind_method(D_METHOD("compute_sha256", "path"), &RuntimeProtector::compute_sha256);
+    ClassDB::bind_method(D_METHOD("compute_directory_sha256", "path"), &RuntimeProtector::compute_directory_sha256);
     ClassDB::bind_method(D_METHOD("self_test_sha256"), &RuntimeProtector::self_test_sha256);
 
     ClassDB::bind_method(D_METHOD("set_check_interval_ms", "ms"), &RuntimeProtector::set_check_interval_ms);
@@ -45,10 +46,6 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_enable_anti_tamper"), &RuntimeProtector::get_enable_anti_tamper);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_anti_tamper"), "set_enable_anti_tamper", "get_enable_anti_tamper");
 
-    ClassDB::bind_method(D_METHOD("set_enable_signature_verification", "enabled"), &RuntimeProtector::set_enable_signature_verification);
-    ClassDB::bind_method(D_METHOD("get_enable_signature_verification"), &RuntimeProtector::get_enable_signature_verification);
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "enable_signature_verification"), "set_enable_signature_verification", "get_enable_signature_verification");
-
     ClassDB::bind_method(D_METHOD("set_expected_pck_hash", "hash"), &RuntimeProtector::set_expected_pck_hash);
     ClassDB::bind_method(D_METHOD("get_expected_pck_hash"), &RuntimeProtector::get_expected_pck_hash);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "expected_pck_hash"), "set_expected_pck_hash", "get_expected_pck_hash");
@@ -60,6 +57,22 @@ void RuntimeProtector::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_expected_exe_hash", "hash"), &RuntimeProtector::set_expected_exe_hash);
     ClassDB::bind_method(D_METHOD("get_expected_exe_hash"), &RuntimeProtector::get_expected_exe_hash);
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "expected_exe_hash"), "set_expected_exe_hash", "get_expected_exe_hash");
+
+    ClassDB::bind_method(D_METHOD("set_expected_library_hash", "hash"), &RuntimeProtector::set_expected_library_hash);
+    ClassDB::bind_method(D_METHOD("get_expected_library_hash"), &RuntimeProtector::get_expected_library_hash);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "expected_library_hash"), "set_expected_library_hash", "get_expected_library_hash");
+
+    ClassDB::bind_method(D_METHOD("set_expected_runtime_dir_hash", "hash"), &RuntimeProtector::set_expected_runtime_dir_hash);
+    ClassDB::bind_method(D_METHOD("get_expected_runtime_dir_hash"), &RuntimeProtector::get_expected_runtime_dir_hash);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "expected_runtime_dir_hash"), "set_expected_runtime_dir_hash", "get_expected_runtime_dir_hash");
+
+    ClassDB::bind_method(D_METHOD("set_runtime_dir_path", "path"), &RuntimeProtector::set_runtime_dir_path);
+    ClassDB::bind_method(D_METHOD("get_runtime_dir_path"), &RuntimeProtector::get_runtime_dir_path);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "runtime_dir_path"), "set_runtime_dir_path", "get_runtime_dir_path");
+
+    ClassDB::bind_method(D_METHOD("set_slow_check_interval_ms", "ms"), &RuntimeProtector::set_slow_check_interval_ms);
+    ClassDB::bind_method(D_METHOD("get_slow_check_interval_ms"), &RuntimeProtector::get_slow_check_interval_ms);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "slow_check_interval_ms"), "set_slow_check_interval_ms", "get_slow_check_interval_ms");
 
     ClassDB::bind_method(D_METHOD("set_reaction_mode", "mode"), &RuntimeProtector::set_reaction_mode);
     ClassDB::bind_method(D_METHOD("get_reaction_mode"), &RuntimeProtector::get_reaction_mode);
@@ -101,11 +114,6 @@ void RuntimeProtector::start_protection() {
     if (running_.load()) {
         return;
     }
-    if (enable_signature_verification_ && !verify_release_now()) {
-        call_deferred("_deferred_quit");
-        return;
-    }
-
     running_.store(true);
     godot_rp::AntiHook::snapshot_loaded_modules();
     worker_thread_ = std::thread(&RuntimeProtector::_worker_loop, this);
@@ -163,11 +171,35 @@ void RuntimeProtector::_worker_loop() {
             }
         }
 
+        // Heavier I/O checks (hashing this whole library file, or an
+        // entire directory tree) run on their own, much slower cadence -
+        // see slow_check_interval_ms_.
+        if (enable_anti_tamper_ && ms_since_slow_check_ >= slow_check_interval_ms_) {
+            ms_since_slow_check_ = 0;
+
+            if (!expected_library_hash_.is_empty()) {
+                std::string actual = AntiTamper::hash_own_module();
+                std::string expected = expected_library_hash_.utf8().get_data();
+                if (actual.empty() || actual != expected) {
+                    _report("tampering_detected", "Library hash mismatch (or file unreadable) for the RuntimeProtector extension itself");
+                }
+            }
+
+            if (!expected_runtime_dir_hash_.is_empty() && !runtime_dir_path_.is_empty()) {
+                std::string actual = AntiTamper::hash_directory(std::string(runtime_dir_path_.utf8().get_data()));
+                std::string expected = expected_runtime_dir_hash_.utf8().get_data();
+                if (actual.empty() || actual != expected) {
+                    _report("tampering_detected", "Runtime directory hash mismatch (or unreadable) for: " + runtime_dir_path_);
+                }
+            }
+        }
+
         // Sleep in small slices so stop_protection() doesn't have to
         // wait out the full interval before the thread can exit.
         for (int waited = 0; waited < check_interval_ms_ && running_.load(); waited += 50) {
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
+        ms_since_slow_check_ += check_interval_ms_;
     }
 }
 
@@ -237,26 +269,29 @@ bool RuntimeProtector::verify_exe_now() {
     return !actual.empty() && actual == std::string(expected_exe_hash_.utf8().get_data());
 }
 
-bool RuntimeProtector::verify_release_now() {
-    std::string pck_path;
-    if (!pck_path_.is_empty()) {
-        const CharString pck_path_utf8 = pck_path_.utf8();
-        pck_path.assign(
-            pck_path_utf8.get_data(),
-            static_cast<size_t>(pck_path_utf8.length())
-        );
+bool RuntimeProtector::verify_library_now() {
+    if (expected_library_hash_.is_empty()) {
+        return false;
     }
-    std::string reason;
-    const bool verified = godot_rp::AntiSignature::verify_release_files(pck_path, reason);
+    std::string actual = godot_rp::AntiTamper::hash_own_module();
+    return !actual.empty() && actual == std::string(expected_library_hash_.utf8().get_data());
+}
 
-    if (!verified) {
-        call_deferred("emit_signal", "tampering_detected", String(reason.c_str()));
+bool RuntimeProtector::verify_runtime_dir_now() {
+    if (expected_runtime_dir_hash_.is_empty() || runtime_dir_path_.is_empty()) {
+        return false;
     }
-    return verified;
+    std::string actual = godot_rp::AntiTamper::hash_directory(std::string(runtime_dir_path_.utf8().get_data()));
+    return !actual.empty() && actual == std::string(expected_runtime_dir_hash_.utf8().get_data());
 }
 
 String RuntimeProtector::compute_sha256(const String &p_path) {
     std::string result = godot_rp::SHA256::hash_file(std::string(p_path.utf8().get_data()));
+    return String(result.c_str());
+}
+
+String RuntimeProtector::compute_directory_sha256(const String &p_path) {
+    std::string result = godot_rp::AntiTamper::hash_directory(std::string(p_path.utf8().get_data()));
     return String(result.c_str());
 }
 
@@ -276,13 +311,6 @@ bool RuntimeProtector::get_enable_anti_hook() const { return enable_anti_hook_; 
 void RuntimeProtector::set_enable_anti_tamper(bool p_enabled) { enable_anti_tamper_ = p_enabled; }
 bool RuntimeProtector::get_enable_anti_tamper() const { return enable_anti_tamper_; }
 
-void RuntimeProtector::set_enable_signature_verification(bool p_enabled) {
-    enable_signature_verification_ = p_enabled;
-}
-bool RuntimeProtector::get_enable_signature_verification() const {
-    return enable_signature_verification_;
-}
-
 void RuntimeProtector::set_expected_pck_hash(const String &p_hash) { expected_pck_hash_ = p_hash; }
 String RuntimeProtector::get_expected_pck_hash() const { return expected_pck_hash_; }
 
@@ -291,6 +319,18 @@ String RuntimeProtector::get_pck_path() const { return pck_path_; }
 
 void RuntimeProtector::set_expected_exe_hash(const String &p_hash) { expected_exe_hash_ = p_hash; }
 String RuntimeProtector::get_expected_exe_hash() const { return expected_exe_hash_; }
+
+void RuntimeProtector::set_expected_library_hash(const String &p_hash) { expected_library_hash_ = p_hash; }
+String RuntimeProtector::get_expected_library_hash() const { return expected_library_hash_; }
+
+void RuntimeProtector::set_expected_runtime_dir_hash(const String &p_hash) { expected_runtime_dir_hash_ = p_hash; }
+String RuntimeProtector::get_expected_runtime_dir_hash() const { return expected_runtime_dir_hash_; }
+
+void RuntimeProtector::set_runtime_dir_path(const String &p_path) { runtime_dir_path_ = p_path; }
+String RuntimeProtector::get_runtime_dir_path() const { return runtime_dir_path_; }
+
+void RuntimeProtector::set_slow_check_interval_ms(int p_ms) { slow_check_interval_ms_ = p_ms > 1000 ? p_ms : 1000; }
+int RuntimeProtector::get_slow_check_interval_ms() const { return slow_check_interval_ms_; }
 
 void RuntimeProtector::set_reaction_mode(int p_mode) { reaction_mode_ = p_mode; }
 int RuntimeProtector::get_reaction_mode() const { return reaction_mode_; }

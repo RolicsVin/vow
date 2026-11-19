@@ -10,14 +10,15 @@ A small GDExtension exposing a `RuntimeProtector` node to GDScript with:
 - **Anti-hooking** — loaded-module snapshot/diff (detects injected
   DLLs/`.so`s), IAT walk on Windows (detects redirected imports), and a
   helper to compare a function's prologue bytes against a known-good copy.
-- **Anti-tampering** — SHA-256 file hashing plus signed-release verification.
-- **Release signatures (Windows x64)** — Authenticode for the EXE and loaded
-  GDExtension DLL, plus Ed25519 verification of a signed manifest containing
-  hashes for the EXE, PCK, and DLL.
+- **Anti-tampering** — a dependency-free SHA-256 implementation to hash
+  and verify your `.pck` (or any file) at runtime.
 
-> **Build status:** the repository changes have not been compiled in this
-> environment. Build the Windows x64 extension and complete the release
-> verification steps below before shipping.
+> **Disclosure:** this code was written without the ability to compile or
+> run it (no network access to fetch `godot-cpp`, no Godot/toolchain in
+> that environment). The algorithms and Win32/Linux APIs are implemented
+> carefully and the SHA-256 implementation ships with a self-test against
+> the official FIPS 180-4 test vectors, but **you must build it yourself
+> and verify it before shipping**. See "Verifying before you ship" below.
 
 ## Why this exists (and what it doesn't do)
 
@@ -51,48 +52,63 @@ runtime_protector/
 ├── SConstruct                   # build script (needs godot-cpp)
 ├── runtime_protector.gdextension
 ├── README.md
-├── tools/
-│   └── sign_release.py          # Ed25519 key generation and release signing
 └── src/
     ├── register_types.{h,cpp}   # GDExtension entry point
-    ├── runtime_protector.{h,cpp}
+    ├── runtime_protector.{h,cpp}# the Node exposed to GDScript
     ├── anti_debug.{h,cpp}
     ├── anti_hook.{h,cpp}
     ├── anti_tamper.{h,cpp}
-    ├── anti_signature.{h,cpp}  # Authenticode and Ed25519 verification
-    ├── integrity_public_key.h
-    ├── sha256.{h,cpp}
-    └── third_party/             # Monocypher 4.0.3 (Ed25519 verification)
+    └── sha256.{h,cpp}           # dependency-free SHA-256
 ```
 
 ## Building
 
-1. Install SCons and Visual Studio 2022 with the **Desktop development with C++**
-   workload. Open the x64 Native Tools Command Prompt.
-2. Fetch `godot-cpp` matching the Godot version used by the project:
+1. Install [SCons](https://scons.org/) and a C++17 compiler (MSVC on
+   Windows, GCC/Clang on Linux).
+2. Fetch `godot-cpp`, matching your Godot version, as a sibling folder:
 
-   ```powershell
-   cd addons/runtime_protector
-   git clone --branch 4.7 https://github.com/godotengine/godot-cpp.git
+   ```bash
+   cd runtime_protector
+   git clone --branch 4.2 https://github.com/godotengine/godot-cpp.git
    cd godot-cpp
    git submodule update --init
    cd ..
    ```
 
-3. Build the Windows x64 templates:
+   (Use the branch/tag matching your Godot version, e.g. `4.1`, `4.2`,
+   `4.3`.)
 
-   ```powershell
-   scons platform=windows target=template_debug arch=x86_64 api_version=4.7
-   scons platform=windows target=template_release arch=x86_64 api_version=4.7
+3. Build:
+
+   ```bash
+   # Windows, debug export template
+   scons platform=windows target=template_debug
+
+   # Windows, release export template
+   scons platform=windows target=template_release
+
+   # Linux, debug export template
+   scons platform=linux target=template_debug
+
+   # Linux, release export template
+   scons platform=linux target=template_release
    ```
 
-   The DLLs are written to `bin/` and match the paths in
-   `runtime_protector.gdextension`. This build configuration intentionally
-   rejects platforms other than Windows x64.
+   This produces files under `bin/`, e.g.
+   `bin/libruntimeprotector.windows.template_debug.x86_64.dll`, matching
+   the paths already listed in `runtime_protector.gdextension`.
 
-4. Ensure the exported project contains the matching GDExtension DLL and a
-   separate PCK file next to the EXE. The integrity verifier currently expects
-   an external PCK; an embedded PCK is not supported by this release workflow.
+4. Copy into your Godot project:
+
+   ```
+   your_godot_project/
+   ├── bin/                      # the compiled .dll/.so files from step 3
+   ├── runtime_protector.gdextension
+   └── ... your project files
+   ```
+
+   Godot will auto-detect the `.gdextension` file and register the
+   `RuntimeProtector` class the next time the project is opened or run.
 
 ## Verifying before you ship
 
@@ -186,95 +202,3 @@ if not protector.verify_pck_now():
   verification into a forked/recompiled Godot engine binary instead of
   (or in addition to) this extension — see the "What this doesn't do"
   section above.
-
-
-## Windows x64 release signature verification
-
-Release startup verification is enabled by default when a `RuntimeProtector`
-node is present in the running project. The node must be present in the first loaded scene (or an autoload)
-and its `autostart` property must be enabled. It is enabled by default.
-Editor sessions skip the check.
-
-The verifier requires all of the following:
-
-- The running EXE has a valid, trusted Authenticode signature.
-- The loaded RuntimeProtector DLL has a valid, trusted Authenticode signature.
-- The adjacent PCK matches the SHA-256 value in the signed manifest.
-- The EXE, PCK, and loaded DLL hashes all match a valid Ed25519-signed
-  manifest.
-
-The manifest and signature are placed next to the EXE as
-`integrity.manifest` and `integrity.sig`. By default, the PCK is expected next
-to the EXE with the same base filename. Set `pck_path` to an absolute path
-before calling `start_protection()` if the PCK is stored elsewhere.
-
-### 1. Generate a signing key pair (once)
-
-Install the Python dependency:
-
-```powershell
-py -m pip install cryptography
-```
-
-From `addons/runtime_protector`:
-
-```powershell
-py tools/sign_release.py keygen
-```
-
-This creates `keys/integrity_private.key` and writes the public key to
-`src/integrity_public_key.h`. Keep the private key offline and never commit it.
-Rebuild the Windows x64 GDExtension after generating the public key.
-
-### 2. Build and Authenticode-sign the binaries
-
-Build the release DLL, export the game, and sign both PE files with your
-code-signing certificate:
-
-```powershell
-signtool sign /fd SHA256 /tr <timestamp-server-url> /td SHA256 /a path\to\game.exe
-signtool sign /fd SHA256 /tr <timestamp-server-url> /td SHA256 /a path\to\libruntimeprotector.windows.template_release.x86_64.dll
-```
-
-The DLL must be the exact library loaded by the exported game. Sign it before
-generating the Ed25519 manifest. The executable must also be signed before
-generating the manifest. Do not modify either binary after the manifest is
-generated.
-
-### 3. Generate the Ed25519 manifest
-
-Run the signing command after Authenticode signing. Use the actual exported
-PCK and the exact DLL shipped with the game:
-
-```powershell
-py tools/sign_release.py sign `
-  --private-key keys/integrity_private.key `
-  --exe path\to\game.exe `
-  --pck path\to\game.pck `
-  --dll path\to\libruntimeprotector.windows.template_release.x86_64.dll `
-  --output path\to\export
-```
-
-The output directory must be the same directory as the EXE. Ship
-`integrity.manifest` and `integrity.sig` alongside the EXE and PCK.
-
-### Runtime behaviour
-
-If any required file is missing, unreadable, unsigned, untrusted, changed, or
-has an invalid Ed25519 signature, `RuntimeProtector` emits
-`tampering_detected` and requests immediate game shutdown. This check runs
-synchronously before the background protection thread starts.
-
-For local development builds, disable `enable_signature_verification` on the
-node. Do not disable it in a release build.
-
-The Ed25519 public key is embedded in the extension; the private key is never
-needed by the game. The detached manifest signature prevents replacement of
-the manifest with new hashes without the private key. Authenticode verification
-uses the Windows trust policy and cached certificate data; the signing tool
-runs `signtool verify /pa` before creating a manifest.
-
-**Important limitation:** because the verifier runs inside the client process,
-a determined attacker can patch or bypass it. For stronger protection, verify
-critical game state on a trusted server or move an independent check into a
-custom Godot engine build.

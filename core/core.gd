@@ -145,24 +145,39 @@ func _on_game_manifest_completed(result: int, response_code: int, _headers: Pack
 	if not parsed is Dictionary:
 		push_warning("[Core] Манифест игры повреждён или не является объектом. Анти-тампер отключён.")
 		return
-
+	
 	var pck_hash: String = str(parsed.get("pck_cache", ""))
 	var exe_hash: String = str(parsed.get("exe_cache", ""))
-
+	var lib_hash: String = str(parsed.get("lib_cache", ""))
+	var runtime_hash: String = str(parsed.get("runtime_cache", ""))
+	
 	var any_enabled := false
-
+	
+	if _is_valid_sha256(lib_hash):
+		protector.expected_library_hash = lib_hash
+		any_enabled = true
+	else:
+		push_warning("[Core] lib_cache отсутствует или некорректен — проверка .dll пропущена.")
+		
+	if _is_valid_sha256(runtime_hash):
+		protector.runtime_dir_path = OS.get_executable_path().get_base_dir().path_join("python_runtime")
+		protector.expected_runtime_dir_hash = runtime_hash
+		any_enabled = true
+	else:
+		push_warning("[Core] runtime_cache отсутствует или некорректен — проверка python_runtime пропущена.")
+	
 	if _is_valid_sha256(pck_hash):
 		protector.expected_pck_hash = pck_hash
 		any_enabled = true
 	else:
 		push_warning("[Core] pck_cache в манифесте отсутствует или некорректен — проверка .pck пропущена.")
-
+	
 	if _is_valid_sha256(exe_hash):
 		protector.expected_exe_hash = exe_hash
 		any_enabled = true
 	else:
 		push_warning("[Core] exe_cache в манифесте отсутствует или некорректен — проверка .exe пропущена.")
-
+	
 	protector.enable_anti_tamper = any_enabled
 
 

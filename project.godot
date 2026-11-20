@@ -44,6 +44,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/export_to_obfuscate/plugin.cfg", "res://addons/path_notes/plugin.cfg", "res://addons/python_bridge/plugin.cfg", "res://addons/txt_dialog_highlighter/plugin.cfg")
 
+[export_to_obfuscate]
+
+mode="full"
+
 [file_customization]
 
 folder_colors={

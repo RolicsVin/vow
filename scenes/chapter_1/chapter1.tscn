@@ -38,3 +38,6 @@ NodePath("../../SettingsMenu"): true
 nodes = {
 NodePath("../Ready"): true
 }
+
+[node name="Effects" parent="." index="13" unique_id=1951616049]
+visible = false

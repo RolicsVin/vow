@@ -22,10 +22,6 @@ func _ready() -> void:
 
 ## Обновляет параметры шейдера и сохраняет их в Data
 func update_parameters(parameters: Dictionary) -> void:
-	if _shader_material == null:
-		push_warning('[PostProcessing] Материал ShaderMaterial не назначен')
-		return
-
 	for parameter_name: String in PARAMETER_NAMES:
 		if not parameters.has(parameter_name):
 			continue
@@ -37,7 +33,12 @@ func update_parameters(parameters: Dictionary) -> void:
 			)
 			continue
 
-		# Синхронизируем значение в синглтоне и в материале шейдера
+		# Сначала сохраняем значение, чтобы Data оставался источником истины
 		var value: float = float(parameter_value)
 		Data.post_processing_parameters[parameter_name] = value
-		_shader_material.set_shader_parameter(parameter_name, value)
+
+		if _shader_material == null:
+			push_warning('[PostProcessing] Материал ShaderMaterial не назначен')
+			continue
+
+		_shader_material.set_shader_parameter(StringName(parameter_name), value)

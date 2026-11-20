@@ -313,6 +313,7 @@ func save_data() -> String:
 		'godo_mini_game': GminiGame.get_save(),
 		'godo_visual_novel': GVisualNovel.get_save(),
 		'audio_server': audio_server.get_save(),
+		'data_singleton': Data.get_save(),
 		'scene': get_tree().current_scene.scene_file_path,
 		'version': tools.get_project_version(),
 		'data': time_tools.get_date(),
@@ -404,6 +405,8 @@ func load_save(_save: Dictionary) -> void:
 	await GVisualNovel.load_save(_save['godo_visual_novel'])
 	if _save.has('audio_server') and _save['audio_server'] is Dictionary:
 		audio_server.load_save(_save['audio_server'])
+	if _save.has('data_singleton') and _save['data_singleton'] is Dictionary:
+		Data.load_save(_save['data_singleton'])
 	Core.scene_tools.change_scene(_save['scene'])
 	print('Сохранение загружено.')
 	

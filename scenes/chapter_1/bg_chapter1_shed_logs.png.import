@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0rcpcij6hxsi"
-path="res://.godot/imported/bg_chapter1_house_interior.png-f8b079a43ded21d2a403cf1e8b6b96a1.ctex"
+uid="uid://celgtimqg6y5"
+path="res://.godot/imported/bg_chapter1_shed_logs.png-8f29bc0a25a633b83699e6fda3afe93f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/chapter_1/bg_chapter1_house_interior.png"
-dest_files=["res://.godot/imported/bg_chapter1_house_interior.png-f8b079a43ded21d2a403cf1e8b6b96a1.ctex"]
+source_file="res://scenes/chapter_1/bg_chapter1_shed_logs.png"
+dest_files=["res://.godot/imported/bg_chapter1_shed_logs.png-8f29bc0a25a633b83699e6fda3afe93f.ctex"]
 
 [params]
 

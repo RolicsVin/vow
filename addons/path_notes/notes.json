@@ -94,6 +94,11 @@
 			"path": "res://addons/runtime_protector/build command.txt",
 			"text": "Команда, для сборки аддона",
 			"uid": ""
+		},
+		{
+			"path": "res://hash_compute.txt",
+			"text": "Команда, для расчёиа хеша файлов",
+			"uid": ""
 		}
 	]
 }

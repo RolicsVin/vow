@@ -1153,6 +1153,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("22_t6gja")
 metadata/_custom_type_script = "uid://ciso5qxxqd11r"
 
@@ -1161,7 +1162,6 @@ visible = false
 layout_mode = 1
 
 [node name="PostProcessing" parent="." unique_id=447539963 instance=ExtResource("9_tpwpp")]
-visible = false
 layout_mode = 1
 script = null
 

@@ -15,6 +15,10 @@ func _ready() -> void: ## Применяет начальную силу дож�
 	_apply_intensity()
 
 
+func _process(delta: float) -> void: ## Анимация дождя
+	pass
+
+
 ## Плавно меняет силу дождя до target_intensity за duration секунд
 func fade_to_intensity(target_intensity: float, duration: float = 2.0) -> void:
 	if _intensity_tween != null and _intensity_tween.is_valid():

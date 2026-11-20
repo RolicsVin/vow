@@ -1,9 +1,36 @@
 [gd_scene format=3 uid="uid://csdwhicd745af"]
 
 [ext_resource type="PackedScene" uid="uid://e612oyf6jcwk" path="res://scenes/scene.tscn" id="1_cgoi1"]
+[ext_resource type="Script" uid="uid://lo32ofqbi1ag" path="res://godo_visual_novel/core/classes/bg.gd" id="2_8e8sd"]
 [ext_resource type="Script" uid="uid://ubqpel73dg6o" path="res://godo_visual_novel/core/classes/linear_dialog.gd" id="2_o3h8a"]
 [ext_resource type="Script" uid="uid://ba3bu5tnfw5l7" path="res://godo_visual_novel/core/classes/replica.gd" id="3_n3s8v"]
+[ext_resource type="Script" uid="uid://srejthmud1dp" path="res://core/classes/ui/linear_visible.gd" id="3_sunk7"]
 [ext_resource type="Script" uid="uid://ds60nmvsajp50" path="res://godo_visual_novel/core/classes/txt_linear_dialog.gd" id="4_8e8sd"]
+[ext_resource type="Texture2D" uid="uid://dfioywtsahn0b" path="res://scenes/chapter_1/bg_chapter1_forest.png" id="4_sunk7"]
+[ext_resource type="Texture2D" uid="uid://dstv26dcje5nw" path="res://scenes/chapter_1/damir.png" id="5_5tdy5"]
+[ext_resource type="Texture2D" uid="uid://dcfrr6cmlxddg" path="res://scenes/chapter_1/bg_chapter1_woodcutter_shed.png" id="5_nlvei"]
+[ext_resource type="Texture2D" uid="uid://celgtimqg6y5" path="res://scenes/chapter_1/bg_chapter1_shed_logs.png" id="6_6kox7"]
+[ext_resource type="Texture2D" uid="uid://bdtstsg62nqb5" path="res://scenes/chapter_1/ratmir_run.png" id="6_naix2"]
+[ext_resource type="Texture2D" uid="uid://c6whdwir7way1" path="res://scenes/chapter_1/bg_chapter1_house_interior.png" id="7_cwt72"]
+[ext_resource type="Texture2D" uid="uid://djknljd462xhq" path="res://scenes/chapter_1/bg_chapter1_cutting_chicken.png" id="8_u74qy"]
+[ext_resource type="Texture2D" uid="uid://c1engdc0og08p" path="res://scenes/chapter_1/bg_chapter1_fireplace.png" id="9_hebtt"]
+[ext_resource type="Texture2D" uid="uid://dnhs5nous2w1f" path="res://scenes/chapter_1/bg_chapter1_window_view.png" id="10_tlayd"]
+[ext_resource type="Texture2D" uid="uid://d1ak46uvd7bpv" path="res://scenes/chapter_1/bg_chapter1_road_deer.png" id="11_uwrki"]
+[ext_resource type="Texture2D" uid="uid://ba5nmk1jc2ueo" path="res://scenes/chapter_1/bg_chapter1_distant_mountain.png" id="12_3vhac"]
+[ext_resource type="Texture2D" uid="uid://di8ulrr1ucnko" path="res://scenes/chapter_1/bg_chapter1_asmund_landing.png" id="13_tiww0"]
+[ext_resource type="Texture2D" uid="uid://bhk2pgu4o12nc" path="res://scenes/chapter_1/bg_chapter1_hiddeng_objects.png" id="14_n4f8w"]
+[ext_resource type="Texture2D" uid="uid://c2g5wcid01ehh" path="res://scenes/chapter_1/bg_chapter1_village_fence.png" id="15_5eixm"]
+[ext_resource type="Texture2D" uid="uid://lcubwir33cja" path="res://scenes/chapter_1/asmund.png" id="16_65b5g"]
+[ext_resource type="Texture2D" uid="uid://ncal0r32tlup" path="res://scenes/chapter_1/sosed.png" id="17_3exv8"]
+[ext_resource type="Texture2D" uid="uid://c5c81m1q6rl3q" path="res://scenes/chapter_1/forest3.png" id="18_bppr1"]
+[ext_resource type="Texture2D" uid="uid://b5347gyx1emv5" path="res://scenes/chapter_1/bg_chapter1_village_aftermath.png" id="19_bfmo4"]
+[ext_resource type="Texture2D" uid="uid://coeahbes7jmy5" path="res://scenes/chapter_1/bg_chapter1_village_road.png" id="20_lfus0"]
+[ext_resource type="Texture2D" uid="uid://bgorjpcu1502a" path="res://scenes/chapter_1/bg_chapter1_girl_returning.png.png" id="21_s1g84"]
+[ext_resource type="Texture2D" uid="uid://jtj0sg3splnc" path="res://scenes/chapter_1/bg_chapter1_father_blood.png" id="23_dyitg"]
+[ext_resource type="Texture2D" uid="uid://b247ixvs53npa" path="res://scenes/chapter_1/bg_chapter1_village_mourners.png" id="25_2a3d3"]
+[ext_resource type="Texture2D" uid="uid://dlkmfn2njqavj" path="res://scenes/chapter_1/ratmir_vow.png" id="25_qnlxp"]
+[ext_resource type="Texture2D" uid="uid://ooitp6dqvkde" path="res://scenes/chapter_1/mother.png" id="26_5f5xv"]
+[ext_resource type="Texture2D" uid="uid://c4cfvdyqdbr1o" path="res://scenes/chapter_1/bg_chapter1_mountain_path.png" id="28_tvixl"]
 
 [sub_resource type="Resource" id="Resource_cgoi1"]
 script = ExtResource("4_8e8sd")
@@ -12,6 +39,660 @@ dialog_name = "Глава 1 — Обет"
 metadata/_custom_type_script = "uid://ds60nmvsajp50"
 
 [node name="Scene" unique_id=733753458 instance=ExtResource("1_cgoi1")]
+
+[node name="BG_Chapter1_Father" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="0" unique_id=492177376]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_bfmo4")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Father" index="0" unique_id=211136546]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/BG_Chapter1_Father" index="1" unique_id=436007447]
+modulate = Color(0.56688654, 0.6713143, 0.74375445, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_5tdy5")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Saving_Everything_You_Have" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="1" unique_id=1579447359]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_bfmo4")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/Saving_Everything_You_Have" index="0" unique_id=249779101]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/Saving_Everything_You_Have" index="1" unique_id=1713213743]
+modulate = Color(0.37830397, 0.4889856, 0.5480753, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_naix2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BG_Chapter1_Forest" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="2" unique_id=539391661]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_sunk7")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Forest" index="0" unique_id=1816374246]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Woodcutter_Shed" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="3" unique_id=233643090]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_nlvei")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Woodcutter_Shed" index="0" unique_id=1490332038]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Shed_Logs" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="4" unique_id=1778165732]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_6kox7")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Shed_Logs" index="0" unique_id=336735004]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_House_Interior" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="5" unique_id=1160047718]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_cwt72")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_House_Interior" index="0" unique_id=1867288983]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_cutting_chicken" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="6" unique_id=824028452]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_u74qy")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_cutting_chicken" index="0" unique_id=1511682766]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_cutting_chicken2" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="7" unique_id=80508430]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_u74qy")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_cutting_chicken2" index="0" unique_id=1953677929]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Fireplace" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="8" unique_id=1134265751]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_hebtt")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Fireplace" index="0" unique_id=1715510480]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Window_View" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="9" unique_id=1499114556]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_tlayd")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Window_View" index="0" unique_id=1422715543]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Road_Deer" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="10" unique_id=1257706488]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_uwrki")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Road_Deer" index="0" unique_id=1352923288]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Distant_Mountain" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="11" unique_id=1443921123]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_3vhac")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Distant_Mountain" index="0" unique_id=49851409]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Asmund_Landing" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="12" unique_id=378482798]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_tiww0")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Asmund_Landing" index="0" unique_id=172216139]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_hiddeng_Objects" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="13" unique_id=1379246935]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_n4f8w")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_hiddeng_Objects" index="0" unique_id=1238040792]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Village_Fence" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="14" unique_id=216987734]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_5eixm")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Village_Fence" index="0" unique_id=1008980872]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="AsmundFence" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="15" unique_id=650723902]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_5eixm")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/AsmundFence" index="0" unique_id=39862063]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/AsmundFence" index="1" unique_id=1976762188]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_65b5g")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BG_Chapter1_Asmund" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="16" unique_id=1408888653]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_5eixm")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Asmund" index="0" unique_id=2037645128]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/BG_Chapter1_Asmund" index="1" unique_id=280067449]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_65b5g")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Sosed" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="17" unique_id=868694979]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_5eixm")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/Sosed" index="0" unique_id=1446168451]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/Sosed" index="1" unique_id=29060299]
+modulate = Color(0.8532543, 0.8906405, 0.8971922, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("17_3exv8")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BG_Chapter1_Village_Fight" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="18" unique_id=372042473]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_bppr1")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Village_Fight" index="0" unique_id=421074029]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Village_Aftermath" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="19" unique_id=2038641280]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_bfmo4")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Village_Aftermath" index="0" unique_id=2102788467]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Village_Road" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="20" unique_id=489638952]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_lfus0")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Village_Road" index="0" unique_id=680948131]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Girl_Returning" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="21" unique_id=1562857724]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("21_s1g84")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Girl_Returning" index="0" unique_id=2010840256]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Father_Blood" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="22" unique_id=118797259]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_dyitg")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Father_Blood" index="0" unique_id=353197828]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Vow" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="23" unique_id=1221449424]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_bfmo4")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Vow" index="0" unique_id=1028067198]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/BG_Chapter1_Vow" index="1" unique_id=60279667]
+modulate = Color(0.48611927, 0.56625533, 0.5839541, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1390.0
+offset_top = -882.0
+offset_right = 213.0
+offset_bottom = 2566.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("25_qnlxp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BG_Chapter1_Confrontation" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="24" unique_id=1650769742]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_dyitg")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Confrontation" index="0" unique_id=1430404382]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Mud_Fall" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="25" unique_id=1006995510]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_dyitg")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Mud_Fall" index="0" unique_id=1469271576]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Village_Mourners" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="26" unique_id=139641089]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("25_2a3d3")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Village_Mourners" index="0" unique_id=467928171]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Mather" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="27" unique_id=1531440396]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("25_2a3d3")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Mather" index="0" unique_id=1549898898]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/BG_Chapter1_Mather" index="1" unique_id=297001830]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("26_5f5xv")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BG_Chapter1_Mother_Goodbye" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="28" unique_id=1048050426]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_cwt72")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Mother_Goodbye" index="0" unique_id=601993384]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="TextureRect" type="TextureRect" parent="Backgrounds/BG_Chapter1_Mother_Goodbye" index="1" unique_id=158581628]
+modulate = Color(0.79788506, 0.6621882, 0.55437076, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("26_5f5xv")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BG_Chapter1_Street" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="29" unique_id=63818036]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_bfmo4")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Street" index="0" unique_id=1414492785]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
+
+[node name="BG_Chapter1_Mountain_Path" type="TextureRect" parent="Backgrounds" parent_id_path=PackedInt32Array(1586722280) index="30" unique_id=622621179]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("28_tvixl")
+expand_mode = 1
+stretch_mode = 6
+script = ExtResource("2_8e8sd")
+metadata/_custom_type_script = "uid://lo32ofqbi1ag"
+
+[node name="LinearVisible" type="Node" parent="Backgrounds/BG_Chapter1_Mountain_Path" index="0" unique_id=897062997]
+script = ExtResource("3_sunk7")
+metadata/_custom_type_script = "uid://srejthmud1dp"
 
 [node name="Chat" parent="ChatRoot" parent_id_path=PackedInt32Array(765098785) index="1" unique_id=1260149037]
 linear_dialog_play_ready = "Глава 1 — Обет"
@@ -39,5 +720,5 @@ nodes = {
 NodePath("../Ready"): true
 }
 
-[node name="Effects" parent="." index="13" unique_id=1951616049]
-visible = false
+[node name="Rain" parent="Effects" parent_id_path=PackedInt32Array(1951616049) index="0" unique_id=936819688]
+visible = true

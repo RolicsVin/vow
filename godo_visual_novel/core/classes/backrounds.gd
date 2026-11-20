@@ -16,10 +16,10 @@ func _ready() -> void:
 				+ "использоваться как фон" % child.name
 			)
 			continue
-
+		
 		child.hide()
 		child.modulate.a = 0.0
-
+	
 	if is_instance_valid(start_bg):
 		start_bg.modulate = Color.WHITE
 		start_bg.show()
@@ -33,9 +33,9 @@ func background(background_name: String) -> void:
 	if background_name.is_empty():
 		push_warning("[Backgrounds] Не указано имя фона")
 		return
-
+	
 	var new_background: Control
-
+	
 	for child in get_children():
 		if child.name == background_name:
 			if child is Control:
@@ -46,11 +46,11 @@ func background(background_name: String) -> void:
 				)
 				return
 			break
-
+	
 	if not is_instance_valid(new_background):
 		push_warning("[Backgrounds] Фон '%s' не найден среди дочерних узлов" % background_name)
 		return
-
+	
 	# Если выбранный фон уже единственный активный — переход не требуется
 	if new_background == current_background:
 		var has_extra_backgrounds: bool = false
@@ -58,29 +58,29 @@ func background(background_name: String) -> void:
 			if child is CanvasItem and child != new_background and child.visible:
 				has_extra_backgrounds = true
 				break
-
+			
 		if not has_extra_backgrounds:
 			return
-
+	
 	# Останавливаем предыдущий переход, который мог оставить фоны полупрозрачными
 	if is_instance_valid(transition_tween) and transition_tween.is_running():
 		transition_tween.kill()
-
+	
 	# Показываем выбранный фон и плавно проявляем его
 	new_background.show()
-
+	
 	transition_tween = create_tween()
 	transition_tween.set_parallel(true)
-
+	
 	var duration: float = maxf(transition_duration, 0.0)
-
+	
 	transition_tween.tween_property(
 		new_background,
 		"modulate:a",
 		1.0,
 		duration
 	)
-
+	
 	# Одновременно скрываем все остальные фоны, включая оставшиеся от прерванных переходов
 	for child in get_children():
 		if child is CanvasItem and child != new_background:
@@ -90,7 +90,7 @@ func background(background_name: String) -> void:
 				0.0,
 				duration
 			)
-
+	
 	# После перехода принудительно скрываем все лишние фоны
 	var background_to_show: Control = new_background
 	transition_tween.chain().tween_callback(func():

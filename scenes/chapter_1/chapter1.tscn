@@ -34,17 +34,11 @@
 [ext_resource type="Texture2D" uid="uid://c4cfvdyqdbr1o" path="res://scenes/chapter_1/bg_chapter1_mountain_path.png" id="28_tvixl"]
 [ext_resource type="Texture2D" uid="uid://8rdhacvhtykm" path="res://scenes/chapter_1/bg_chapter1_father_dying.png" id="30_a8sjj"]
 [ext_resource type="Texture2D" uid="uid://b1xidfrsehf4g" path="res://scenes/chapter_1/bg_chapter1_father_wounded.png" id="31_03kte"]
-[ext_resource type="Script" uid="uid://bdi3evh2rffok" path="res://godo_visual_novel/core/classes/action.gd" id="32_pe12f"]
-
-[sub_resource type="Resource" id="Resource_5dgnr"]
-script = ExtResource("3_n3s8v")
-metadata/_custom_type_script = "uid://ba3bu5tnfw5l7"
 
 [sub_resource type="Resource" id="Resource_cgoi1"]
 script = ExtResource("4_8e8sd")
 txt_path = "res://scenes/chapter_1/сhapter1.txt"
 dialog_name = "Глава 1 — Обет"
-replicas = Array[ExtResource("3_n3s8v")]([SubResource("Resource_5dgnr")])
 metadata/_custom_type_script = "uid://ds60nmvsajp50"
 
 [node name="Scene" unique_id=733753458 instance=ExtResource("1_cgoi1")]

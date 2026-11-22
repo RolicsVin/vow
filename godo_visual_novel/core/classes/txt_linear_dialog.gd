@@ -38,9 +38,10 @@ class_name TxtLinearDialog extends LinearDialog
 ##   id <строка>            unical_id (по умолчанию случайный)
 ##
 ## Действия:
-##   action;<start|end>;<visible|sound|music> <путь> [off] [slow]
+##   action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]
 ##   По умолчанию действие быстрое (fast_action_*) и включающее (показать/играть).
-##   off  - выключить (скрыть/остановить), slow - медленное (on_start/on_end).
+##   on/off - включить или выключить, fast/slow - быстрое действие или on_start/on_end.
+##   Для effects путь указывается относительно узла Effects.
 ##
 ## Свойства самого диалога (в любом месте файла, отдельным блоком или внутри блока):
 ##   dialog;name <имя>      dialog_name (по умолчанию - имя файла без расширения)
@@ -244,9 +245,9 @@ func _apply_replica_line(replica: Replica, line_no: int, line: String) -> void:
 
 
 func _apply_action(replica: Replica, line_no: int, key_parts: PackedStringArray, value: String) -> void:
-	# action;<start|end>;<visible|sound|music> <путь> [off] [slow]
+	# action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]
 	if key_parts.size() != 3:
-		_error(line_no, "ожидалось «action;start|end;visible|sound|music путь»")
+		_error(line_no, "ожидалось «action;start|end;visible|sound|music|effects путь»")
 		return
 	
 	var when: String = key_parts[1].to_lower()
@@ -256,7 +257,7 @@ func _apply_action(replica: Replica, line_no: int, key_parts: PackedStringArray,
 	
 	var type_idx := _find_enum(Action.Type, key_parts[2])
 	if type_idx == -1:
-		_error(line_no, "тип действия «%s» не найден (visible / sound / music)" % key_parts[2])
+		_error(line_no, "тип действия «%s» не найден (visible / sound / music / effects)" % key_parts[2])
 		return
 	
 	var tokens: PackedStringArray = value.replace("\t", " ").split(" ", false)

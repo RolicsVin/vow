@@ -1,7 +1,7 @@
 class_name Action extends Resource
 
 
-enum Type {visible, sound, music}
+enum Type {visible, sound, music, effects}
 
 @export var path_node: String
 @export var action: bool = false

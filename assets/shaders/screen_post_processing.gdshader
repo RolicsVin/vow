@@ -12,8 +12,11 @@ uniform float noise_intensity : hint_range(0.0, 1.0) = 0.05;
 uniform float blur_strength : hint_range(0.0, 10.0) = 0.0;
 
 
-float random(vec2 uv) {
-    return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+// Хеш без sin(): не деградирует на больших значениях аргумента
+float random(vec2 seed) {
+    vec3 p3 = fract(vec3(seed.xyx) * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
 
@@ -48,7 +51,10 @@ void fragment() {
     // -------------------------
     // Noise
     // -------------------------
-    float noise = random(uv + TIME) * 2.0 - 1.0;
+    // Координаты в пикселях экрана и ограниченное время, чтобы значения не росли бесконечно
+    float time_offset = mod(TIME, 10.0);
+    vec2 noise_seed = floor(FRAGCOORD.xy) + time_offset * vec2(113.0, 71.0);
+    float noise = random(noise_seed) * 2.0 - 1.0;
 
     color.rgb += noise * noise_intensity;
 

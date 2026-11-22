@@ -34,7 +34,7 @@ const DIALOG_PROPERTIES: Dictionary = {
 const SYNTAX_HINTS: Dictionary = {
 	'dialog': 'Настройка диалога: dialog;<свойство> <значение>',
 	'lang': 'Перевод реплики: lang;<Ru|En> <текст перевода>',
-	'action': 'Действие: action;<start|end>;<visible|sound|music> <путь> [off] [slow]',
+	'action': 'Действие: action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]. Для effects путь относительно узла Effects.',
 }
 
 ## Допустимые значения перечислений
@@ -45,7 +45,7 @@ const ENUM_VALUES: Dictionary = {
 	'language': ['Ru', 'En'],
 	'lang': ['Ru', 'En'],
 	'when': ['start', 'end'],
-	'action_type': ['visible', 'sound', 'music'],
+	'action_type': ['visible', 'sound', 'music', 'effects'],
 	'boolean': ['true', 'false'],
 	'small_text': ['true', 'false'],
 	'reset_text_buffer': ['true', 'false'],
@@ -400,7 +400,7 @@ func _validate_replica_line(line_text: String) -> String:
 	if line_text.begins_with('action;'):
 		var action_parts: PackedStringArray = line_text.split(';')
 		if action_parts.size() != 3:
-			return 'Формат: action;<start|end>;<visible|sound|music> <путь>'
+			return 'Формат: action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]'
 		if action_parts[1].to_lower() not in ENUM_VALUES['when']:
 			return 'Первый параметр action должен быть start или end'
 		if action_parts[2].strip_edges().is_empty():
@@ -410,7 +410,7 @@ func _validate_replica_line(line_text: String) -> String:
 		if action_value.is_empty():
 			return 'Не указан тип действия и путь к ноде'
 		if action_value[0].to_lower() not in ENUM_VALUES['action_type']:
-			return 'Тип действия: visible, sound или music'
+			return 'Тип действия: visible, sound, music или effects'
 		if action_value.size() < 2 or action_value[1].strip_edges().is_empty():
 			return 'Не указан путь к ноде'
 		return ''

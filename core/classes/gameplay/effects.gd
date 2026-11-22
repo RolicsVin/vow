@@ -1,6 +1,6 @@
 ## Узел управления экранными эффектами и оверлеями. 
 ## Позволяет показывать и скрывать дочерние узлы CanvasItem. 
-class_name Effects extends Node
+class_name Effects extends Control
 
 
 ## Показывает дочерний эффект по указанному пути.

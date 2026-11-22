@@ -8,15 +8,17 @@ class_name RainOverlay extends ColorRect
 		rain_intensity = clampf(value, 0.0, 1.0)
 		_apply_intensity()
 
+@export var wind_sway_enabled: bool = true: ## Включена ли анимация направления дождя
+	set(value):
+		wind_sway_enabled = value
+		_apply_wind_sway()
+
 var _intensity_tween: Tween ## Текущая анимация смены силы дождя
 
 
-func _ready() -> void: ## Применяет начальную силу дождя
+func _ready() -> void: ## Применяет начальные настройки дождя
 	_apply_intensity()
-
-
-func _process(delta: float) -> void: ## Анимация дождя
-	pass
+	_apply_wind_sway()
 
 
 ## Плавно меняет силу дождя до target_intensity за duration секунд
@@ -38,3 +40,11 @@ func _apply_intensity() -> void:
 	shader_material.set_shader_parameter('drop_length', lerpf(0.25, 0.5, rain_intensity))
 	shader_material.set_shader_parameter('overlay_amount', rain_intensity)
 	shader_material.set_shader_parameter('fog_amount', lerpf(0.0, 0.6, rain_intensity))
+
+
+## Переносит состояние анимации ветра в параметры шейдера
+func _apply_wind_sway() -> void:
+	var shader_material: ShaderMaterial = material as ShaderMaterial ## Материал с шейдером дождя
+	if shader_material == null: # Материал ещё не назначен
+		return
+	shader_material.set_shader_parameter('animate_direction', wind_sway_enabled)

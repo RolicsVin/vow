@@ -251,7 +251,7 @@ func _resolve_manifest_url(value: Variant) -> String:
 		return ''
 	
 	## Ответ PythonBridge с прямой ссылкой
-	var response: Dictionary = await PythonBridge.call_function('tools', 'drive_direct_url', [value])
+	var response: Dictionary = PythonBridge.call_function('tools', 'drive_direct_url', [value])
 	if not response.get('ok', false):
 		push_warning(
 			'[Core] drive_direct_url не смог разобрать ссылку: %s'
@@ -386,7 +386,7 @@ func get_save(save_name: String) -> Dictionary:
 	data.erase('icon_data')
 	
 	print('Сохранение прочитано.')
-	var response: Dictionary = await PythonBridge.call_function('stdout', 'pretty_print', [data])
+	var response: Dictionary = PythonBridge.call_function('stdout', 'pretty_print', [data])
 	print(response.result)
 	if not response.get("ok", false):
 		push_error("[Core] Не удалось вывести сохранение через PythonBridge: %s" % response.get("error", "unknown error"))
@@ -399,10 +399,10 @@ func load_save(_save: Dictionary) -> void:
 	_print_log()
 	
 	print('Загрузка сохранения...')
-	await GCombat.load_save(_save['godo_combat'])
+	GCombat.load_save(_save['godo_combat'])
 	if _save.has('godo_mini_game'):
-		await GminiGame.load_save(_save['godo_mini_game'])
-	await GVisualNovel.load_save(_save['godo_visual_novel'])
+		GminiGame.load_save(_save['godo_mini_game'])
+	GVisualNovel.load_save(_save['godo_visual_novel'])
 	if _save.has('audio_server') and _save['audio_server'] is Dictionary:
 		audio_server.load_save(_save['audio_server'])
 	if _save.has('data_singleton') and _save['data_singleton'] is Dictionary:

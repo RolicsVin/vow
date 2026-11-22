@@ -1,7 +1,2 @@
-BG_Chapter1_Father
 BG_Chapter1_Father_Wounded
-Saving_Everything_You_Have
-BG_Chapter1_Mud_Fall
 BG_Chapter1_Father_Dying
-BG_Chapter1_Father_Dead
-BG_Chapter1_Vow

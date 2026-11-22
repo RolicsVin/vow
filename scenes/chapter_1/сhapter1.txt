@@ -338,12 +338,13 @@ speaker Подросток
 
 // Обет.
 Отец! Отец, держись!
-background BG_Chapter1_Father_Dying
+background BG_Chapter1_Father_Wounded
 sound SFX_Running_Footsteps
 speaker Подросток
 emotion Испуганно
 
 Я подошёл к нему и наклонился.
+background BG_Chapter1_Father_Dying
 
 Пожалуйста, только не умирай. Я прошу тебя...
 speaker Подросток
@@ -390,7 +391,7 @@ background BG_Chapter1_Mather
 
 :
 
-// Там лес на фоне(снизу)
+// Там лес на фоне(BG_Chapter1_Village_Fight)
 Вдруг я почувстовал...
 background BG_Chapter1_Village_Fight
 

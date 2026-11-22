@@ -523,6 +523,11 @@ shader_parameter/brightness_variation = 0.5
 shader_parameter/fall_speed = 1400.0
 shader_parameter/speed_variation = 0.25
 shader_parameter/angle_degrees = 12.0
+shader_parameter/animate_direction = true
+shader_parameter/sway_amplitude = 15.0
+shader_parameter/sway_speed = 0.3
+shader_parameter/sway_irregularity = 0.5
+shader_parameter/sway_layer_lag = 0.5
 shader_parameter/column_spacing = 22.0
 shader_parameter/vertical_period = 220.0
 shader_parameter/far_scale = 0.45
@@ -689,13 +694,16 @@ stream = ExtResource("10_tvkk6")
 volume_db = 5.0
 metadata/_custom_type_script = "uid://bvc438jdgpr3y"
 
-[node name="History" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=824046209 node_paths=PackedStringArray("animation", "sound")]
+[node name="History" type="TextureButton" parent="ChatRoot/Control/HBoxContainer" unique_id=824046209 node_paths=PackedStringArray("animation", "sound", "nodes")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 script = ExtResource("7_7ftgl")
 hidding_on_press = false
 animation = NodePath("AnimationPlayer")
 sound = NodePath("GTSound")
+nodes = {
+NodePath("../../../../Effects"): false
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="ChatRoot/Control/HBoxContainer/History" unique_id=2069134830]
@@ -875,7 +883,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Back" type="TextureButton" parent="History" unique_id=2146543999 node_paths=PackedStringArray("animation", "sound")]
+[node name="Back" type="TextureButton" parent="History" unique_id=2146543999 node_paths=PackedStringArray("animation", "sound", "nodes")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 7
@@ -893,6 +901,9 @@ script = ExtResource("7_7ftgl")
 hidding_on_press = false
 animation = NodePath("AnimationPlayer")
 sound = NodePath("GTSound")
+nodes = {
+NodePath(".."): false
+}
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
 [node name="Label" type="Label" parent="History/Back" unique_id=475731322]

@@ -17,7 +17,7 @@ func _on_save_button_pressed() -> void:
 	if current_time - last_space_press < SAVE_BLOCK_TIME:
 		return
 	
-	Core.save()
+	Core.save_data()
 	$ChatRoot/Control/HBoxContainer/Menu/GTSound.play()
 
 

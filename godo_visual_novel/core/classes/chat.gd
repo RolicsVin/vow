@@ -269,6 +269,8 @@ func _perform_fast_actions(actions: Array) -> void:
 					fast_action.show_child(node_path)
 				else:
 					fast_action.hide_child(node_path)
+			Action.Type.effects:
+				_perform_effect_action(node_path, should_activate)
 			Action.Type.sound:
 				if not sounds:
 					push_warning('[Chat] Не выполнено действие со звуком \'%s\': Sounds не назначен' % node_path)
@@ -293,6 +295,10 @@ func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 			push_warning('[Chat] Пропущено пустое отложенное действие')
 			continue
 
+		if action.get_action_type() == Action.Type.effects:
+			_perform_effect_action(action.get_path_node(), action.get_action())
+			continue
+
 		var node_path: NodePath = NodePath(action.get_path_node())
 		if node_path.is_empty():
 			push_warning('[Chat] У отложенного действия не указан путь к узлу')
@@ -304,6 +310,18 @@ func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 			continue
 
 		_perform_slow_action(node, action, is_start)
+
+
+## Переключает эффект через назначенный компонент Effects.
+func _perform_effect_action(effect_path: String, should_show: bool) -> void:
+	if not fast_action:
+		push_warning('[Chat] Не выполнено действие эффекта: FastAction не назначен')
+		return
+
+	if should_show:
+		fast_action.show_effect(effect_path)
+	else:
+		fast_action.hide_effect(effect_path)
 
 
 func _perform_slow_action(node: Node, action: Action, is_start: bool) -> void:

@@ -197,10 +197,17 @@ def _obfuscate_function(function_code: str) -> str:
 
     output: list[str] = []
     previous_significant: str = ""
+    bracket_stack: list[str] = []
     tokens = list(_TOKEN_RE.finditer(function_code))
 
     for index, token in enumerate(tokens):
         value: str = token.group(0)
+
+        if token.lastgroup == "other":
+            if value in "([{":
+                bracket_stack.append(value)
+            elif value in ")]}" and bracket_stack:
+                bracket_stack.pop()
 
         if token.lastgroup != "identifier" or value not in replacements:
             output.append(value)
@@ -219,11 +226,16 @@ def _obfuscate_function(function_code: str) -> str:
                 break
 
         is_member: bool = previous_significant == "."
-        is_named_argument: bool = (
-            next_significant == "=" and previous_significant in ("(", ",")
+        # Это ключ словарного литерала { key = value, ... }, а не наш
+        # локальный идентификатор, только если непосредственно окружающая
+        # скобка — фигурная. Для круглой скобки "(" это значение параметра
+        # по умолчанию в заголовке функции — его нужно переименовывать, как
+        # и любое другое объявление параметра.
+        is_dict_key: bool = (
+            next_significant == "=" and bool(bracket_stack) and bracket_stack[-1] == "{"
         )
 
-        if is_member or is_named_argument:
+        if is_member or is_dict_key:
             output.append(value)
         else:
             output.append(replacements[value])
@@ -456,6 +468,18 @@ def _next_significant(tokens: list[re.Match], index: int) -> str:
     return ""
 
 
+# "%" в GDScript — это и бинарный оператор (деление по модулю, форматирование
+# строк "%s" % value), и префикс обращения к уникальному узлу (%NodeName).
+# "%" считается префиксом уникального узла только тогда, когда непосредственно
+# перед ним стоит что-то, после чего ожидается НАЧАЛО нового выражения — иначе
+# это бинарный оператор, и то, что после него, нужно переименовывать как
+# обычно. У "$" такой неоднозначности нет — это всегда префикс пути к узлу.
+_EXPRESSION_START_TOKENS: frozenset[str] = frozenset({
+    "", "(", "[", "{", ",", "=", "+", "-", "*", "/", "%", ":", "<", ">", "!",
+    "return", "await", "and", "or", "not", "in", "if", "elif", "while", "else",
+})
+
+
 def _apply_global_rename(code: str, symbol_map: dict[str, str]) -> str:
     """Переименовывает функции/переменные класса/сигналы по всему файлу.
 
@@ -471,6 +495,8 @@ def _apply_global_rename(code: str, symbol_map: dict[str, str]) -> str:
     previous_significant: str = ""
     pending_call_name: str = ""
     call_name_stack: list[str] = []
+    bracket_stack: list[str] = []
+    percent_is_node_prefix: bool = False
 
     for index, token in enumerate(tokens):
         value: str = token.group(0)
@@ -497,15 +523,23 @@ def _apply_global_rename(code: str, symbol_map: dict[str, str]) -> str:
 
         if value.isspace():
             output.append(value)
+            if "\n" in value:
+                # Новая строка — конец выражения/оператора. Не тащим контекст
+                # предыдущей строки дальше (важно для $/%/словарных ключей).
+                previous_significant = ""
+                pending_call_name = ""
             continue
 
         if kind == "identifier":
             if value in symbol_map:
                 is_dict_key: bool = (
-                    previous_significant in ("{", ",", "(")
-                    and _next_significant(tokens, index) == "="
+                    _next_significant(tokens, index) == "="
+                    and bool(bracket_stack)
+                    and bracket_stack[-1] == "{"
                 )
-                is_node_path: bool = previous_significant in ("$", "%")
+                is_node_path: bool = previous_significant == "$" or (
+                    previous_significant == "%" and percent_is_node_prefix
+                )
 
                 if is_dict_key or is_node_path:
                     output.append(value)
@@ -519,11 +553,18 @@ def _apply_global_rename(code: str, symbol_map: dict[str, str]) -> str:
             continue
 
         # Однознаковые токены (скобки, точки, операторы и т.п.)
+        if value == "%":
+            percent_is_node_prefix = previous_significant in _EXPRESSION_START_TOKENS
+
+        if value in "([{":
+            bracket_stack.append(value)
+        elif value in ")]}" and bracket_stack:
+            bracket_stack.pop()
+
         if value == "(":
             call_name_stack.append(pending_call_name)
-        elif value == ")":
-            if call_name_stack:
-                call_name_stack.pop()
+        elif value == ")" and call_name_stack:
+            call_name_stack.pop()
 
         if value not in ("(", ")"):
             pending_call_name = ""

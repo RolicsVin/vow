@@ -26,6 +26,7 @@ var _python_available: bool = false
 var _mode: String = "safe"
 var _full_map_path: String = ""
 var _full_map_ready: bool = false
+var _full_mode_exclude_prefixes: PackedStringArray = PackedStringArray()
 
 
 func _get_name() -> String:
@@ -69,8 +70,20 @@ func _export_begin(
 	_mode = str(ProjectSettings.get_setting(SETTING_MODE, "safe"))
 	_full_map_path = ""
 	_full_map_ready = false
+	_full_mode_exclude_prefixes = PackedStringArray()
 
 	if _mode == MODE_FULL:
+		# Карта переименований строится только по НЕ исключённым файлам,
+		# поэтому глобальное переименование нельзя применять и к файлам из
+		# исключённых папок — иначе чужой код (другие аддоны и т.п.), который
+		# мы даже не сканировали, может случайно совпасть по имени с
+		# переименованным символом проекта и сломаться.
+		var exclude_dirs: PackedStringArray = ProjectSettings.get_setting(
+			SETTING_EXCLUDE_DIRS, PackedStringArray(["res://addons"])
+		)
+		for exclude_dir in exclude_dirs:
+			_full_mode_exclude_prefixes.append(_normalized_dir_prefix(exclude_dir))
+
 		var map_path: String = TEMP_DIRECTORY.path_join(
 			"rename_map_%s.json" % str(Time.get_ticks_usec())
 		)
@@ -92,7 +105,25 @@ func _export_file(path: String, type: String, _features: PackedStringArray) -> v
 	if type == "GDScript" and path.ends_with(".gd"):
 		_export_script(path)
 	elif _mode == MODE_FULL and _full_map_ready and _is_scene_or_resource(path):
-		_export_scene(path)
+		# Сцены/ресурсы из исключённых папок не обрабатываем вовсе — для них
+		# нет "безопасного" эквивалента точечной локальной обфускации
+		if not _is_excluded_from_full_mode(path):
+			_export_scene(path)
+
+
+## "res://addons" -> "res://addons/" (чтобы не задеть "res://addons_other")
+func _normalized_dir_prefix(dir_path: String) -> String:
+	var normalized: String = dir_path
+	if not normalized.ends_with("/"):
+		normalized += "/"
+	return normalized
+
+
+func _is_excluded_from_full_mode(path: String) -> bool:
+	for prefix in _full_mode_exclude_prefixes:
+		if path.begins_with(prefix):
+			return true
+	return false
 
 
 func _export_end() -> void:
@@ -106,6 +137,7 @@ func _export_end() -> void:
 	_mode = "safe"
 	_full_map_path = ""
 	_full_map_ready = false
+	_full_mode_exclude_prefixes = PackedStringArray()
 
 
 func _is_scene_or_resource(path: String) -> bool:
@@ -139,7 +171,7 @@ func _export_script(path: String) -> void:
 		return
 
 	var script_args: PackedStringArray = PackedStringArray(["--mode", "locals"])
-	if _mode == MODE_FULL and _full_map_ready:
+	if _mode == MODE_FULL and _full_map_ready and not _is_excluded_from_full_mode(path):
 		script_args = PackedStringArray([
 			"--mode", "apply",
 			"--map", ProjectSettings.globalize_path(_full_map_path),
@@ -172,7 +204,12 @@ func _export_scene(path: String) -> void:
 	add_file(path, updated_text.to_utf8_buffer(), false)
 
 
-func _run_file_transform(content: String, source_path: String, suffix: String, extra_args: PackedStringArray) -> String:
+func _run_file_transform(
+	content: String,
+	source_path: String,
+	suffix: String,
+	extra_args: PackedStringArray
+) -> String:
 	var file_suffix: String = "%s_%s" % [suffix, str(Time.get_ticks_usec())]
 	var input_path: String = TEMP_DIRECTORY.path_join("input_%s.tmp" % file_suffix)
 	var output_path: String = TEMP_DIRECTORY.path_join("output_%s.tmp" % file_suffix)

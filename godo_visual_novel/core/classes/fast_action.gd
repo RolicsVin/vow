@@ -2,8 +2,6 @@
 class_name FastAction extends Control
 
 
-@export var effects: Effects
-
 
 func _ready() -> void:
 	show()
@@ -43,29 +41,3 @@ func hide_child(child_name: String):
 			child.linear_hide()
 			return
 	target.hide()
-
-
-## Показывает эффект по пути относительно компонента Effects.
-func show_effect(effect_path: String) -> void:
-	if not effects:
-		push_warning('[FastAction] Компонент Effects не назначен')
-		return
-
-	if effect_path.is_empty():
-		push_warning('[FastAction] Не указан путь к эффекту для отображения')
-		return
-
-	effects.show_effect(NodePath(effect_path))
-
-
-## Скрывает эффект по пути относительно компонента Effects.
-func hide_effect(effect_path: String) -> void:
-	if not effects:
-		push_warning('[FastAction] Компонент Effects не назначен')
-		return
-
-	if effect_path.is_empty():
-		push_warning('[FastAction] Не указан путь к эффекту для скрытия')
-		return
-
-	effects.hide_effect(NodePath(effect_path))

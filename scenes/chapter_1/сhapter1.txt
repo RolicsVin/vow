@@ -13,11 +13,11 @@ background BG_Chapter1_Forest
 Поддувал лёгкий ветерок. Несмотря на холод было свежо - приятно.
 
 Я заготавливал дрова на зиму.
-
-Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 background BG_Chapter1_Woodcutter_Shed
 action;start;music Music/Chapter1_ColdMorning
 sound SFX_Axe_Wood_Impact
+
+Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
 
 Вот и последнее.
 sound SFX_Axe_Wood_Split
@@ -31,6 +31,7 @@ background BG_Chapter1_Shed_Logs
 sound SFX_Wood_Falling
 
 Фух...
+speaker Нет
 
 Фух... На сегодня всё.
 reset_text_buffer false
@@ -43,47 +44,61 @@ reset_text_buffer false
 background BG_Chapter1_cutting_chicken
 
 Не хочу на это смотреть.
+speaker Нет
 
 Я зашёл в дом.
 background BG_Chapter1_House_Interior
 action;start;music Music/Chapter1_Home_Ambience on
 action;start;music Music/Chapter1_Quiet_Tension
+action;start;effects Rain off
 sound SFX_Fireplace_Crackling
 
 Хоть немного согреюсь.
+speaker Нет
 
 Я сел перед печью
 background BG_Chapter1_Fireplace
 
 В ней горели дрова, исходило тепло
+speaker Нет
 
 Протянул окачиневшие руки ближе к печи.
+speaker Нет
 
 Погода, в последнее время, будто нарочно испытывает нас.
+speaker Нет
 
 Посидев ещё немного, я подошёл к окну.
 background BG_Chapter1_Window_View
 sound SFX_Rain_Light
+action;start;effects Rain on
 action;start;music Music/Chapter1_Mountain_Storm
 
 Там виднелась гора Баустхен.
+speaker Нет
 
 Самая высокая гора во всех пяти мирах.
+speaker Нет
 
 Её вид завораживает.
+speaker Нет
 
 :
 
 Говорят там обитель богов...
+speaker Нет
 
 Интересно, это правда?
+speaker Нет
 
 :
 
 // Асмунд прибывает.
 Над вершиной опять собираются тучи. Молнии... И ветер поднялся.
+speaker Нет
 
 Наверное Асмунд гневается...
+speaker Нет
 
 Вдруг на дорожку выбежал оленёнок
 background BG_Chapter1_Road_Deer
@@ -118,12 +133,14 @@ reset_text_buffer false
 Оленёнок убежал... Из леса выбежала запоздавшая мать и ринулась за ним.
 background BG_Chapter1_Escape_Deer
 
-Это было не впервой для меня. Я вспомнил наказ отца:
+Это было не впервой для меня. Я вспомнил наказ отца
+speaker Нет
 
 Спрятать ценности под тайник
 
 Я начал быстро собирать все ценности, что у нас были.
 background BG_Chapter1_hiddeng_Objects
+action;start;effects Rain off
 
 Еда, ткани, свечи и несколько монет - всё это я сложил под кровать.
 sound SFX_Hiding_Objects
@@ -134,6 +151,7 @@ sound SFX_Hiding_Objects
 
 // Асмунд буянит.
 Богу стало скучно и он стал ломать соседский забор.
+action;start;effects Rain on
 background BG_Chapter1_Village_Fence
 
 Тот разлетался в щепки.
@@ -419,7 +437,7 @@ emotion Яростно
 speaker Подросток
 emotion Неистово
 
-Все смотрели на меня: кто-то с удивлением, кто-то с жалостью, кто-то пустыми глазами.
+Все смотрели на меня. Кто-то с удивлением, кто-то с жалостью, кто-то пустыми глазами.
 
 // Главный герой уходит.
 Я поднялся и быстро пошёл домой
@@ -427,6 +445,7 @@ background BG_Chapter1_Street
 
 Зайдя в дом, я стал собиратся.
 background BG_Chapter1_House_Preparation
+action;start;effects Rain off
 sound SFX_Packing_Bag
 
 Хлеб. Вода. Всё это я замотал в красную ткань...
@@ -448,6 +467,7 @@ speaker Подросток
 
 Я вышел на улицу
 background BG_Chapter1_Street
+action;start;effects Rain on
 
 Не ходи туда! Ты ведь видел, что стало с твоим отцом!
 background BG_Chapter1_Village_Mourners
@@ -479,7 +499,5 @@ emotion Задумчиво
 Я иду за тобой, Асмунд.
 
 И однажды ты ответишь за всё.
-
- 
 background BG_Chapter1_Bausthen_Foot
 action;start;music Music/Chapter1_Vow off

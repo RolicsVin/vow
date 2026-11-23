@@ -20,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://drfbvtfvs0g8u" path="res://assets/ui/new_quest.ogg" id="18_c7gmr"]
 [ext_resource type="PackedScene" uid="uid://cdmvmkaab0an" path="res://scenes/settings_menu.tscn" id="18_fsfa6"]
 [ext_resource type="Script" uid="uid://xv70bc857g43" path="res://godo_visual_novel/core/classes/chat_click.gd" id="18_r2e7w"]
+[ext_resource type="Script" uid="uid://ckgwlwk5kauo8" path="res://godo_visual_novel/core/classes/effects_shaders.gd" id="19_cvxd1"]
 [ext_resource type="Shader" uid="uid://k3iktyqek5bv" path="res://assets/vfx/rain/rain.gdshader" id="21_fsfa6"]
 [ext_resource type="Script" uid="uid://ciso5qxxqd11r" path="res://core/classes/gameplay/rain_overlay.gd" id="22_t6gja"]
 
@@ -540,7 +541,7 @@ shader_parameter/fog_amount = 0.3
 shader_parameter/fog_scale = 300.0
 shader_parameter/fog_speed = 15.0
 
-[node name="Scene" type="Control" unique_id=733753458]
+[node name="Scene2" type="Control" unique_id=733753458]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -616,7 +617,7 @@ vertical_alignment = 1
 script = ExtResource("2_q0q2f")
 metadata/_custom_type_script = "uid://cp2osj87mhleq"
 
-[node name="Chat" type="Label" parent="ChatRoot" unique_id=1260149037 node_paths=PackedStringArray("behind", "fast_action", "background", "chat_click", "mini_games_root", "auto_text_swith_timer", "menu", "settings_menu", "back_button", "sounds", "music", "timer")]
+[node name="Chat" type="Label" parent="ChatRoot" unique_id=1260149037 node_paths=PackedStringArray("behind", "fast_action", "effects_shaders", "background", "chat_click", "mini_games_root", "auto_text_swith_timer", "menu", "settings_menu", "back_button", "sounds", "music", "timer")]
 custom_minimum_size = Vector2(0, 212)
 layout_mode = 2
 size_flags_vertical = 3
@@ -629,6 +630,7 @@ autowrap_mode = 2
 script = ExtResource("3_7c5am")
 behind = NodePath("../Behind")
 fast_action = NodePath("../../FastAction")
+effects_shaders = NodePath("../../EffectsShaders")
 background = NodePath("../../Backgrounds")
 chat_click = NodePath("../../ChatClick")
 mini_games_root = NodePath("../../MiniGamesRoot")
@@ -702,7 +704,7 @@ hidding_on_press = false
 animation = NodePath("AnimationPlayer")
 sound = NodePath("GTSound")
 nodes = {
-NodePath("../../../../EffectsShaders"): false
+null: false
 }
 metadata/_custom_type_script = "uid://dqquy1ejfgbvm"
 
@@ -1146,7 +1148,7 @@ visible = false
 layout_mode = 1
 post_process = NodePath("../PostProcessing")
 
-[node name="EffectsShaders" type="Control" parent="." unique_id=1951616049]
+[node name="EffectsShaders" type="Control" parent="." unique_id=1403411988]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1154,6 +1156,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("19_cvxd1")
+metadata/_custom_type_script = "uid://ckgwlwk5kauo8"
 
 [node name="Rain" type="ColorRect" parent="EffectsShaders" unique_id=936819688]
 visible = false

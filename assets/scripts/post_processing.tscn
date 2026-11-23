@@ -8,7 +8,7 @@ shader = ExtResource("1_ovpnr")
 shader_parameter/brightness = 0.0
 shader_parameter/contrast = 1.0
 shader_parameter/saturation = 1.0
-shader_parameter/noise_intensity = 0.01200000057
+shader_parameter/noise_intensity = 0.030000001425
 shader_parameter/blur_strength = 0.0
 
 [node name="PostProcessing" type="ColorRect" unique_id=447539963]

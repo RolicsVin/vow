@@ -19,7 +19,7 @@ signal dialog_exited(dialog: LinearDialog)
 @export_group('components')
 @export var behind: Behind
 @export var fast_action: FastAction
-@export var effects: Effects
+@export var effects_shaders: EffectsShaders
 @export var background: Backgrounds
 @export var chat_click: ChatClick
 @export var mini_games_root: Control
@@ -313,20 +313,20 @@ func _perform_slow_actions(actions: Array, is_start: bool) -> void:
 		_perform_slow_action(node, action, is_start)
 
 
-## Переключает эффект через назначенный компонент Effects.
+## Переключает эффект через назначенный компонент EffectsShaders.
 func _perform_effect_action(
 	effect_path: String,
 	should_show: bool,
 	is_slow: bool = false
 ) -> void:
-	if not effects:
-		push_warning('[Chat] Не выполнено действие эффекта: Effects не назначен')
+	if not effects_shaders:
+		push_warning('[Chat] Не выполнено действие эффекта: EffectsShaders не назначен')
 		return
 
 	if should_show:
-		effects.show_effect(NodePath(effect_path), is_slow)
+		effects_shaders.show_effect(NodePath(effect_path), is_slow)
 	else:
-		effects.hide_effect(NodePath(effect_path), is_slow)
+		effects_shaders.hide_effect(NodePath(effect_path), is_slow)
 
 
 func _perform_slow_action(node: Node, action: Action, is_start: bool) -> void:

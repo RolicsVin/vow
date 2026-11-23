@@ -41,7 +41,7 @@ class_name TxtLinearDialog extends LinearDialog
 ##   action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]
 ##   По умолчанию действие быстрое (fast_action_*) и включающее (показать/играть).
 ##   on/off - включить или выключить, fast/slow - быстрое действие или on_start/on_end.
-##   Для effects путь указывается относительно узла Effects.
+##   Для effects путь указывается относительно узла EffectsShaders.
 ##
 ## Свойства самого диалога (в любом месте файла, отдельным блоком или внутри блока):
 ##   dialog;name <имя>      dialog_name (по умолчанию - имя файла без расширения)

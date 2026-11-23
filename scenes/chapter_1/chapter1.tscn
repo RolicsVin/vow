@@ -714,7 +714,7 @@ dialog_tree = Array[ExtResource("2_o3h8a")]([SubResource("Resource_cgoi1")])
 
 [node name="History" parent="ChatRoot/Control/HBoxContainer" parent_id_path=PackedInt32Array(1358434576) index="1" unique_id=824046209 node_paths=PackedStringArray("nodes")]
 nodes = {
-NodePath("../../../../Effects"): false
+NodePath("../../../../EffectsShaders"): false
 }
 
 [node name="Menu" parent="ChatRoot/Control/HBoxContainer" parent_id_path=PackedInt32Array(1358434576) index="2" unique_id=961365472 node_paths=PackedStringArray("nodes")]
@@ -744,5 +744,5 @@ nodes = {
 NodePath("../Ready"): true
 }
 
-[node name="Rain" parent="Effects" parent_id_path=PackedInt32Array(1951616049) index="0" unique_id=936819688]
+[node name="Rain" parent="EffectsShaders" parent_id_path=PackedInt32Array(1951616049) index="0" unique_id=936819688]
 visible = true

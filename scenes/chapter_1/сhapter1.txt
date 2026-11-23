@@ -7,7 +7,7 @@ dialog;end linear
 dialog;interpolation linear
 
 // Утро. Дровяной навес у дома.
-Было прохладная погода, переодически моросил дождик.
+Была прохладная погода, переодически моросил дождик.
 background BG_Chapter1_Forest
 action;start;sound Rain on
 

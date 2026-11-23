@@ -36,7 +36,7 @@ const SYNTAX_HINTS: Dictionary = {
 	'lang': 'Перевод реплики: lang;<Ru|En> <текст перевода>',
 	'action': (
 		'Действие: action;<start|end>;<visible|sound|music|effects> <путь> [on|off] [fast|slow]. '
-		+ 'Для effects путь относительно узла Effects.'
+		+ 'Для effects путь относительно узла EffectsShaders.'
 	),
 }
 

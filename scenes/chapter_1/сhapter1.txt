@@ -9,12 +9,13 @@ dialog;interpolation linear
 // Утро. Дровяной навес у дома.
 Было прохладная погода, переодически моросил дождик.
 background BG_Chapter1_Forest
+action;start;sound Rain on
 
 Поддувал лёгкий ветерок. Несмотря на холод было свежо - приятно.
 
 Я заготавливал дрова на зиму.
 background BG_Chapter1_Woodcutter_Shed
-action;start;music Music/Chapter1_ColdMorning
+action;start;music Chapter1_ColdMorning
 sound SFX_Axe_Wood_Impact
 
 Сегодня управлюсь быстрее. Отец говорил, к вечеру дождь усилится.
@@ -48,16 +49,17 @@ speaker Нет
 
 Я зашёл в дом.
 background BG_Chapter1_House_Interior
-action;start;music Music/Chapter1_Home_Ambience on
-action;start;music Music/Chapter1_Quiet_Tension
 action;start;effects Rain off
-sound SFX_Fireplace_Crackling
+sound SFX_Fireplace_Crackling_Compressed
+id rainhome
 
 Хоть немного согреюсь.
 speaker Нет
 
 Я сел перед печью
 background BG_Chapter1_Fireplace
+action;start;sound SFX_Fireplace_Crackling_Compressed off
+sound SFX_Fireplace_Crackling
 
 В ней горели дрова, исходило тепло
 speaker Нет

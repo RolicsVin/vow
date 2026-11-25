@@ -593,6 +593,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("18_r2e7w")
 chat = NodePath("../ChatRoot/Chat")
+actions = Array[String](["space"])
 metadata/_custom_type_script = "uid://xv70bc857g43"
 
 [node name="ChatRoot" type="VBoxContainer" parent="." unique_id=765098785]

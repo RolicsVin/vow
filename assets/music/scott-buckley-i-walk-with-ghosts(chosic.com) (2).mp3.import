@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://jo06sffwto4v"
+path="res://.godot/imported/scott-buckley-i-walk-with-ghosts(chosic.com) (2).mp3-a45e3bf3052eb0832618d4b3e8a304f0.mp3str"
+
+[deps]
+
+source_file="res://assets/music/scott-buckley-i-walk-with-ghosts(chosic.com) (2).mp3"
+dest_files=["res://.godot/imported/scott-buckley-i-walk-with-ghosts(chosic.com) (2).mp3-a45e3bf3052eb0832618d4b3e8a304f0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

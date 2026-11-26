@@ -10,6 +10,7 @@ docs/
 obsidian/
 __pycache__/
 /__pycache__/
+FLstudioProjects/
 
 # VS specific ignores
 .vs/

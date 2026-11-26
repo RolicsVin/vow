@@ -12,7 +12,8 @@ config_version=5
 
 config/name="vow"
 config/description="Визуальная новелла, про человека решившего подняться на самую высокую гору и сразить богов."
-config/version="alpha1.8"
+config/version="alpha2.2"
+config/tags=PackedStringArray("2д", "визуальня_новелла", "дарк_фентези")
 run/main_scene="uid://cfrunyyn51m1w"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)

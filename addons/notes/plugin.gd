@@ -4,8 +4,20 @@
 ## путь служит запасным вариантом. 
 class_name PathNotesPlugin extends EditorPlugin
 
-const NOTES_PATH: String = 'res://addons/path_notes/notes.json' ## Файл с сохранёнными подсказками
+const NOTES_PATH: String = 'res://addons/notes/notes.json' ## Файл с сохранёнными подсказками
 const NOTE_MARKER: String = '📝 ' ## Префикс, по которому узнаём наши тултипы
+
+## Тексты интерфейса. Для неизвестных языков используется английский.
+const UI_TEXT: Dictionary = {
+	'en': {
+		'dialog_title': 'Note',
+		'edit_note': 'Edit Note...',
+	},
+	'ru': {
+		'dialog_title': 'Подсказка',
+		'edit_note': 'Изменить подсказку…',
+	},
+}
 
 var entries: Array[Dictionary] = [] ## Все подсказки: словари с ключами uid, path и text
 var by_uid: Dictionary = {} ## Индекс «uid -> запись»
@@ -23,7 +35,7 @@ func _enter_tree() -> void: ## Включение плагина
 
 	# Создаём диалог редактирования
 	edit_dialog = ConfirmationDialog.new()
-	edit_dialog.title = 'Подсказка'
+	edit_dialog.title = _ui_text('dialog_title')
 	note_input = TextEdit.new()
 	note_input.custom_minimum_size = Vector2(400, 120)
 	edit_dialog.add_child(note_input)
@@ -60,9 +72,17 @@ func _exit_tree() -> void: ## Выключение плагина
 
 ## Открывает диалог редактирования подсказки для указанного пути
 func open_editor(path: String) -> void:
+	edit_dialog.title = _ui_text('dialog_title')
 	edited_path = _normalize(path)
 	note_input.text = get_note(edited_path)
 	edit_dialog.popup_centered()
+
+
+## Возвращает перевод интерфейсной строки для текущего языка редактора.
+## Русский интерфейс включается для локалей ru*, остальные используют английский.
+func _ui_text(key: String) -> String:
+	var language: String = 'ru' if TranslationServer.get_locale().begins_with('ru') else 'en'
+	return UI_TEXT[language][key]
 
 
 ## Возвращает текст подсказки для пути или пустую строку, если подсказки нет
@@ -283,7 +303,7 @@ class ContextMenu extends EditorContextMenuPlugin:
 	## Добавляет пункт меню, если выбран ровно один файл или папка
 	func _popup_menu(paths: PackedStringArray) -> void:
 		if paths.size() == 1:
-			add_context_menu_item('Изменить подсказку…', _on_item_pressed)
+			add_context_menu_item(plugin._ui_text('edit_note'), _on_item_pressed)
 
 	## Открывает диалог для выбранного пути
 	func _on_item_pressed(paths: PackedStringArray) -> void:
